@@ -4,7 +4,7 @@
 Summary: Mono CIL runtime
 Name: mono
 Version: 1.1.3
-Release: 1
+Release: 2
 URL: http://www.mono-project.com/
 License: LGPL
 Group: System Environment/Base
@@ -43,7 +43,7 @@ programs using %{name}, you will need to install %{name}-devel.
 
 %build
 %configure
-make
+make EXTERNAL_MCS=true
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -66,13 +66,10 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root)
 %doc AUTHORS COPYING.LIB ChangeLog NEWS README
-%doc %{_mandir}/man1/mcs.*
 %doc %{_mandir}/man1/mono.*
 %doc %{_mandir}/man1/mint.*
 %doc %{_mandir}/man1/oldmono.*
 %config %{_sysconfdir}/mono/*
-%{_bindir}/mbas
-%{_bindir}/mcs
 %{_bindir}/mint
 %{_bindir}/mono
 %{_libdir}/*.so.*
@@ -81,7 +78,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(-, root, root)
 %doc docs/
-%doc %{_mandir}/man5/*
 %doc %{_mandir}/man1/cert2spc.*
 %doc %{_mandir}/man1/certmgr.*
 %doc %{_mandir}/man1/chktrust.*
@@ -91,6 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/genxs.*
 %doc %{_mandir}/man1/ilasm.*
 %doc %{_mandir}/man1/makecert.*
+%doc %{_mandir}/man1/mcs.*
 %doc %{_mandir}/man1/mcs.*
 %doc %{_mandir}/man1/mkbundle.*
 %doc %{_mandir}/man1/monoburg.*
@@ -105,6 +102,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/sqlsharp.*
 %doc %{_mandir}/man1/wsdl.*
 %doc %{_mandir}/man1/xsd.*
+%doc %{_mandir}/man5/*
 %{_bindir}/al
 %{_bindir}/cert2spc
 %{_bindir}/certmgr
@@ -117,13 +115,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/ilasm
 %{_bindir}/jay
 %{_bindir}/makecert
-%{_bindir}/monodis
+%{_bindir}/mbas
+%{_bindir}/mcs
+%{_bindir}/mkbundle
 %{_bindir}/mono-find-provides
 %{_bindir}/mono-find-requires
+%{_bindir}/monodis
 %{_bindir}/monograph
 %{_bindir}/monop
 %{_bindir}/monoresgen
-%{_bindir}/mkbundle
 %{_bindir}/pedump
 %{_bindir}/resgen
 %{_bindir}/secutil
@@ -145,5 +145,9 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{_libdir}/*.la
 
 %changelog
-* Wed Dec 15 2004 Justin Ross <jross@dhcp83-29.boston.redhat.com> 
-- Initial build.
+* Thu Jan 20 2005 Justin Ross <jross@redhat.com>
+  - Moves some binaries from mono to mono-devel.
+  - Adds the EXTERNAL_MCS flag to force bootstrap via monolite download.
+
+* Wed Dec 15 2004 Justin Ross <jross@dhcp83-29.boston.redhat.com>
+  - Initial build.

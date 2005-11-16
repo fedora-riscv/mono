@@ -1,560 +1,487 @@
-# Based off of a spec file by Dag Wieers <dag@wieers.com>
-# http://dag.wieers.com/packages/mono/mono.spec
+Name:           mono
+Version:        1.1.10
+Release:        1
+Summary:        a .NET runtime environment
 
-Summary: Mono CIL runtime
-Name: mono
-Version: 1.1.3
-Release: 3
-URL: http://www.mono-project.com/
-License: LGPL
-Group: System Environment/Base
-Source0: %{name}-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires: bison
-BuildRequires: glib2-devel
-BuildRequires: libxml2-devel
-BuildRequires: libxslt-devel
-BuildRequires: pkgconfig
-BuildRequires: icu
-BuildRequires: libicu-devel
-Requires: libicu
-Requires: /sbin/ldconfig
+Group:          Development/Languages
+License:        GPL, LGPL, MIT X11
+URL:            http://www.mono-project.com/
+Source0:        mono-%{version}.tar.gz
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+BuildRequires:  bison, glib2-devel, pkgconfig, libicu-devel
 
 %description
-The Mono runtime implements a JIT engine for the ECMA CLI virtual
-machine (as well as a byte code interpreter, the class loader, the
-garbage collector, threading system and metadata access libraries).
+The Mono runtime implements a JIT engine for the ECMA CLI
+virtual machine (as well as a byte code interpreter, the
+class loader, the garbage collector, threading system and
+metadata access libraries.
 
-%package data
-Summary: mono-data
-Group: Development/Libraries
-Requires: %{name}-enterprise = %{version}-%{release}
+%package core
+Summary:        The Mono CIL runtime, suitable for running .NET code
+Group:          Development/Languages
 
-%description data
-mono-data
-
-%package data-db2
-Summary: mono-data-db2
-Group: Development/Libraries
-Requires: %{name}-data = %{version}-%{release}
-
-%description data-db2
-mono-data-db2
-
-%package data-mysql
-Summary: mono-data-mysql
-Group: Development/Libraries
-Requires: %{name}-data = %{version}-%{release}
-Requires: %{name}-design = %{version}-%{release}
-Requires: %{name}-sharpziplib = %{version}-%{release}
-Requires: %{name}-posix = %{version}-%{release}
-
-%description data-mysql
-mono-data-mysql
-
-%package data-oracle
-Summary: mono-data-oracle
-Group: Development/Libraries
-Requires: %{name}-data = %{version}-%{release}
-
-%description data-oracle
-mono-data-oracle
-
-%package data-postgresql
-Summary: mono-data-postgresql
-Group: Development/Libraries
-Requires: %{name}-data = %{version}-%{release}
-Requires: %{name}-design = %{version}-%{release}
-
-%description data-postgresql
-mono-data-postgresql
-
-%package data-sqlite
-Summary: mono-data-sqlite
-Group: Development/Libraries
-Requires: %{name}-data = %{version}-%{release}
-
-%description data-sqlite
-mono-data-sqlite
-
-%package data-sybase
-Summary: mono-data-sybase
-Group: Development/Libraries
-Requires: %{name}-data = %{version}-%{release}
-
-%description data-sybase
-mono-data-sybase
-
-%package data-tds
-Summary: mono-data-tds
-Group: Development/Libraries
-Requires: %{name}-data = %{version}-%{release}
-
-%description data-tds
-mono-data-tds
-
-%package design
-Summary: mono-design
-Group: Development/Libraries
-Requires: %{name}-winforms = %{version}-%{release}
-Requires: %{name}-data = %{version}-%{release}
-Requires: %{name}-web = %{version}-%{release}
-
-%description design
-mono-design
+%description core
+This package contains the core of the Mono runtime including its
+Virtual Machine, Just-in-time compiler, C# compiler, security
+tools and libraries (corlib, XML, System.Security, ZipLib,
+I18N, Cairo and Mono.*).
 
 %package devel
-Summary: mono-devel
-# Fix group XXX
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+Summary:        Development tools and headers for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+Requires:       glib2-devel
 
 %description devel
-mono-devel
-
-%package basic
-Summary: mono-basic
-# Fix group XXX
-Group: Development/Libraries
-Requires: %{name}-winforms = %{version}-%{release}
-
-%description basic
-mono-basic
-
-%package directory
-Summary: mono-directory
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
-
-%description directory
-mono-directory
-
-%package drawing
-Summary: mono-drawing
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
-
-%description drawing
-mono-drawing
-
-%package enterprise
-Summary: mono-enterprise
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
-
-%description enterprise
-mono-enterprise
-
-%package extra-assemblies
-Summary: mono-extra-assemblies
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
-
-%description extra-assemblies
-mono-extra-assemblies
-
-%package messaging
-Summary: mono-messaging
-Group: Development/Libraries
-Requires: %{name}-enterprise = %{version}-%{release}
-Requires: %{name}-winforms = %{version}-%{release}
-
-%description messaging
-mono-messaging
+This package includes all Mono library headers and completes the
+Mono developer toolchain (with the mono profiler, assembler and
+other various tools)
 
 %package nunit
-Summary: mono-nunit
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+Summary:        NUnit Testing Framework
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+Requires:       glib2-devel
 
 %description nunit
-mono-nunit
+NUnit is a unit-testing framework for all .Net languages. Initially
+ported from JUnit, the current release, version 2.2, is the fourth
+major release of this Unit based unit testing tool for Microsoft .NET.
+It is written entirely in C# and  has been completely redesigned to
+take advantage of many .NET language features, for example
+custom attributes and other reflection related capabilities. NUnit
+brings xUnit to all .NET languages.
 
-%package posix
-Summary: mono-posix
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+%package locale-extras
+Summary:        Extra locale information for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
 
-%description posix
-mono-posix
+%description locale-extras
+This package contains assemblies to support I18N applications for
+non-latin alphabets.
 
-%package security
-Summary: mono-security
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+# The above seems safe
 
-%description security
-mono-security
+%package jscript
+Summary:        JScript .NET support for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
 
-%package sharpziplib
-Summary: mono-sharpziplib
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+%description jscript
+This package contains the JScript .NET compiler and language runtime.
+This allows you to compile and run JScript.NET application and
+assemblies.
 
-%description sharpziplib
-mono-sharpziplib
+%package basic
+Summary:        Visual Basic .NET support for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
 
-%package web
-Summary: mono-web
-Group: Development/Libraries
-Requires: %{name}-data = %{version}-%{release}
-Requires: %{name}-drawing = %{version}-%{release}
-Requires: %{name}-enterprise = %{version}-%{release}
-Requires: %{name}-sharpziplib = %{version}-%{release}
+%description basic
+This package contains the Visual Basic .NET compiler and language
+runtime. This allows you to compile and run VB.NET application and
+assemblies.
 
-%description web
-mono-web
+%package extras
+Summary:        Provides the infrastructure for running and building daemons and services with Mono as well as various stub assemblies
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+
+%description extras
+This package provides the libary and application to run services
+and daemons with Mono. It also includes stubs for the following
+.NET 1.1 and 2.0 assemblies: Microsoft.Vsa,
+System.Configuration.Install, System.Management, System.Messaging.
 
 %package winforms
-Summary: mono-winforms
-Group: Development/Libraries
-Requires: %{name}-drawing = %{version}-%{release}
+Summary:        Windows Forms implementation for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
 
 %description winforms
-mono-winforms
+This package provides a fully managed implementation of
+System.Windows.Forms, the default graphical toolkit for .NET
+applications.
 
-%package xml
-Summary: mono-xml
-Group: Development/Libraries
-Requires: %{name}-data = %{version}-%{release}
+%package web
+Summary:        ASP.NET, Remoting, and Web Services for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
 
-%description xml
-mono-xml
+%description web
+This package provides the ASP.NET libraries and runtime for
+development of web application, web services and remoting support.
 
-#%post
-#echo "You must install libgdiplus separately."
+%package data
+Summary:        Database connectivity for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+
+%description data
+This package provides a Mono assembly to facilitate data access
+and manipulation with databases, LDAP compatible directory servers
+and/or XML data exchange. Beyond the ADO.NET, Novell.LDAP and
+System.DirectoryServices assemblies, it also includes a command
+line sql application as well as the Microsoft SQL Server and ODBC
+data providers.
+
+%package data-sqlite
+Summary:        sqlite database connectivity for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+Requires:       sqlite
+
+%description data-sqlite
+This package contains the ADO.NET Data provider for the sqlite
+database.
+
+%package data-sybase
+Summary:        Sybase database connectivity for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+
+%description data-sybase
+This package contains the ADO.NET Data provider for the Sybase
+database.
+
+%package data-oracle
+Summary:        Oracle database connectivity for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+
+%description data-oracle
+This package contains the ADO.NET Data provider for the Oracle
+database.
+
+%package data-postgresql
+Summary:        Postgresql database connectivity for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+
+%description data-postgresql
+This package contains the ADO.NET Data provider for the PostgreSQL
+database.
+
+%package data-firebird
+Summary:        Firebird database connectivity for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+
+%description data-firebird
+This package contains the ADO.NET Data provider for the Firebird
+database.
+
+# This uses the upstream package name, don't know why its not mono-data-*
+%package -n ibm-data-db2
+Summary:        IBM DB2 database connectivity for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+
+%description -n ibm-data-db2
+This package contains the ADO.NET Data provider for the IBM DB2
+Universal database.
+
+# This uses the upstream package name, don't know why its not mono-data-*
+%package -n bytefx-data-mysql
+Summary:        MySQL database connectivity for Mono
+Group:          Development/Languages
+Requires:       mono-core == %version-%release
+
+%description -n bytefx-data-mysql
+This package contains the ADO.NET Data provider for MySQL. This is
+no longer maintained. MySQL AB now provides MySQL Connector/Net
+which is fully managed and actively maintained.
+
+%define monodir %_prefix/lib/mono
+%define gac_dll(dll) \
+  %{monodir}/gac/%{1} \
+  %{monodir}/?.0/%{1}.dll \
+  %{nil}
+%define mono_bin(bin) \
+  %{_bindir}/%{1} \
+  %{monodir}/?.0/%{1}.exe \
+  %{monodir}/?.0/%{1}.exe.* \
+  %{nil}
+%define mono_bin_1(bin, dll) \
+  %{_bindir}/%{1} \
+  %{monodir}/1.0/%{2}.exe \
+  %{monodir}/1.0/%{2}.exe.* \
+  %{nil}
+%define mono_bin_2(bin, dll) \
+  %{_bindir}/%{1} \
+  %{monodir}/2.0/%{2}.exe \
+  %{monodir}/2.0/%{2}.exe.* \
+  %{nil}
 
 %prep
 %setup -q
 
 %build
-%configure
-make EXTERNAL_MCS=true
+export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
+%configure --with-ikvm=yes --with-ikvm=yes
+make %{?_smp_mflags}
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
-rm -rf $RPM_BUILD_ROOT/usr/man/*
+make DESTDIR=$RPM_BUILD_ROOT install
 
-%post
-/sbin/ldconfig 2>/dev/null
+# Libtool is on crack, installing the shell wrappers
+cp mono/dis/.libs/monodis $RPM_BUILD_ROOT%{_bindir}
+cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 
-%postun
-/sbin/ldconfig 2>/dev/null
+rm $RPM_BUILD_ROOT%{_libdir}/*.a
+rm $RPM_BUILD_ROOT%{_libdir}/*.la
+
+# We put these inside rpm
+rm $RPM_BUILD_ROOT%{_bindir}/mono-find-provides
+rm $RPM_BUILD_ROOT%{_bindir}/mono-find-requires
+
+
+# TODO: Is System.Drawing safe?
+rm -rf $RPM_BUILD_ROOT%{monodir}/gac/System.Drawing
+rm $RPM_BUILD_ROOT%{monodir}/?.0/System.Drawing.dll
+
+# This was removed upstream:
+rm -fr $RPM_BUILD_ROOT%{monodir}/gac/Mono.Security.Win32/[12]*
+rm $RPM_BUILD_ROOT%{monodir}/*/Mono.Security.Win32.dll
+rm $RPM_BUILD_ROOT%{_datadir}/libgc-mono/README*
+rm $RPM_BUILD_ROOT%{_datadir}/libgc-mono/barrett_diagram
+rm $RPM_BUILD_ROOT%{_datadir}/libgc-mono/*.html
+rm $RPM_BUILD_ROOT%{_datadir}/libgc-mono/gc.man
+rm $RPM_BUILD_ROOT%{_mandir}/man1/cilc.1
+rm $RPM_BUILD_ROOT/%_bindir/cilc
+rm $RPM_BUILD_ROOT%{monodir}/1.0/cilc*
+rm $RPM_BUILD_ROOT/%_bindir/jay
+rm -r $RPM_BUILD_ROOT%{_datadir}/jay
+rm $RPM_BUILD_ROOT%{_prefix}/man/man1/jay.1
+rm $RPM_BUILD_ROOT%{_mandir}/man1/monostyle.1
+rm $RPM_BUILD_ROOT%{_mandir}/man1/oldmono.1
+rm $RPM_BUILD_ROOT%{_mandir}/man1/mint.1
+rm $RPM_BUILD_ROOT%{_libdir}/pkgconfig/mint.pc
+rm $RPM_BUILD_ROOT%{monodir}/1.0/CorCompare.exe
+rm $RPM_BUILD_ROOT%{monodir}/1.0/browsercaps-updater.exe*
+rm $RPM_BUILD_ROOT%{monodir}/1.0/mono-api-diff.exe
+rm $RPM_BUILD_ROOT%{monodir}/*/mono-api-info.exe
+rm -f $RPM_BUILD_ROOT%{_bindir}/monop2
+rm -f $RPM_BUILD_ROOT%{monodir}/2.0/monop.exe*
+rm -f $RPM_BUILD_ROOT%{_bindir}/nunit-console
+rm -f $RPM_BUILD_ROOT%{monodir}/*/nunit-console.exe*
+rm -f $RPM_BUILD_ROOT%{_libdir}/libMonoSupportW*
+rm -f $RPM_BUILD_ROOT%{monodir}/1.0/mono-shlib-cop.exe.config
+rm $RPM_BUILD_ROOT/%_bindir/xbuild
 
 %clean
-#rm -rf $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 
-%files
-%defattr(-, root, root)
+%files core
+%defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB ChangeLog NEWS README
-%doc %{_mandir}/man1/mono.*
-%doc %{_mandir}/man1/mint.*
-%doc %{_mandir}/man1/oldmono.*
-%config %{_sysconfdir}/mono/*
-%{_bindir}/mint
+%{_libdir}/libmono.so*
 %{_bindir}/mono
-%{_libdir}/*.so.*
-%{_libdir}/mono/1.0/mscorlib.dll
-%{_libdir}/mono/1.0/mscorlib.dll.mdb
-%{_libdir}/mono/1.0/System.dll
-%{_libdir}/mono/gac/System/*
-%{_libdir}/mono/1.0/System.Xml.dll
-%{_libdir}/mono/gac/System.Xml/*
-%{_libdir}/mono/1.0/Mono.Security.dll
-%{_libdir}/mono/gac/Mono.Security/*
-%{_libdir}/mono/1.0/I18N*.dll
-%{_libdir}/mono/gac/I18N*/*
-
-%files data
-%defattr(-, root, root)
-%{_bindir}/sqlsharp
-%{_libdir}/mono/1.0/sqlsharp.exe
-%{_libdir}/mono/1.0/sqlsharp.exe.mdb
-%{_mandir}/man1/sqlsharp.*
-%{_libdir}/mono/1.0/System.Data.dll
-%{_libdir}/mono/gac/System.Data/*
-%{_libdir}/mono/1.0/Mono.Data.dll
-%{_libdir}/mono/gac/Mono.Data/*
-%{_libdir}/mono/1.0/Mono.Data.Tds.dll
-%{_libdir}/mono/gac/Mono.Data.Tds/*
-
-%files data-db2
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/IBM.Data.DB2.dll
-%{_libdir}/mono/gac/IBM.Data.DB2/*
-
-%files data-mysql
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/ByteFX.Data.dll
-%{_libdir}/mono/gac/ByteFX.Data/*
-
-%files data-oracle
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/System.Data.OracleClient.dll
-%{_libdir}/mono/gac/System.Data.OracleClient/*
-
-%files data-postgresql
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/Npgsql.dll
-%{_libdir}/mono/gac/Npgsql/*
-
-%files data-sqlite
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/Mono.Data.SqliteClient.dll
-%{_libdir}/mono/gac/Mono.Data.SqliteClient/*
-
-%files data-sybase
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/Mono.Data.SybaseClient.dll
-%{_libdir}/mono/gac/Mono.Data.SybaseClient/*
-
-%files data-tds
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/Mono.Data.TdsClient.dll
-%{_libdir}/mono/gac/Mono.Data.TdsClient/*
-
-%files design
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/System.Design.dll
-%{_libdir}/mono/gac/System.Design/*
-%{_libdir}/mono/1.0/System.Drawing.Design.dll
-%{_libdir}/mono/gac/System.Drawing.Design/*
+%mono_bin certmgr
+%mono_bin chktrust
+%mono_bin gacutil
+%mono_bin gmcs
+%mono_bin mcs
+%mono_bin mozroots
+%mono_bin setreg
+%mono_bin sn
+%{_mandir}/man1/certmgr.1.gz
+%{_mandir}/man1/chktrust.1.gz
+%{_mandir}/man1/gacutil.1.gz
+%{_mandir}/man1/mcs.1.gz
+%{_mandir}/man1/mono.1.gz
+%{_mandir}/man1/mozroots.1.gz
+%{_mandir}/man1/setreg.1.gz
+%{_mandir}/man1/sn.1.gz
+%{_mandir}/man5/mono-config.5.gz
+%dir %{monodir}
+%dir %{monodir}/1.0
+%dir %{monodir}/2.0
+%dir %{monodir}/gac
+%gac_dll Commons.Xml.Relaxng
+%gac_dll I18N
+%gac_dll I18N.West
+%gac_dll ICSharpCode.SharpZipLib
+%gac_dll Microsoft.VisualC
+%gac_dll Mono.C5
+%gac_dll Mono.Cairo
+%gac_dll Mono.CompilerServices.SymbolWriter
+%gac_dll Mono.GetOptions
+%gac_dll Mono.Posix
+%gac_dll Mono.Security
+%gac_dll System
+%gac_dll System.Configuration
+#gac_dll System.Drawing
+%gac_dll System.Security
+%gac_dll System.Xml
+%gac_dll cscompmgd
+%{monodir}/?.0/mscorlib.dll
+%{monodir}/?.0/mscorlib.dll.mdb
+%dir /etc/mono
+%dir /etc/mono/1.0
+%dir /etc/mono/2.0
+%config /etc/mono/config
+%config /etc/mono/1.0/machine.config
+%config /etc/mono/2.0/machine.config
+%{_libdir}/libikvm-native.so
+%{_libdir}/libMonoPosixHelper.so*
 
 %files devel
-%defattr(-, root, root)
-%doc docs/
-%{_bindir}/al
-%{_libdir}/mono/1.0/al.exe
-%{_libdir}/mono/1.0/al.exe.mdb
-%{_libdir}/mono/1.0/browsercaps-updater.exe
-%{_libdir}/mono/1.0/browsercaps-updater.exe.mdb
-%{_bindir}/cilc
-%{_libdir}/mono/1.0/cilc.exe
-%{_libdir}/mono/1.0/cilc.exe.mdb
-%{_mandir}/man1/cilc.*
-%{_libdir}/mono/1.0/CorCompare.exe
-%{_bindir}/gacutil
-%{_libdir}/mono/1.0/gacutil.exe
-%{_libdir}/mono/1.0/gacutil.exe.mdb
-%{_mandir}/man1/gacutil.*
-%{_libdir}/mono/1.0/ictool.exe
-%{_libdir}/mono/1.0/ictool.exe.mdb
-%{_bindir}/ilasm
-%{_libdir}/mono/1.0/ilasm.exe
-%{_libdir}/mono/1.0/ilasm.exe.mdb
-%{_mandir}/man1/ilasm.*
-%{_bindir}/mcs
-%{_libdir}/mono/1.0/mcs.exe
-%{_libdir}/mono/1.0/mcs.exe.mdb
-%{_libdir}/mono/1.0/mcs.exe.config
-%{_mandir}/man1/mcs.*
-%{_bindir}/mkbundle
-%{_libdir}/mono/1.0/mkbundle.exe
-%{_libdir}/mono/1.0/mkbundle.exe.mdb
-%{_mandir}/man1/mkbundle.*
-%{_libdir}/mono/1.0/mono-api-diff.exe
-%{_libdir}/mono/1.0/mono-api-info.exe
-%{_bindir}/mono-find-provides
-%{_libdir}/mono/1.0/mono-find-provides.exe
-%{_libdir}/mono/1.0/mono-find-provides.exe.mdb
-%{_bindir}/mono-find-requires
-%{_libdir}/mono/1.0/mono-find-requires.exe
-%{_libdir}/mono/1.0/mono-find-requires.exe.mdb
-%{_bindir}/monop
-%{_libdir}/mono/1.0/monop.exe
-%{_libdir}/mono/1.0/monop.exe.mdb
-%{_mandir}/man1/monop.*
-%{_bindir}/resgen
-%{_libdir}/mono/1.0/resgen.exe
-%{_libdir}/mono/1.0/resgen.exe.mdb
-%{_libdir}/mono/1.0/cscompmgd.dll
-%{_libdir}/mono/gac/cscompmgd/*
-%{_libdir}/mono/1.0/PEAPI.dll
-%{_libdir}/mono/gac/PEAPI/*
-%{_libdir}/mono/1.0/Mono.CompilerServices.SymbolWriter.dll
-%{_libdir}/mono/gac/Mono.CompilerServices.SymbolWriter/*
-%{_libdir}/*.a
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/mono/
-%{_datadir}/mono/
-%{_bindir}/jay
-%{_datadir}/jay/
-%{_datadir}/libgc-mono/
+%defattr(-,root,root,-)
 %{_bindir}/monodis
-%{_mandir}/man1/monodis.*
-%{_bindir}/monograph
 %{_bindir}/pedump
+%{_bindir}/monodiet
+%mono_bin al
+%mono_bin caspol
+%mono_bin cert2spc
+%mono_bin dtd2xsd
+%mono_bin genxs
+%mono_bin ilasm
+%mono_bin macpack
+%mono_bin makecert
+%mono_bin mkbundle
+%mono_bin monop
+%mono_bin mono-shlib-cop
+%mono_bin permview
+%mono_bin prj2make
+%mono_bin resgen
+%mono_bin secutil
+%mono_bin signcode
+%{monodir}/1.0/ictool.exe
+%{monodir}/1.0/ictool.exe.mdb
+%{_mandir}/man1/al.1.gz
+%{_mandir}/man1/cert2spc.1.gz
+%{_mandir}/man1/dtd2xsd.1.gz
+%{_mandir}/man1/genxs.1.gz
+%{_mandir}/man1/ilasm.1.gz
+%{_mandir}/man1/macpack.1.gz
+%{_mandir}/man1/makecert.1.gz
+%{_mandir}/man1/mkbundle.1.gz
+%{_mandir}/man1/mono-shlib-cop.1.gz
+%{_mandir}/man1/monodis.1.gz
+%{_mandir}/man1/monop.1.gz
+%{_mandir}/man1/permview.1.gz
+%{_mandir}/man1/prj2make.1.gz
+%{_mandir}/man1/secutil.1.gz
+%{_mandir}/man1/signcode.1.gz
+%gac_dll PEAPI
+%{_bindir}/monograph
+%{_includedir}/mono
+%{_libdir}/libmono-profiler-aot.*
+%{_libdir}/libmono-profiler-cov.*
+%{_libdir}/pkgconfig/dotnet.pc
+%{_libdir}/pkgconfig/mono.pc
 %{_mandir}/man1/monoburg.*
-%{_mandir}/man1/monostyle.*
-%{_mandir}/man5/mono-config.*
-%exclude %{_bindir}/monoresgen
-%exclude %{_libdir}/*.la
-%exclude %{_bindir}/gmcs
-
-%files basic
-%defattr(-, root, root)
-%{_bindir}/mbas
-%{_libdir}/mono/1.0/mbas.exe
-%{_libdir}/mono/1.0/mbas.exe.mdb
-%{_libdir}/mono/1.0/Microsoft.VisualBasic.dll
-%{_libdir}/mono/gac/Microsoft.VisualBasic/*
-
-%files directory
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/System.DirectoryServices.dll
-%{_libdir}/mono/gac/System.DirectoryServices/*
-%{_libdir}/mono/1.0/Novell.Directory.Ldap.dll
-%{_libdir}/mono/gac/Novell.Directory.Ldap/*
-
-%files drawing
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/Mono.Cairo.dll
-%{_libdir}/mono/gac/Mono.Cairo/*
-%{_libdir}/mono/1.0/System.Drawing.dll
-%{_libdir}/mono/gac/System.Drawing/*
-
-%files enterprise
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/System.EnterpriseServices.dll
-%{_libdir}/mono/gac/System.EnterpriseServices/*
-%{_libdir}/mono/1.0/System.Configuration.Install.dll
-%{_libdir}/mono/gac/System.Configuration.Install/*
-%{_libdir}/mono/1.0/System.Management.dll
-%{_libdir}/mono/gac/System.Management/*
-
-%files extra-assemblies
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/Microsoft.VisualC.dll
-%{_libdir}/mono/gac/Microsoft.VisualC/*
-%{_libdir}/mono/1.0/Microsoft.Vsa.dll
-%{_libdir}/mono/gac/Microsoft.Vsa/*
-%{_libdir}/mono/1.0/System.ServiceProcess.dll
-%{_libdir}/mono/gac/System.ServiceProcess/*
-%{_libdir}/mono/1.0/Mono.C5.dll
-%{_libdir}/mono/gac/Mono.C5/*
-%{_libdir}/mono/1.0/Mono.Security.Win32.dll
-%{_libdir}/mono/gac/Mono.Security.Win32/*
-%{_libdir}/mono/1.0/Mono.GetOptions.dll
-%{_libdir}/mono/gac/Mono.GetOptions/*
-
-%files messaging
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/System.Messaging.dll
-%{_libdir}/mono/gac/System.Messaging/*
+%{_datadir}/mono/cil/cil-opcodes.xml
+%dir %{_datadir}/mono
+%dir %{_datadir}/mono/cil
 
 %files nunit
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/nunit.core.dll
-%{_libdir}/mono/gac/nunit.core/*
-%{_libdir}/mono/1.0/nunit.framework.dll
-%{_libdir}/mono/gac/nunit.framework/*
-%{_libdir}/mono/1.0/nunit.util.dll
-%{_libdir}/mono/gac/nunit.util/*
+%defattr(-,root,root,-)
+%gac_dll nunit.core
+%gac_dll nunit.framework
+%gac_dll nunit.util
+%{_libdir}/pkgconfig/mono-nunit.pc
 
-%files posix
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/Mono.Posix.dll
-%{_libdir}/mono/gac/Mono.Posix/*
+%files locale-extras
+%defattr(-,root,root,-)
+%gac_dll I18N.MidEast
+%gac_dll I18N.Rare
+%gac_dll I18N.CJK
+%gac_dll I18N.Other
 
-%files security
-%defattr(-, root, root)
-%{_bindir}/cert2spc
-%{_libdir}/mono/1.0/cert2spc.exe
-%{_libdir}/mono/1.0/cert2spc.exe.mdb
-%{_mandir}/man1/cert2spc.*
-%{_bindir}/certmgr
-%{_libdir}/mono/1.0/certmgr.exe
-%{_libdir}/mono/1.0/certmgr.exe.mdb
-%{_mandir}/man1/certmgr.*
-%{_bindir}/chktrust
-%{_libdir}/mono/1.0/chktrust.exe
-%{_libdir}/mono/1.0/chktrust.exe.mdb
-%{_mandir}/man1/chktrust.*
-%{_bindir}/makecert
-%{_libdir}/mono/1.0/MakeCert.exe
-%{_libdir}/mono/1.0/MakeCert.exe.mdb
-%{_mandir}/man1/makecert.*
-%{_bindir}/secutil
-%{_libdir}/mono/1.0/secutil.exe
-%{_libdir}/mono/1.0/secutil.exe.mdb
-%{_mandir}/man1/secutil.*
-%{_bindir}/setreg
-%{_libdir}/mono/1.0/setreg.exe
-%{_libdir}/mono/1.0/setreg.exe.mdb
-%{_mandir}/man1/setreg.*
-%{_bindir}/signcode
-%{_libdir}/mono/1.0/signcode.exe
-%{_libdir}/mono/1.0/signcode.exe.mdb
-%{_mandir}/man1/signcode.*
-%{_bindir}/sn
-%{_libdir}/mono/1.0/sn.exe
-%{_libdir}/mono/1.0/sn.exe.mdb
-%{_mandir}/man1/sn.*
-%{_libdir}/mono/1.0/System.Security.dll
-%{_libdir}/mono/gac/System.Security/*
+%files jscript
+%defattr(-,root,root,-)
+%mono_bin mjs
+%gac_dll Microsoft.JScript
 
-%files sharpziplib
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/ICSharpCode.SharpZipLib.dll
-%{_libdir}/mono/gac/ICSharpCode.SharpZipLib/*
+%files basic
+%defattr(-,root,root,-)
+%mono_bin mbas
+%gac_dll Microsoft.VisualBasic
 
-%files web
-%defattr(-, root, root)
-%{_bindir}/wsdl
-%{_bindir}/wsdl2
-%{_libdir}/mono/1.0/wsdl.exe
-%{_libdir}/mono/1.0/wsdl.exe.mdb
-%{_mandir}/man1/wsdl.*
-%{_bindir}/soapsuds
-%{_libdir}/mono/1.0/soapsuds.exe
-%{_libdir}/mono/1.0/soapsuds.exe.mdb
-%{_mandir}/man1/soapsuds.*
-%{_bindir}/disco
-%{_libdir}/mono/1.0/disco.exe
-%{_libdir}/mono/1.0/disco.exe.mdb
-%{_mandir}/man1/disco.*
-%{_libdir}/mono/1.0/System.Web.dll
-%{_libdir}/mono/gac/System.Web/*
-%{_libdir}/mono/1.0/System.Web.Services.dll
-%{_libdir}/mono/gac/System.Web.Services/*
-%{_libdir}/mono/1.0/System.Runtime.Remoting.dll
-%{_libdir}/mono/gac/System.Runtime.Remoting/*
-%{_libdir}/mono/1.0/System.Runtime.Serialization.Formatters.Soap.dll
-%{_libdir}/mono/gac/System.Runtime.Serialization.Formatters.Soap/*
-%{_libdir}/mono/1.0/Mono.Http.dll
-%{_libdir}/mono/gac/Mono.Http/*
+%files extras
+%defattr(-,root,root,-)
+%{_mandir}/man1/mono-service.1.gz
+%mono_bin mono-service
+%gac_dll System.Management
+%gac_dll System.Messaging
+%gac_dll System.ServiceProcess
+%gac_dll System.Configuration.Install
+%gac_dll Microsoft.Vsa
 
 %files winforms
-%defattr(-, root, root)
-%{_libdir}/mono/1.0/Accessibility.dll
-%{_libdir}/mono/gac/Accessibility/*
-%{_libdir}/mono/1.0/System.Windows.Forms.dll
-%{_libdir}/mono/gac/System.Windows.Forms/*
+%defattr(-,root,root,-)
+%gac_dll System.Windows.Forms
+%gac_dll Accessibility
+%gac_dll System.Design
+%gac_dll System.Drawing.Design
 
-%files xml
-%defattr(-, root, root)
-%{_bindir}/xsd
-%{_libdir}/mono/1.0/xsd.exe
-%{_libdir}/mono/1.0/xsd.exe.mdb
-%{_mandir}/man1/xsd.*
-%{_bindir}/genxs
-%{_libdir}/mono/1.0/genxs.exe
-%{_libdir}/mono/1.0/genxs.exe.mdb
-%{_mandir}/man1/genxs.*
-%{_libdir}/mono/1.0/Commons.Xml.Relaxng.dll
-%{_libdir}/mono/gac/Commons.Xml.Relaxng/*
+%files web
+%defattr(-,root,root,-)
+%gac_dll Mono.Http
+%gac_dll System.Runtime.Remoting
+%gac_dll System.Web
+%gac_dll System.Runtime.Serialization.Formatters.Soap
+%gac_dll System.Web.Services
+%mono_bin disco
+%mono_bin soapsuds
+%mono_bin_1 wsdl wsdl
+%mono_bin_2 wsdl2 wsdl
+%mono_bin xsd
+%{_mandir}/man1/disco.1.gz
+%{_mandir}/man1/soapsuds.1.gz
+%{_mandir}/man1/wsdl.1.gz
+%{_mandir}/man1/xsd.1.gz
+%config /etc/mono/browscap.ini
+%config /etc/mono/1.0/DefaultWsdlHelpGenerator.aspx
+%config /etc/mono/2.0/DefaultWsdlHelpGenerator.aspx
+
+
+%files data
+%defattr(-,root,root,-)
+%mono_bin sqlsharp
+%{_mandir}/man1/sqlsharp.1.gz
+%gac_dll System.Data
+%gac_dll Mono.Data
+%gac_dll Mono.Data.Tds
+%gac_dll Mono.Data.TdsClient
+%gac_dll System.EnterpriseServices
+%gac_dll Novell.Directory.Ldap
+%gac_dll System.DirectoryServices
+
+%files data-sqlite
+%defattr(-,root,root,-)
+%gac_dll Mono.Data.SqliteClient
+
+%files data-sybase
+%defattr(-,root,root,-)
+%gac_dll Mono.Data.SybaseClient
+
+%files data-oracle
+%defattr(-,root,root,-)
+%gac_dll System.Data.OracleClient
+
+%files data-postgresql
+%defattr(-,root,root,-)
+%gac_dll Npgsql
+
+%files data-firebird
+%defattr(-,root,root,-)
+%gac_dll FirebirdSql.Data.Firebird
+
+%files -n bytefx-data-mysql
+%defattr(-,root,root,-)
+%gac_dll ByteFX.Data
+
+%files -n ibm-data-db2
+%defattr(-,root,root,-)
+%gac_dll IBM.Data.DB2
 
 %changelog
-* Thu Feb 03 2005 Justin Ross <jross@redhat.com>
-  - Introduces a more fine-grained packaging scheme.  This
-    unfortunately requires detailed file lists.
-  - Removes some unused scriptlet code.
-
-* Thu Jan 20 2005 Justin Ross <jross@redhat.com>
-  - Moves some binaries from mono to mono-devel.
-  - Adds the EXTERNAL_MCS flag to force bootstrap via monolite download.
-
-* Wed Dec 15 2004 Justin Ross <jross@dhcp83-29.boston.redhat.com>
-  - Initial build.
+* Tue Nov 15 2005 Alexander Larsson <alexl@redhat.com> - 1.1.10-1
+- Initial version

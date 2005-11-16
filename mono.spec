@@ -195,22 +195,18 @@ no longer maintained. MySQL AB now provides MySQL Connector/Net
 which is fully managed and actively maintained.
 
 %define monodir %_prefix/lib/mono
-%define gac_dll(dll) \
-  %{monodir}/gac/%{1} \
+%define gac_dll(dll)  %{monodir}/gac/%{1} \
   %{monodir}/?.0/%{1}.dll \
   %{nil}
-%define mono_bin(bin) \
-  %{_bindir}/%{1} \
+%define mono_bin(bin) %{_bindir}/%{1} \
   %{monodir}/?.0/%{1}.exe \
   %{monodir}/?.0/%{1}.exe.* \
   %{nil}
-%define mono_bin_1(bin, dll) \
-  %{_bindir}/%{1} \
+%define mono_bin_1(bin, dll) %{_bindir}/%{1} \
   %{monodir}/1.0/%{2}.exe \
   %{monodir}/1.0/%{2}.exe.* \
   %{nil}
-%define mono_bin_2(bin, dll) \
-  %{_bindir}/%{1} \
+%define mono_bin_2(bin, dll) %{_bindir}/%{1} \
   %{monodir}/2.0/%{2}.exe \
   %{monodir}/2.0/%{2}.exe.* \
   %{nil}

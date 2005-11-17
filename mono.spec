@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.1.10
-Release:        1
+Release:        2
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -12,11 +12,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  bison, glib2-devel, pkgconfig, libicu-devel libgdiplus
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 s390 s390x armv4l sparc
-# s390 Buildroots are hosed atm
-ExcludeArch: s390 s390x
-# rpmbuild segfaults on x86-64
-ExcludeArch: x86_64
+ExclusiveArch: %ix86 x86_64 ppc ia64 s390 armv4l sparc
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -485,5 +481,8 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Thu Nov 17 2005 Alexander Larsson <alexl@redhat.com> 1.1.10-2
+- Build on s390 and x86-64 now
+
 * Tue Nov 15 2005 Alexander Larsson <alexl@redhat.com> - 1.1.10-1
 - Initial version

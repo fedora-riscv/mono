@@ -221,7 +221,8 @@ which is fully managed and actively maintained.
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
-%configure --with-ikvm=yes --with-ikvm=yes
+%configure --with-ikvm=yes
+make clean
 make %{?_smp_mflags}
 
 

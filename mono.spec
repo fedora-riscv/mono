@@ -227,8 +227,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %endif
 
 %configure --with-ikvm=yes
-make %{?_smp_mflags}
-
+make
 
 %install
 rm -rf $RPM_BUILD_ROOT

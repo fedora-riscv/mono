@@ -224,7 +224,7 @@ export CFLAGS="-O2 -fno-strict-aliasing"
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %endif
 
-%configure --with-ikvm=yes
+%configure --with-ikvm=yes --with-jit=yes
 make
 
 %install

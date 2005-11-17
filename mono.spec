@@ -9,7 +9,10 @@ URL:            http://www.mono-project.com/
 Source0:        mono-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  bison, glib2-devel, pkgconfig, libicu-devel
+BuildRequires:  bison, glib2-devel, pkgconfig, libicu-devel libgdiplus
+
+# Buildroots are hosed atm
+ExcludeArch: s390 s390x
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -235,11 +238,6 @@ rm $RPM_BUILD_ROOT%{_libdir}/*.la
 rm $RPM_BUILD_ROOT%{_bindir}/mono-find-provides
 rm $RPM_BUILD_ROOT%{_bindir}/mono-find-requires
 
-
-# TODO: Is System.Drawing safe?
-rm -rf $RPM_BUILD_ROOT%{monodir}/gac/System.Drawing
-rm $RPM_BUILD_ROOT%{monodir}/?.0/System.Drawing.dll
-
 # This was removed upstream:
 rm -fr $RPM_BUILD_ROOT%{monodir}/gac/Mono.Security.Win32/[12]*
 rm $RPM_BUILD_ROOT%{monodir}/*/Mono.Security.Win32.dll
@@ -311,7 +309,7 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll Mono.Security
 %gac_dll System
 %gac_dll System.Configuration
-#gac_dll System.Drawing
+%gac_dll System.Drawing
 %gac_dll System.Security
 %gac_dll System.Xml
 %gac_dll cscompmgd

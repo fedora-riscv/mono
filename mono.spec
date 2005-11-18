@@ -13,6 +13,8 @@ BuildRequires:  bison, glib2-devel, pkgconfig, libicu-devel libgdiplus
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ppc ia64 s390 armv4l sparc
+# Some build failure on s390
+ExcludeArch: s390
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -482,7 +484,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Fri Nov 18 2005 Alexander Larsson <alexl@redhat.com> 1.1.10-3
-- New try for s390
+- Disable s390 due to some build failure
 
 * Thu Nov 17 2005 Alexander Larsson <alexl@redhat.com> 1.1.10-2
 - Build on s390 and x86-64 now

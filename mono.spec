@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.1.10
-Release:        2
+Release:        3
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -481,6 +481,9 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Nov 18 2005 Alexander Larsson <alexl@redhat.com> 1.1.10-3
+- New try for s390
+
 * Thu Nov 17 2005 Alexander Larsson <alexl@redhat.com> 1.1.10-2
 - Build on s390 and x86-64 now
 

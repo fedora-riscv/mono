@@ -218,7 +218,7 @@ which is fully managed and actively maintained.
 %setup -q
 
 %build
-%ifarch ia64
+%ifarch ia64 s390
 export CFLAGS="-O2 -fno-strict-aliasing"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"

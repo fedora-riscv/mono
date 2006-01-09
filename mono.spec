@@ -12,7 +12,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  bison, glib2-devel, pkgconfig, libicu-devel libgdiplus
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 s390 s390x armv4l sparc
+ExclusiveArch: %ix86 x86_64 ppc ia64 s390 armv4l sparc
+# Some build failure on s390x
+ExcludeArch: s390x
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI

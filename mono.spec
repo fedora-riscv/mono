@@ -1,6 +1,6 @@
 Name:           mono
-Version:        1.1.10
-Release:        4
+Version:        1.1.12.1
+Release:        1
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -271,7 +271,6 @@ rm -f $RPM_BUILD_ROOT%{_bindir}/nunit-console
 rm -f $RPM_BUILD_ROOT%{monodir}/*/nunit-console.exe*
 rm -f $RPM_BUILD_ROOT%{_libdir}/libMonoSupportW*
 rm -f $RPM_BUILD_ROOT%{monodir}/1.0/mono-shlib-cop.exe.config
-rm $RPM_BUILD_ROOT/%_bindir/xbuild
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -306,6 +305,7 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll I18N
 %gac_dll I18N.West
 %gac_dll ICSharpCode.SharpZipLib
+%{monodir}/compat-*/ICSharpCode.SharpZipLib.dll
 %gac_dll Microsoft.VisualC
 %gac_dll Mono.C5
 %gac_dll Mono.Cairo
@@ -340,7 +340,8 @@ rm -rf $RPM_BUILD_ROOT
 %mono_bin cert2spc
 %mono_bin dtd2xsd
 %mono_bin genxs
-%mono_bin ilasm
+%mono_bin_1 ilasm ilasm
+%mono_bin_2 ilasm2 ilasm
 %mono_bin macpack
 %mono_bin makecert
 %mono_bin mkbundle
@@ -351,6 +352,7 @@ rm -rf $RPM_BUILD_ROOT
 %mono_bin resgen
 %mono_bin secutil
 %mono_bin signcode
+%mono_bin xbuild
 %{monodir}/1.0/ictool.exe
 %{monodir}/1.0/ictool.exe.mdb
 %{_mandir}/man1/al.1.gz
@@ -369,16 +371,22 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/secutil.1.gz
 %{_mandir}/man1/signcode.1.gz
 %gac_dll PEAPI
+%gac_dll Microsoft.Build.Engine
+%gac_dll Microsoft.Build.Framework
+%gac_dll Microsoft.Build.Tasks
+%gac_dll Microsoft.Build.Utilities
 %{_bindir}/monograph
 %{_includedir}/mono
 %{_libdir}/libmono-profiler-aot.*
 %{_libdir}/libmono-profiler-cov.*
 %{_libdir}/pkgconfig/dotnet.pc
 %{_libdir}/pkgconfig/mono.pc
+%{_libdir}/pkgconfig/mono-cairo.pc
 %{_mandir}/man1/monoburg.*
 %{_datadir}/mono/cil/cil-opcodes.xml
 %dir %{_datadir}/mono
 %dir %{_datadir}/mono/cil
+%{monodir}/xbuild
 
 %files nunit
 %defattr(-,root,root,-)
@@ -483,6 +491,9 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Mon Jan  9 2006 Alexander Larsson <alexl@redhat.com> - 1.1.12.1-1
+- Update to 1.1.12.1
+
 * Mon Jan  9 2006 Alexander Larsson <alexl@redhat.com> - 1.1.10-4
 - rebuild
 

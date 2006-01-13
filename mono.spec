@@ -1,5 +1,5 @@
 Name:           mono
-Version:        1.1.12.1
+Version:        1.1.13
 Release:        1
 Summary:        a .NET runtime environment
 
@@ -12,9 +12,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  bison, glib2-devel, pkgconfig, libicu-devel libgdiplus
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 s390 armv4l sparc
-# Some build failure on s390x
-ExcludeArch: s390x
+ExclusiveArch: %ix86 x86_64 ppc ia64 s390 s390x armv4l sparc
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -25,6 +23,7 @@ metadata access libraries.
 %package core
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
+Requires:	libgdiplus
 
 %description core
 This package contains the core of the Mono runtime including its
@@ -256,7 +255,7 @@ rm $RPM_BUILD_ROOT/%_bindir/cilc
 rm $RPM_BUILD_ROOT%{monodir}/1.0/cilc*
 rm $RPM_BUILD_ROOT/%_bindir/jay
 rm -r $RPM_BUILD_ROOT%{_datadir}/jay
-rm $RPM_BUILD_ROOT%{_prefix}/man/man1/jay.1
+rm $RPM_BUILD_ROOT%{_mandir}/man1/jay.1
 rm $RPM_BUILD_ROOT%{_mandir}/man1/monostyle.1
 rm $RPM_BUILD_ROOT%{_mandir}/man1/oldmono.1
 rm $RPM_BUILD_ROOT%{_mandir}/man1/mint.1
@@ -491,6 +490,11 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Jan 13 2006 Alexander Larsson <alexl@redhat.com> - 1.1.13-1
+- Update to 1.13
+- Add libgdiplus dep to mono-core
+- Add s390x to build
+
 * Mon Jan  9 2006 Alexander Larsson <alexl@redhat.com> - 1.1.12.1-1
 - Update to 1.1.12.1
 

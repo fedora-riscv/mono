@@ -1,5 +1,5 @@
 Name:           mono
-Version:        1.1.13
+Version:        1.1.13.2
 Release:        1
 Summary:        a .NET runtime environment
 
@@ -490,6 +490,9 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Tue Jan 31 2006 Christopher Aillon <caillon@redhat.com> - 1.1.13.2-1
+- Update to 1.1.13.2
+
 * Fri Jan 13 2006 Alexander Larsson <alexl@redhat.com> - 1.1.13-1
 - Update to 1.13
 - Add libgdiplus dep to mono-core

@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.1.13.2
-Release:        1.1
+Release:        2
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -490,6 +490,9 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Sun Feb 12 2006 Christopher Aillon <caillon@redhat.com> - 1.1.13.2-2
+- Rebuild
+
 * Tue Feb 07 2006 Jesse Keating <jkeating@redhat.com> - 1.1.13.2-1.1
 - rebuilt for new gcc4.1 snapshot and glibc changes
 

@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.1.13.2
-Release:        2
+Release:        3
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -13,6 +13,8 @@ BuildRequires:  bison, glib2-devel, pkgconfig, libicu-devel libgdiplus
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ppc ia64 s390 s390x armv4l sparc
+
+Patch0: mono-1.1.13.2-work-with-selinux.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -217,6 +219,7 @@ which is fully managed and actively maintained.
 
 %prep
 %setup -q
+%patch0 -p1 -b .work-with-selinux
 
 %build
 %ifarch ia64 s390
@@ -490,6 +493,9 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Mon Feb 27 2006 Ray Strode <rstrode@redhat.com> - 1.1.13.2-3
+- Patch from Jakub to make work with SELinux better
+
 * Sun Feb 12 2006 Christopher Aillon <caillon@redhat.com> - 1.1.13.2-2
 - Rebuild
 

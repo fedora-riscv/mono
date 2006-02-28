@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.1.13.2
-Release:        3
+Release:        4
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -493,6 +493,9 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Tue Feb 28 2006 Ray Strode <rstrode@redhat.com> - 1.1.13.2-4
+- Updated patch from Paolo Molaro <lupus@ximian.com>
+
 * Mon Feb 27 2006 Ray Strode <rstrode@redhat.com> - 1.1.13.2-3
 - Patch from Jakub to make work with SELinux better
 

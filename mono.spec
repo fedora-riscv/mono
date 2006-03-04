@@ -1,20 +1,26 @@
 Name:           mono
-Version:        1.1.13.2
-Release:        5
+Version:        1.1.13.4
+Release:        1
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
 License:        GPL, LGPL, MIT X11
 URL:            http://www.mono-project.com/
-Source0:        mono-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  bison, glib2-devel, pkgconfig, libicu-devel libgdiplus
+BuildRequires:  bison
+BuildRequires:  glib2-devel
+BuildRequires:  pkgconfig
+BuildRequires:  libicu-devel
+BuildRequires:  libgdiplus
+BuildRequires:  zlib-devel
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ppc ia64 s390 s390x armv4l sparc
 
-Patch0: mono-1.1.13.2-work-with-selinux.patch
+Patch1: mono-1.1.13.4-selinux-ia64.patch
+Patch2: mono-1.1.13.4-ppc-threading.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -36,7 +42,7 @@ I18N, Cairo and Mono.*).
 %package devel
 Summary:        Development tools and headers for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 Requires:       glib2-devel
 
 %description devel
@@ -47,7 +53,7 @@ other various tools)
 %package nunit
 Summary:        NUnit Testing Framework
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 Requires:       glib2-devel
 
 %description nunit
@@ -62,7 +68,7 @@ brings xUnit to all .NET languages.
 %package locale-extras
 Summary:        Extra locale information for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description locale-extras
 This package contains assemblies to support I18N applications for
@@ -73,7 +79,7 @@ non-latin alphabets.
 %package jscript
 Summary:        JScript .NET support for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description jscript
 This package contains the JScript .NET compiler and language runtime.
@@ -83,7 +89,7 @@ assemblies.
 %package basic
 Summary:        Visual Basic .NET support for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description basic
 This package contains the Visual Basic .NET compiler and language
@@ -93,7 +99,7 @@ assemblies.
 %package extras
 Summary:        Provides the infrastructure for running and building daemons and services with Mono as well as various stub assemblies
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description extras
 This package provides the libary and application to run services
@@ -104,7 +110,7 @@ System.Configuration.Install, System.Management, System.Messaging.
 %package winforms
 Summary:        Windows Forms implementation for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description winforms
 This package provides a fully managed implementation of
@@ -114,7 +120,7 @@ applications.
 %package web
 Summary:        ASP.NET, Remoting, and Web Services for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description web
 This package provides the ASP.NET libraries and runtime for
@@ -123,7 +129,7 @@ development of web application, web services and remoting support.
 %package data
 Summary:        Database connectivity for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description data
 This package provides a Mono assembly to facilitate data access
@@ -136,7 +142,7 @@ data providers.
 %package data-sqlite
 Summary:        sqlite database connectivity for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 Requires:       sqlite
 
 %description data-sqlite
@@ -146,7 +152,7 @@ database.
 %package data-sybase
 Summary:        Sybase database connectivity for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description data-sybase
 This package contains the ADO.NET Data provider for the Sybase
@@ -155,7 +161,7 @@ database.
 %package data-oracle
 Summary:        Oracle database connectivity for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description data-oracle
 This package contains the ADO.NET Data provider for the Oracle
@@ -164,7 +170,7 @@ database.
 %package data-postgresql
 Summary:        Postgresql database connectivity for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description data-postgresql
 This package contains the ADO.NET Data provider for the PostgreSQL
@@ -173,7 +179,7 @@ database.
 %package data-firebird
 Summary:        Firebird database connectivity for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description data-firebird
 This package contains the ADO.NET Data provider for the Firebird
@@ -183,7 +189,7 @@ database.
 %package -n ibm-data-db2
 Summary:        IBM DB2 database connectivity for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description -n ibm-data-db2
 This package contains the ADO.NET Data provider for the IBM DB2
@@ -193,7 +199,7 @@ Universal database.
 %package -n bytefx-data-mysql
 Summary:        MySQL database connectivity for Mono
 Group:          Development/Languages
-Requires:       mono-core == %version-%release
+Requires:       mono-core = %{version}-%{release}
 
 %description -n bytefx-data-mysql
 This package contains the ADO.NET Data provider for MySQL. This is
@@ -219,7 +225,8 @@ which is fully managed and actively maintained.
 
 %prep
 %setup -q
-%patch0 -p1 -b .work-with-selinux
+%patch1 -p1 -b .selinux-ia64
+%patch2 -p1 -b .ppc-threading
 
 %build
 %ifarch ia64 s390
@@ -232,50 +239,50 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 make
 
 %install
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # Libtool is on crack, installing the shell wrappers
 cp mono/dis/.libs/monodis $RPM_BUILD_ROOT%{_bindir}
 cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 
-rm $RPM_BUILD_ROOT%{_libdir}/*.a
-rm $RPM_BUILD_ROOT%{_libdir}/*.la
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.a
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 # We put these inside rpm
-rm $RPM_BUILD_ROOT%{_bindir}/mono-find-provides
-rm $RPM_BUILD_ROOT%{_bindir}/mono-find-requires
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-provides
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-requires
 
 # This was removed upstream:
-rm -fr $RPM_BUILD_ROOT%{monodir}/gac/Mono.Security.Win32/[12]*
-rm $RPM_BUILD_ROOT%{monodir}/*/Mono.Security.Win32.dll
-rm $RPM_BUILD_ROOT%{_datadir}/libgc-mono/README*
-rm $RPM_BUILD_ROOT%{_datadir}/libgc-mono/barrett_diagram
-rm $RPM_BUILD_ROOT%{_datadir}/libgc-mono/*.html
-rm $RPM_BUILD_ROOT%{_datadir}/libgc-mono/gc.man
-rm $RPM_BUILD_ROOT%{_mandir}/man1/cilc.1
-rm $RPM_BUILD_ROOT/%_bindir/cilc
-rm $RPM_BUILD_ROOT%{monodir}/1.0/cilc*
-rm $RPM_BUILD_ROOT/%_bindir/jay
-rm -r $RPM_BUILD_ROOT%{_datadir}/jay
-rm $RPM_BUILD_ROOT%{_mandir}/man1/jay.1
-rm $RPM_BUILD_ROOT%{_mandir}/man1/monostyle.1
-rm $RPM_BUILD_ROOT%{_mandir}/man1/oldmono.1
-rm $RPM_BUILD_ROOT%{_mandir}/man1/mint.1
-rm $RPM_BUILD_ROOT%{_libdir}/pkgconfig/mint.pc
-rm $RPM_BUILD_ROOT%{monodir}/1.0/CorCompare.exe
-rm $RPM_BUILD_ROOT%{monodir}/1.0/browsercaps-updater.exe*
-rm $RPM_BUILD_ROOT%{monodir}/1.0/mono-api-diff.exe
-rm $RPM_BUILD_ROOT%{monodir}/*/mono-api-info.exe
-rm -f $RPM_BUILD_ROOT%{_bindir}/monop2
-rm -f $RPM_BUILD_ROOT%{monodir}/2.0/monop.exe*
-rm -f $RPM_BUILD_ROOT%{_bindir}/nunit-console
-rm -f $RPM_BUILD_ROOT%{monodir}/*/nunit-console.exe*
-rm -f $RPM_BUILD_ROOT%{_libdir}/libMonoSupportW*
-rm -f $RPM_BUILD_ROOT%{monodir}/1.0/mono-shlib-cop.exe.config
+%{__rm} -fr $RPM_BUILD_ROOT%{monodir}/gac/Mono.Security.Win32/[12]*
+%{__rm} $RPM_BUILD_ROOT%{monodir}/*/Mono.Security.Win32.dll
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/README*
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/barrett_diagram
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/*.html
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/gc.man
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/cilc.1
+%{__rm} $RPM_BUILD_ROOT/%_bindir/cilc
+%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/cilc*
+%{__rm} $RPM_BUILD_ROOT/%_bindir/jay
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/jay
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/jay.1
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/monostyle.1
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/oldmono.1
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/mint.1
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/pkgconfig/mint.pc
+%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/CorCompare.exe
+%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/browsercaps-updater.exe*
+%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/mono-api-diff.exe
+%{__rm} $RPM_BUILD_ROOT%{monodir}/*/mono-api-info.exe
+%{__rm} -f $RPM_BUILD_ROOT%{_bindir}/monop2
+%{__rm} -f $RPM_BUILD_ROOT%{monodir}/2.0/monop.exe*
+%{__rm} -f $RPM_BUILD_ROOT%{_bindir}/nunit-console
+%{__rm} -f $RPM_BUILD_ROOT%{monodir}/*/nunit-console.exe*
+%{__rm} -f $RPM_BUILD_ROOT%{_libdir}/libMonoSupportW*
+%{__rm} -f $RPM_BUILD_ROOT%{monodir}/1.0/mono-shlib-cop.exe.config
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf $RPM_BUILD_ROOT
 
 %files core
 %defattr(-,root,root,-)
@@ -493,6 +500,11 @@ rm -rf $RPM_BUILD_ROOT
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Mar  3 2006 Christopher Aillon <caillon@redhat.com> - 1.1.13.4-1
+- Update to 1.1.13.4
+- Add patch so mono doesn't segfault on PPC SMP machines
+- Minor spec cleanup
+
 * Thu Mar  2 2006 Ray Strode <rstrode@redhat.com> - 1.1.13.2-5
 - Updated patch from Jakub (1.1.13.2-3 to 1.1.13.2-5 are 
   for bug 182965)

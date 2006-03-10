@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.1.13.4
-Release:        1
+Release:        2
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -500,6 +500,9 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Mar 10 2006 Bill Nottingham <notting@redhat.com> - 1.1.13.4-2
+- rebuild for ppc TLS issue (#184446)
+
 * Fri Mar  3 2006 Christopher Aillon <caillon@redhat.com> - 1.1.13.4-1
 - Update to 1.1.13.4
 - Add patch so mono doesn't segfault on PPC SMP machines

@@ -1,5 +1,5 @@
 Name:           mono
-Version:        1.1.13.4
+Version:        1.1.13.7
 Release:        2
 Summary:        a .NET runtime environment
 
@@ -500,6 +500,9 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Wed Apr 26 2006 Alexander Larsson <alexl@redhat.com> - 1.1.13.7-2
+- Update to 1.1.13.7
+
 * Fri Mar 10 2006 Bill Nottingham <notting@redhat.com> - 1.1.13.4-2
 - rebuild for ppc TLS issue (#184446)
 

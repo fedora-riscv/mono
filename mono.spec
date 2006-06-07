@@ -1,6 +1,6 @@
 Name:           mono
-Version:        1.1.13.7
-Release:        2
+Version:        1.1.15
+Release:        1
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -260,26 +260,16 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/barrett_diagram
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/*.html
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/gc.man
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/cilc.1
-%{__rm} $RPM_BUILD_ROOT/%_bindir/cilc
-%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/cilc*
 %{__rm} $RPM_BUILD_ROOT/%_bindir/jay
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/jay
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/jay.1
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/monostyle.1
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/oldmono.1
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/mint.1
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/pkgconfig/mint.pc
 %{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/CorCompare.exe
 %{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/browsercaps-updater.exe*
 %{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/mono-api-diff.exe
 %{__rm} $RPM_BUILD_ROOT%{monodir}/*/mono-api-info.exe
-%{__rm} -f $RPM_BUILD_ROOT%{_bindir}/monop2
-%{__rm} -f $RPM_BUILD_ROOT%{monodir}/2.0/monop.exe*
-%{__rm} -f $RPM_BUILD_ROOT%{_bindir}/nunit-console
-%{__rm} -f $RPM_BUILD_ROOT%{monodir}/*/nunit-console.exe*
-%{__rm} -f $RPM_BUILD_ROOT%{_libdir}/libMonoSupportW*
-%{__rm} -f $RPM_BUILD_ROOT%{monodir}/1.0/mono-shlib-cop.exe.config
 
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
@@ -338,6 +328,7 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %config /etc/mono/2.0/machine.config
 %{_libdir}/libikvm-native.so
 %{_libdir}/libMonoPosixHelper.so*
+%{_libdir}/libMonoSupportW.so
 
 %files devel
 %defattr(-,root,root,-)
@@ -347,18 +338,23 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %mono_bin al
 %mono_bin caspol
 %mono_bin cert2spc
+%mono_bin cilc
 %mono_bin dtd2xsd
+%mono_bin dtd2rng
 %mono_bin genxs
 %mono_bin_1 ilasm ilasm
 %mono_bin_2 ilasm2 ilasm
 %mono_bin macpack
 %mono_bin makecert
 %mono_bin mkbundle
-%mono_bin monop
+%mono_bin_1 monop monop
+%mono_bin_2 monop2 monop
 %mono_bin mono-shlib-cop
+%mono_bin mono-xmltool
 %mono_bin permview
 %mono_bin prj2make
-%mono_bin resgen
+%mono_bin_1 resgen resgen
+%mono_bin_2 resgen2 resgen
 %mono_bin secutil
 %mono_bin signcode
 %mono_bin xbuild
@@ -366,6 +362,7 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %{monodir}/1.0/ictool.exe.mdb
 %{_mandir}/man1/al.1.gz
 %{_mandir}/man1/cert2spc.1.gz
+%{_mandir}/man1/cilc.1.gz
 %{_mandir}/man1/dtd2xsd.1.gz
 %{_mandir}/man1/genxs.1.gz
 %{_mandir}/man1/ilasm.1.gz
@@ -373,6 +370,7 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/makecert.1.gz
 %{_mandir}/man1/mkbundle.1.gz
 %{_mandir}/man1/mono-shlib-cop.1.gz
+%{_mandir}/man1/mono-xmltool.1.gz
 %{_mandir}/man1/monodis.1.gz
 %{_mandir}/man1/monop.1.gz
 %{_mandir}/man1/permview.1.gz
@@ -399,6 +397,8 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 
 %files nunit
 %defattr(-,root,root,-)
+%mono_bin_1 nunit-console nunit-console
+%mono_bin_2 nunit-console2 nunit-console
 %gac_dll nunit.core
 %gac_dll nunit.framework
 %gac_dll nunit.util
@@ -420,11 +420,14 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %defattr(-,root,root,-)
 %mono_bin mbas
 %gac_dll Microsoft.VisualBasic
+%{_mandir}/man1/mbas.1.gz
 
 %files extras
 %defattr(-,root,root,-)
 %{_mandir}/man1/mono-service.1.gz
-%mono_bin mono-service
+%mono_bin_1 mono-service mono-service
+%{_bindir}/mono-service2
+
 %gac_dll System.Management
 %gac_dll System.Messaging
 %gac_dll System.ServiceProcess
@@ -457,7 +460,7 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %config /etc/mono/browscap.ini
 %config /etc/mono/1.0/DefaultWsdlHelpGenerator.aspx
 %config /etc/mono/2.0/DefaultWsdlHelpGenerator.aspx
-
+%config /etc/mono/2.0/web.config
 
 %files data
 %defattr(-,root,root,-)
@@ -470,6 +473,7 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.EnterpriseServices
 %gac_dll Novell.Directory.Ldap
 %gac_dll System.DirectoryServices
+%gac_dll System.Transactions
 
 %files data-sqlite
 %defattr(-,root,root,-)

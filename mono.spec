@@ -15,6 +15,9 @@ BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
 BuildRequires:  libgdiplus
 BuildRequires:  zlib-devel
+%ifarch ia64
+BuildRequires:  libunwind
+%endif
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ppc ia64 s390 s390x armv4l sparc

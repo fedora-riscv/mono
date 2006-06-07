@@ -20,7 +20,9 @@ BuildRequires:  libunwind
 %endif
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 s390 s390x armv4l sparc
+ExclusiveArch: %ix86 x86_64 ppc ia64 s390x armv4l sparc
+# Disabled due to strange build failure:
+# s390
 
 Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-1.1.13.4-ppc-threading.patch
@@ -507,6 +509,10 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Wed Jun  7 2006 Alexander Larsson <alexl@redhat.com> - 1.1.15-1
+- Disabled s390 for now due to build failure
+- Update to 1.1.15
+
 * Wed Apr 26 2006 Alexander Larsson <alexl@redhat.com> - 1.1.13.7-2
 - Update to 1.1.13.7
 

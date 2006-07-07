@@ -20,7 +20,9 @@ BuildRequires:  libunwind
 %endif
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc s390 s390x
+ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc
+# Disabled due to strange build failure:
+# s390 s390x
 
 Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-1.1.13.4-ppc-threading.patch

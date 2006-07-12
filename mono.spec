@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.1.16
-Release:        1
+Release:        1.1
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -510,6 +510,9 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - sh: line 0: fg: no job control
+- rebuild
+
 * Fri Jul  7 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16-1
 - update to 1.1.16
 

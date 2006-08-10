@@ -1,6 +1,6 @@
 Name:           mono
-Version:        1.1.16
-Release:        1.1
+Version:        1.1.16.1
+Release:        1
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -33,10 +33,26 @@ virtual machine (as well as a byte code interpreter, the
 class loader, the garbage collector, threading system and
 metadata access libraries.
 
+%package lib
+Summary:        Mono library, used by applications embedding mono
+Group:          Development/Languages
+
+%description lib
+This pickage contains libraries required for embedding/hosting the
+mono runtime in other applications.
+
+%package lib-devel
+Summary:        Header files for Mono library
+Group:          Development/Languages
+
+%description lib-devel
+Contains headers and other files needed to use the library in mono-lib.
+
 %package core
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
 Requires:	libgdiplus
+Requires:	mono-lib
 
 %description core
 This package contains the core of the Mono runtime including its
@@ -44,16 +60,19 @@ Virtual Machine, Just-in-time compiler, C# compiler, security
 tools and libraries (corlib, XML, System.Security, ZipLib,
 I18N, Cairo and Mono.*).
 
-%package devel
-Summary:        Development tools and headers for Mono
+%package devtools
+Summary:        Development tools for Mono
 Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       glib2-devel
+# We changed the name of this from mono-devel to avoid multilib issues (#185690)
+Provides:	mono-devel
+Obsoletes: 	mono-devel
 
-%description devel
-This package includes all Mono library headers and completes the
-Mono developer toolchain (with the mono profiler, assembler and
-other various tools)
+
+%description devtools
+This package completes the Mono developer toolchain with the mono profiler,
+assembler and other various tools.
 
 %package nunit
 Summary:        NUnit Testing Framework
@@ -279,10 +298,21 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
 
+%files lib
+%defattr(-,root,root,-)
+%{_libdir}/libmono.so.*
+%{_libdir}/libMonoPosixHelper.so
+%{_libdir}/libMonoSupportW.so
+
+%files lib-devel
+%defattr(-,root,root,-)
+%{_libdir}/libmono.so
+%{_includedir}/mono
+%{_libdir}/pkgconfig/mono.pc
+
 %files core
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB ChangeLog NEWS README
-%{_libdir}/libmono.so*
 %{_bindir}/mono
 %mono_bin certmgr
 %mono_bin chktrust
@@ -305,6 +335,7 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %dir %{monodir}/1.0
 %dir %{monodir}/2.0
 %dir %{monodir}/gac
+%dir %{monodir}/compat-*
 %gac_dll Commons.Xml.Relaxng
 %gac_dll I18N
 %gac_dll I18N.West
@@ -332,10 +363,8 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %config /etc/mono/1.0/machine.config
 %config /etc/mono/2.0/machine.config
 %{_libdir}/libikvm-native.so
-%{_libdir}/libMonoPosixHelper.so*
-%{_libdir}/libMonoSupportW.so
 
-%files devel
+%files devtools
 %defattr(-,root,root,-)
 %{_bindir}/monodis
 %{_bindir}/pedump
@@ -388,11 +417,9 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %gac_dll Microsoft.Build.Tasks
 %gac_dll Microsoft.Build.Utilities
 %{_bindir}/monograph
-%{_includedir}/mono
 %{_libdir}/libmono-profiler-aot.*
 %{_libdir}/libmono-profiler-cov.*
 %{_libdir}/pkgconfig/dotnet.pc
-%{_libdir}/pkgconfig/mono.pc
 %{_libdir}/pkgconfig/mono-cairo.pc
 %{_mandir}/man1/monoburg.*
 %{_datadir}/mono/cil/cil-opcodes.xml
@@ -510,7 +537,11 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
-* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - sh: line 0: fg: no job control
+* Mon Aug 10 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16.1-1
+- Update to 1.1.16.1
+- Split out mono libs and devel headers to fix lib64 conflicts (#199790)
+
+* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - 1.1.16-1.1
 - rebuild
 
 * Fri Jul  7 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16-1

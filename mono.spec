@@ -1,12 +1,13 @@
 Name:           mono
 Version:        1.1.16.1
-Release:        1
+Release:        2%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
 License:        GPL, LGPL, MIT X11
 URL:            http://www.mono-project.com/
 Source0:        %{name}-%{version}.tar.gz
+Source1:	monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  bison
@@ -18,6 +19,8 @@ BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
 %endif
+# Required for mono-libdir.patch
+BuildRequires: automake
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc
@@ -26,6 +29,8 @@ ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc
 
 Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-1.1.13.4-ppc-threading.patch
+Patch3: mono-libdir.patch
+Patch4: mono-1.1.16.1-use-monodir.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -33,26 +38,14 @@ virtual machine (as well as a byte code interpreter, the
 class loader, the garbage collector, threading system and
 metadata access libraries.
 
-%package lib
-Summary:        Mono library, used by applications embedding mono
-Group:          Development/Languages
-
-%description lib
-This pickage contains libraries required for embedding/hosting the
-mono runtime in other applications.
-
-%package lib-devel
-Summary:        Header files for Mono library
-Group:          Development/Languages
-
-%description lib-devel
-Contains headers and other files needed to use the library in mono-lib.
-
 %package core
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
 Requires:	libgdiplus
-Requires:	mono-lib
+
+# Temporary provides due to transient package, remove when rawhide is settled
+Obsoletes:      mono-lib
+Provides:       mono-lib
 
 %description core
 This package contains the core of the Mono runtime including its
@@ -60,19 +53,23 @@ Virtual Machine, Just-in-time compiler, C# compiler, security
 tools and libraries (corlib, XML, System.Security, ZipLib,
 I18N, Cairo and Mono.*).
 
-%package devtools
+%package devel
 Summary:        Development tools for Mono
 Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       glib2-devel
-# We changed the name of this from mono-devel to avoid multilib issues (#185690)
-Provides:	mono-devel
-Obsoletes: 	mono-devel
 
+# Temporary provides due to transient package, remove when rawhide is settled
+Obsoletes:      mono-lib-devel
+Provides:       mono-lib-devel
 
-%description devtools
+%description devel
 This package completes the Mono developer toolchain with the mono profiler,
 assembler and other various tools.
+
+# Temporary provides due to transient package, remove when rawhide is settled
+Obsoletes:      mono-devtools
+Provides:       mono-devtools
 
 %package nunit
 Summary:        NUnit Testing Framework
@@ -230,7 +227,7 @@ This package contains the ADO.NET Data provider for MySQL. This is
 no longer maintained. MySQL AB now provides MySQL Connector/Net
 which is fully managed and actively maintained.
 
-%define monodir %_prefix/lib/mono
+%define monodir %{_libdir}/mono
 %define gac_dll(dll)  %{monodir}/gac/%{1} \
   %{monodir}/?.0/%{1}.dll \
   %{nil}
@@ -251,6 +248,8 @@ which is fully managed and actively maintained.
 %setup -q
 %patch1 -p1 -b .selinux-ia64
 %patch2 -p1 -b .ppc-threading
+%patch3 -p1 -b .libdir
+%patch4 -p1 -b .use-monodir
 
 %build
 %ifarch ia64 s390
@@ -258,17 +257,18 @@ export CFLAGS="-O2 -fno-strict-aliasing"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %endif
+autoreconf --force --install
+
+gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
 %configure --with-ikvm=yes --with-jit=yes
 make
 
+
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
-
-# Libtool is on crack, installing the shell wrappers
-cp mono/dis/.libs/monodis $RPM_BUILD_ROOT%{_bindir}
-cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
+install monodir $RPM_BUILD_ROOT%{_bindir}
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/*.a
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
@@ -298,22 +298,11 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
 
-%files lib
-%defattr(-,root,root,-)
-%{_libdir}/libmono.so.*
-%{_libdir}/libMonoPosixHelper.so
-%{_libdir}/libMonoSupportW.so
-
-%files lib-devel
-%defattr(-,root,root,-)
-%{_libdir}/libmono.so
-%{_includedir}/mono
-%{_libdir}/pkgconfig/mono.pc
-
 %files core
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB ChangeLog NEWS README
 %{_bindir}/mono
+%{_bindir}/monodir
 %mono_bin certmgr
 %mono_bin chktrust
 %mono_bin gacutil
@@ -322,6 +311,9 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %mono_bin mozroots
 %mono_bin setreg
 %mono_bin sn
+%{_libdir}/libmono.so.*
+%{_libdir}/libMonoPosixHelper.so
+%{_libdir}/libMonoSupportW.so
 %{_mandir}/man1/certmgr.1.gz
 %{_mandir}/man1/chktrust.1.gz
 %{_mandir}/man1/gacutil.1.gz
@@ -364,7 +356,7 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %config /etc/mono/2.0/machine.config
 %{_libdir}/libikvm-native.so
 
-%files devtools
+%files devel
 %defattr(-,root,root,-)
 %{_bindir}/monodis
 %{_bindir}/pedump
@@ -411,6 +403,7 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/prj2make.1.gz
 %{_mandir}/man1/secutil.1.gz
 %{_mandir}/man1/signcode.1.gz
+%{_mandir}/man1/monoburg.*
 %gac_dll PEAPI
 %gac_dll Microsoft.Build.Engine
 %gac_dll Microsoft.Build.Framework
@@ -419,9 +412,11 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/monograph
 %{_libdir}/libmono-profiler-aot.*
 %{_libdir}/libmono-profiler-cov.*
+%{_libdir}/libmono.so
 %{_libdir}/pkgconfig/dotnet.pc
 %{_libdir}/pkgconfig/mono-cairo.pc
-%{_mandir}/man1/monoburg.*
+%{_libdir}/pkgconfig/mono.pc
+%{_includedir}/mono
 %{_datadir}/mono/cil/cil-opcodes.xml
 %dir %{_datadir}/mono
 %dir %{_datadir}/mono/cil
@@ -537,6 +532,11 @@ cp mono/monograph/.libs/monograph $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Aug 18 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16.1-2
+- Move gac to libdir to be multilib compat
+- rename mono-devtools back to mono-devel
+- kill mono-lib and mono-lib-devel
+
 * Mon Aug 10 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16.1-1
 - Update to 1.1.16.1
 - Split out mono libs and devel headers to fix lib64 conflicts (#199790)

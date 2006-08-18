@@ -1,0 +1,210 @@
+Index: mono-1.1.16/configure.in
+===================================================================
+--- mono-1.1.16.orig/configure.in
++++ mono-1.1.16/configure.in
+@@ -2000,7 +2000,7 @@ fi
+   if test x$cross_compiling = xno; then
+     echo "prefix=$prefix" > $srcdir/$mcsdir/build/config.make
+     echo "exec_prefix=$exec_prefix" >> $srcdir/$mcsdir/build/config.make
+-    echo 'mono_libdir=${exec_prefix}/lib' >> $srcdir/$mcsdir/build/config.make
++    echo "mono_libdir=$libdir" >> $srcdir/$mcsdir/build/config.make
+     echo 'MCS_FLAGS = $(PLATFORM_DEBUG_FLAGS)' >> $srcdir/$mcsdir/build/config.make
+     echo 'IL_FLAGS = /debug' >> $srcdir/$mcsdir/build/config.make
+     echo "RUNTIME = $mono_build_root/runtime/mono-wrapper" >> $srcdir/$mcsdir/build/config.make
+Index: mono-1.1.16/mono/metadata/Makefile.am
+===================================================================
+--- mono-1.1.16.orig/mono/metadata/Makefile.am
++++ mono-1.1.16/mono/metadata/Makefile.am
+@@ -9,7 +9,7 @@ else
+ # The mingw math.h has "extern inline" functions that dont appear in libs, so
+ # optimisation is required to actually inline them
+ AM_CFLAGS = -O
+-assembliesdir = $(exec_prefix)/lib
++assembliesdir = $(libdir)
+ confdir = $(sysconfdir)
+ endif
+ 
+Index: mono-1.1.16/scripts/Makefile.am
+===================================================================
+--- mono-1.1.16.orig/scripts/Makefile.am
++++ mono-1.1.16/scripts/Makefile.am
+@@ -80,7 +80,7 @@ plat_bindir = $(shell cygpath -m $(libdi
+ mono_instdir = $(shell cygpath -m $(libdir))/mono
+ else
+ plat_bindir = $(bindir)
+-mono_instdir = $(prefix)/lib/mono
++mono_instdir = $(libdir)/mono
+ endif
+ 
+ REWRITE_COMMON = sed \
+Index: mono-1.1.16/scripts/mono-nunit.pc.in
+===================================================================
+--- mono-1.1.16.orig/scripts/mono-nunit.pc.in
++++ mono-1.1.16/scripts/mono-nunit.pc.in
+@@ -1,6 +1,6 @@
+ prefix=${pcfiledir}/../..
+ exec_prefix=${prefix}
+-libdir=${exec_prefix}/lib
++libdir=${exec_prefix}/@reloc_libdir@
+ 
+ 
+ Name: Mono NUnit
+Index: mono-1.1.16/mint.pc.in
+===================================================================
+--- mono-1.1.16.orig/mint.pc.in
++++ mono-1.1.16/mint.pc.in
+@@ -1,6 +1,6 @@
+ prefix=${pcfiledir}/../..
+ exec_prefix=${pcfiledir}/../..
+-libdir=${prefix}/lib
++libdir=${prefix}/@reloc_libdir@
+ includedir=${prefix}/include
+ 
+ 
+Index: mono-1.1.16/mono-cairo.pc.in
+===================================================================
+--- mono-1.1.16.orig/mono-cairo.pc.in
++++ mono-1.1.16/mono-cairo.pc.in
+@@ -6,4 +6,4 @@ includedir=${prefix}/include
+ Name: Mono.Cairo
+ Description: Cairo bindings for Mono
+ Version: @VERSION@
+-Libs: -r:${prefix}/lib/mono/1.0/Mono.Cairo.dll
++Libs: -r:${libdir}/mono/1.0/Mono.Cairo.dll
+Index: mono-1.1.16/mcs/build/config-default.make
+===================================================================
+--- mono-1.1.16.orig/mcs/build/config-default.make
++++ mono-1.1.16/mcs/build/config-default.make
+@@ -17,7 +17,7 @@ LIBRARY_FLAGS = /noconfig
+ CFLAGS = -g -O2
+ prefix = /usr/local
+ exec_prefix = $(prefix)
+-mono_libdir = $(exec_prefix)/lib
++mono_libdir = $(libdir)
+ #RUNTIME = mono
+ RUNTIME = false
+ TEST_RUNTIME = MONO_PATH="$(topdir)/class/lib/$(PROFILE)$(PLATFORM_PATH_SEPARATOR)$(TEST_MONO_PATH)$(PLATFORM_PATH_SEPARATOR)$$MONO_PATH" $(RUNTIME) --debug
+Index: mono-1.1.16/mcs/build/profiles/atomic.make
+===================================================================
+--- mono-1.1.16.orig/mcs/build/profiles/atomic.make
++++ mono-1.1.16/mcs/build/profiles/atomic.make
+@@ -15,14 +15,14 @@ MCS = $(BOOTSTRAP_MCS)
+ 
+ # Get our installed libraries (an issue on windows)
+ 
+-PROFILE_MCS_FLAGS = /lib:$(prefix)/lib
++PROFILE_MCS_FLAGS = /lib:$(libdir)
+ 
+ # Check that installed libraries even exist.
+ 
+ profile-check:
+-	@if test '!' -f $(prefix)/lib/I18N.dll ; then \
++	@if test '!' -f $(libdir)/I18N.dll ; then \
+ 	    echo ; \
+-	    echo "$(prefix)/lib/I18N.dll does not exist." ; \
++	    echo "$(libdir)/I18N.dll does not exist." ; \
+ 	    echo ; \
+ 	    echo "This probably means that you are building from a miniature" ; \
+ 	    echo "distribution of MCS or don't yet have an installed MCS at all." ; \
+Index: mono-1.1.16/mcs/class/Mono.Globalization/Makefile
+===================================================================
+--- mono-1.1.16.orig/mcs/class/Mono.Globalization/Makefile
++++ mono-1.1.16/mcs/class/Mono.Globalization/Makefile
+@@ -8,8 +8,8 @@ thelib = $(topdir)/class/lib/Mono.Global
+ all-local: $(thelib)
+ 
+ install-local:
+-	$(MKINSTALLDIRS) $(DESTDIR)$(prefix)/lib
+-	$(INSTALL_LIB) $(thelib) $(DESTDIR)$(prefix)/lib
++	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
++	$(INSTALL_LIB) $(thelib) $(DESTDIR)$(libdir)
+ 
+ clean-local:
+ 	rm -rf $(thelib) MonoCultures.cs write-source.exe
+Index: mono-1.1.16/mcs/tools/cilc/res-Makefile
+===================================================================
+--- mono-1.1.16.orig/mcs/tools/cilc/res-Makefile
++++ mono-1.1.16/mcs/tools/cilc/res-Makefile
+@@ -2,7 +2,7 @@ include defs.mk
+ 
+ LIBNAME = $(shell echo $(basename $(SONAME)) | sed -e 's/^lib//')
+ HTARGET = $(prefix)/include/$(LIBNAME)/
+-LIBTARGET = $(prefix)/lib/
++LIBTARGET = $(libdir)
+ 
+ CFLAGS += -static -fpic $(shell pkg-config --cflags glib-2.0 gobject-2.0 mono) $(EXTRAINCLUDES) -I.
+ 
+--- mono-1.1.16.1/mono/metadata/Makefile.am.libdir	2006-07-05 23:55:46.000000000 +0200
++++ mono-1.1.16.1/mono/metadata/Makefile.am	2006-08-17 17:54:36.000000000 +0200
+@@ -21,7 +21,7 @@
+ #
+ noinst_LTLIBRARIES = libmonoruntime.la libmonoruntime-static.la
+ 
+-INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/mono $(LIBGC_CFLAGS) $(GLIB_CFLAGS) $(GMODULE_CFLAGS) -DMONO_BINDIR=\"$(bindir)/\" -DMONO_ASSEMBLIES=\"$(assembliesdir)\" -DMONO_CFG_DIR=\"$(confdir)\"
++INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/mono $(LIBGC_CFLAGS) $(GLIB_CFLAGS) $(GMODULE_CFLAGS) -DMONO_BINDIR=\"$(bindir)/\" -DMONO_ASSEMBLIES=\"$(assembliesdir)\" -DMONO_RELOC_LIBDIR=\"$(reloc_libdir)\" -DMONO_CFG_DIR=\"$(confdir)\"
+ 
+ #
+ # Make sure any prefix changes are updated in the binaries too.
+--- mono-1.1.16.1/mono/metadata/assembly.c.libdir	2006-08-17 17:52:42.000000000 +0200
++++ mono-1.1.16.1/mono/metadata/assembly.c	2006-08-17 17:56:21.000000000 +0200
+@@ -521,7 +521,7 @@
+ 	}
+ 
+ 	config = g_build_filename (base, "etc", NULL);
+-	lib = g_build_filename (base, "lib", NULL);
++	lib = g_build_filename (base, MONO_RELOC_LIBDIR, NULL);
+ 	mono = g_build_filename (lib, "mono/1.0", NULL);
+ 	if (stat (mono, &buf) == -1)
+ 		fallback ();
+@@ -1844,7 +1844,7 @@
+ 	if (extra_gac_paths) {
+ 		paths = extra_gac_paths;
+ 		while (!res && *paths) {
+-			gacpath = g_build_path (G_DIR_SEPARATOR_S, *paths, "lib", "mono", "gac", aname->name, NULL);
++			gacpath = g_build_path (G_DIR_SEPARATOR_S, *paths, MONO_RELOC_LIBDIR, "mono", "gac", aname->name, NULL);
+ 			res = probe_for_partial_name (gacpath, fullname, aname, status);
+ 			g_free (gacpath);
+ 			paths++;
+@@ -1908,7 +1908,7 @@
+ 		paths = extra_gac_paths;
+ 		while (!image && *paths) {
+ 			fullpath = g_build_path (G_DIR_SEPARATOR_S, *paths,
+-					"lib", "mono", "gac", subpath, NULL);
++					MONO_RELOC_LIBDIR, "mono", "gac", subpath, NULL);
+ 			image = mono_image_open (fullpath, NULL);
+ 			g_free (fullpath);
+ 			paths++;
+@@ -2058,7 +2058,7 @@
+ 	if (extra_gac_paths) {
+ 		paths = extra_gac_paths;
+ 		while (!result && *paths) {
+-			fullpath = g_build_path (G_DIR_SEPARATOR_S, *paths, "lib", "mono", "gac", subpath, NULL);
++			fullpath = g_build_path (G_DIR_SEPARATOR_S, *paths, MONO_RELOC_LIBDIR, "mono", "gac", subpath, NULL);
+ 			result = mono_assembly_open_full (fullpath, status, refonly);
+ 			g_free (fullpath);
+ 			paths++;
+--- mono-1.1.16.1/mcs/tools/gacutil/driver.cs.libdir	2006-08-17 15:40:14.000000000 +0200
++++ mono-1.1.16.1/mcs/tools/gacutil/driver.cs	2006-08-17 15:40:19.000000000 +0200
+@@ -667,7 +667,7 @@
+ 		private static string EnsureLib (string dir)
+ 		{
+ 			DirectoryInfo d = new DirectoryInfo (dir);
+-			if (d.Name == "lib")
++			if (d.Name == "lib" || d.Name == "lib64")
+ 				return dir;
+ 			return Path.Combine (dir, "lib");
+ 		}
+--- mono-1.1.16.1/mcs/class/Microsoft.Build.Utilities/Mono.XBuild.Utilities/MonoLocationHelper.cs.libdir	2006-08-17 15:46:11.000000000 +0200
++++ mono-1.1.16.1/mcs/class/Microsoft.Build.Utilities/Mono.XBuild.Utilities/MonoLocationHelper.cs	2006-08-17 15:46:53.000000000 +0200
+@@ -53,10 +53,10 @@
+ 			xbuildDir = Path.Combine (t2.FullName, "xbuild");
+ 			// /usr/local/lib
+ 			t3 = t2.Parent;
++			libDir = t3.FullName;
+ 			// /usr/local
+ 			t4 = t3.Parent;
+ 			binDir = Path.Combine (t4.FullName, "bin");
+-			libDir = Path.Combine (t4.FullName, "lib");
+ 		}
+ 	
+ 		public static string GetBinDir ()

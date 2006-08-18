@@ -20,7 +20,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  libunwind
 %endif
 # Required for mono-libdir.patch
-BuildRequires: automake
+BuildRequires: automake libtool
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc

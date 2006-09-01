@@ -1,6 +1,6 @@
 Name:           mono
-Version:        1.1.16.1
-Release:        2%{?dist}
+Version:        1.1.17.1
+Release:        1%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -30,7 +30,7 @@ ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc
 Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-1.1.13.4-ppc-threading.patch
 Patch3: mono-libdir.patch
-Patch4: mono-1.1.16.1-use-monodir.patch
+Patch4: mono-1.1.17.1-use-monodir.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -52,6 +52,10 @@ This package contains the core of the Mono runtime including its
 Virtual Machine, Just-in-time compiler, C# compiler, security
 tools and libraries (corlib, XML, System.Security, ZipLib,
 I18N, Cairo and Mono.*).
+
+# Mono-basic was removed in 1.1.17
+Obsoletes:      mono-basic
+Provides:       mono-basic
 
 %package devel
 Summary:        Development tools for Mono
@@ -105,16 +109,6 @@ Requires:       mono-core = %{version}-%{release}
 %description jscript
 This package contains the JScript .NET compiler and language runtime.
 This allows you to compile and run JScript.NET application and
-assemblies.
-
-%package basic
-Summary:        Visual Basic .NET support for Mono
-Group:          Development/Languages
-Requires:       mono-core = %{version}-%{release}
-
-%description basic
-This package contains the Visual Basic .NET compiler and language
-runtime. This allows you to compile and run VB.NET application and
 assemblies.
 
 %package extras
@@ -277,6 +271,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-provides
 %{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-requires
 
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/mbas
+
 # This was removed upstream:
 %{__rm} -fr $RPM_BUILD_ROOT%{monodir}/gac/Mono.Security.Win32/[12]*
 %{__rm} $RPM_BUILD_ROOT%{monodir}/*/Mono.Security.Win32.dll
@@ -346,6 +342,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Security
 %gac_dll System.Xml
 %gac_dll cscompmgd
+%gac_dll CustomMarshalers
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
 %dir /etc/mono
@@ -444,17 +441,12 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin mjs
 %gac_dll Microsoft.JScript
 
-%files basic
-%defattr(-,root,root,-)
-%mono_bin mbas
-%gac_dll Microsoft.VisualBasic
-%{_mandir}/man1/mbas.1.gz
-
 %files extras
 %defattr(-,root,root,-)
 %{_mandir}/man1/mono-service.1.gz
 %mono_bin_1 mono-service mono-service
-%{_bindir}/mono-service2
+%mono_bin_2 mono-service2 mono-service
+%{monodir}/gac/mono-service
 
 %gac_dll System.Management
 %gac_dll System.Messaging
@@ -532,6 +524,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Sep  1 2006 Alexander Larsson <alexl@redhat.com> - 1.1.17.1-1
+- update to 1.1.17.1
+
 * Fri Aug 18 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16.1-2
 - Move gac to libdir to be multilib compat
 - rename mono-devtools back to mono-devel

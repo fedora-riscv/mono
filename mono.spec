@@ -14,7 +14,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus
+BuildRequires:  libgdiplus-devel
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -89,6 +89,14 @@ It is written entirely in C# and  has been completely redesigned to
 take advantage of many .NET language features, for example
 custom attributes and other reflection related capabilities. NUnit
 brings xUnit to all .NET languages.
+
+%package nunit-devel
+Summary: pkgconfig for nunit
+Group: Development/Libraries
+Requires: mono-core = %{version}-%{release} pkgconfig
+
+%description nunit-devel
+Development files for nunit
 
 %package locale-extras
 Summary:        Extra locale information for Mono
@@ -427,6 +435,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll nunit.framework
 %gac_dll nunit.util
 %gac_dll nunit.mocks
+
+%files nunit-devel
+%defattr(-,root,root,-)
 %{_libdir}/pkgconfig/mono-nunit.pc
 
 %files locale-extras
@@ -524,8 +535,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
-* Fri Sep  1 2006 Alexander Larsson <alexl@redhat.com> - 1.1.17.1-1
+* Mon Sep  4 2006 Alexander Larsson <alexl@redhat.com> - 1.1.17.1-1
 - update to 1.1.17.1
+- Add one file nunit-devel package due to packaging guidelines (#205056)
 
 * Fri Aug 18 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16.1-2
 - Move gac to libdir to be multilib compat

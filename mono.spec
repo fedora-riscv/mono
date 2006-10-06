@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.1.17.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -31,6 +31,7 @@ Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-1.1.13.4-ppc-threading.patch
 Patch3: mono-libdir.patch
 Patch4: mono-1.1.17.1-use-monodir.patch
+Patch5: mono-CVE-2006-5072-TempFileCollection.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -252,6 +253,7 @@ which is fully managed and actively maintained.
 %patch2 -p1 -b .ppc-threading
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
+%patch5 -p1 -b .CVE-2006-5072
 
 %build
 %ifarch ia64 s390
@@ -535,6 +537,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Oct  6 2006 Caolan McNamara <caolanm@redhat.com> - 1.1.17.1-2
+- CVE-2006-5072
+
 * Mon Sep  4 2006 Alexander Larsson <alexl@redhat.com> - 1.1.17.1-1
 - update to 1.1.17.1
 - Add one file nunit-devel package due to packaging guidelines (#205056)

@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.1.17.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -265,7 +265,7 @@ autoreconf --force --install
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
-%configure --with-ikvm=yes --with-jit=yes
+%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes
 make
 
 
@@ -537,6 +537,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Thu Oct 12 2006 Alexander Larsson <alexl@redhat.com> - 1.1.17.1-3
+- Don't use slow TLS approach under xen (#210001) 
+
 * Fri Oct  6 2006 Caolan McNamara <caolanm@redhat.com> - 1.1.17.1-2
 - CVE-2006-5072
 

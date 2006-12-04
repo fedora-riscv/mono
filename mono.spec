@@ -1,6 +1,6 @@
 Name:           mono
-Version:        1.1.17.1
-Release:        3%{?dist}
+Version:        1.2.2
+Release:        1%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -14,7 +14,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel
+BuildRequires:  libgdiplus-devel >= 1.2.1
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -31,7 +31,6 @@ Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-1.1.13.4-ppc-threading.patch
 Patch3: mono-libdir.patch
 Patch4: mono-1.1.17.1-use-monodir.patch
-Patch5: mono-CVE-2006-5072-TempFileCollection.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -62,6 +61,7 @@ Provides:       mono-basic
 Summary:        Development tools for Mono
 Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
+Requires:       pkgconfig
 Requires:       glib2-devel
 
 # Temporary provides due to transient package, remove when rawhide is settled
@@ -253,7 +253,6 @@ which is fully managed and actively maintained.
 %patch2 -p1 -b .ppc-threading
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
-%patch5 -p1 -b .CVE-2006-5072
 
 %build
 %ifarch ia64 s390
@@ -301,6 +300,14 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/mono-api-diff.exe
 %{__rm} $RPM_BUILD_ROOT%{monodir}/*/mono-api-info.exe
 
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+%post devel -p /sbin/ldconfig
+
+%postun devel -p /sbin/ldconfig
+
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
 
@@ -317,6 +324,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin mozroots
 %mono_bin setreg
 %mono_bin sn
+%{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
 %{_libdir}/libMonoPosixHelper.so
 %{_libdir}/libMonoSupportW.so
@@ -353,14 +361,15 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Xml
 %gac_dll cscompmgd
 %gac_dll CustomMarshalers
+%gac_dll OpenSystem.C
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
 %dir /etc/mono
 %dir /etc/mono/1.0
 %dir /etc/mono/2.0
-%config /etc/mono/config
-%config /etc/mono/1.0/machine.config
-%config /etc/mono/2.0/machine.config
+%config (noreplace) /etc/mono/config
+%config (noreplace) /etc/mono/1.0/machine.config
+%config (noreplace) /etc/mono/2.0/machine.config
 %{_libdir}/libikvm-native.so
 
 %files devel
@@ -375,6 +384,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin dtd2xsd
 %mono_bin dtd2rng
 %mono_bin genxs
+%mono_bin sgen
 %mono_bin_1 ilasm ilasm
 %mono_bin_2 ilasm2 ilasm
 %mono_bin macpack
@@ -409,6 +419,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/permview.1.gz
 %{_mandir}/man1/prj2make.1.gz
 %{_mandir}/man1/secutil.1.gz
+%{_mandir}/man1/sgen.1.gz
 %{_mandir}/man1/signcode.1.gz
 %{_mandir}/man1/monoburg.*
 %gac_dll PEAPI
@@ -490,10 +501,10 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/soapsuds.1.gz
 %{_mandir}/man1/wsdl.1.gz
 %{_mandir}/man1/xsd.1.gz
-%config /etc/mono/browscap.ini
-%config /etc/mono/1.0/DefaultWsdlHelpGenerator.aspx
-%config /etc/mono/2.0/DefaultWsdlHelpGenerator.aspx
-%config /etc/mono/2.0/web.config
+%config (noreplace) /etc/mono/browscap.ini
+%config (noreplace) /etc/mono/1.0/DefaultWsdlHelpGenerator.aspx
+%config (noreplace) /etc/mono/2.0/DefaultWsdlHelpGenerator.aspx
+%config (noreplace) /etc/mono/2.0/web.config
 
 %files data
 %defattr(-,root,root,-)
@@ -537,6 +548,12 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Mon Dec  4 2006 Alexander Larsson <alexl@redhat.com> - 1.2.2-1
+- update to 1.2.2
+- Mark config files as noreplace
+- Require pkgconfig in mono-devel
+- Run ldconfig in post/postun
+
 * Thu Oct 12 2006 Alexander Larsson <alexl@redhat.com> - 1.1.17.1-3
 - Don't use slow TLS approach under xen (#210001) 
 

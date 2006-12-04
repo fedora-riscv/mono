@@ -106,21 +106,6 @@ Index: mono-1.1.16/mcs/build/profiles/atomic.make
  	    echo ; \
  	    echo "This probably means that you are building from a miniature" ; \
  	    echo "distribution of MCS or don't yet have an installed MCS at all." ; \
-Index: mono-1.1.16/mcs/class/Mono.Globalization/Makefile
-===================================================================
---- mono-1.1.16.orig/mcs/class/Mono.Globalization/Makefile
-+++ mono-1.1.16/mcs/class/Mono.Globalization/Makefile
-@@ -8,8 +8,8 @@ thelib = $(topdir)/class/lib/Mono.Global
- all-local: $(thelib)
- 
- install-local:
--	$(MKINSTALLDIRS) $(DESTDIR)$(prefix)/lib
--	$(INSTALL_LIB) $(thelib) $(DESTDIR)$(prefix)/lib
-+	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
-+	$(INSTALL_LIB) $(thelib) $(DESTDIR)$(libdir)
- 
- clean-local:
- 	rm -rf $(thelib) MonoCultures.cs write-source.exe
 Index: mono-1.1.16/mcs/tools/cilc/res-Makefile
 ===================================================================
 --- mono-1.1.16.orig/mcs/tools/cilc/res-Makefile

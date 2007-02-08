@@ -51,14 +51,15 @@ Index: mono-1.1.16/scripts/mono-nunit.pc.in
  Name: Mono NUnit
 Index: mono-1.1.16/mint.pc.in
 ===================================================================
---- mono-1.1.16.orig/mint.pc.in
-+++ mono-1.1.16/mint.pc.in
+--- mono-1.2.3/mint.pc.in	2007-01-28 14:04:26.000000000 +0000
++++ mono-1.2.3/mint-new.pc.in	2007-01-28 14:10:02.000000000 +0000
 @@ -1,6 +1,6 @@
  prefix=${pcfiledir}/../..
  exec_prefix=${pcfiledir}/../..
 -libdir=${prefix}/lib
 +libdir=${prefix}/@reloc_libdir@
- includedir=${prefix}/include
+ includedir=${prefix}/include/mono-@API_VER@
+ 
  
  
 Index: mono-1.1.16/mono-cairo.pc.in
@@ -106,6 +107,7 @@ Index: mono-1.1.16/mcs/build/profiles/atomic.make
  	    echo ; \
  	    echo "This probably means that you are building from a miniature" ; \
  	    echo "distribution of MCS or don't yet have an installed MCS at all." ; \
+
 Index: mono-1.1.16/mcs/tools/cilc/res-Makefile
 ===================================================================
 --- mono-1.1.16.orig/mcs/tools/cilc/res-Makefile

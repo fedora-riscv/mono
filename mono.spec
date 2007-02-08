@@ -1,5 +1,5 @@
 Name:           mono
-Version:        1.2.2
+Version:        1.2.3
 Release:        1%{?dist}
 Summary:        a .NET runtime environment
 
@@ -30,7 +30,7 @@ ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc
 Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-1.1.13.4-ppc-threading.patch
 Patch3: mono-libdir.patch
-Patch4: mono-1.1.17.1-use-monodir.patch
+Patch4: mono-1.2.3-use-monodir.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -364,12 +364,12 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll OpenSystem.C
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
-%dir /etc/mono
-%dir /etc/mono/1.0
-%dir /etc/mono/2.0
-%config (noreplace) /etc/mono/config
-%config (noreplace) /etc/mono/1.0/machine.config
-%config (noreplace) /etc/mono/2.0/machine.config
+%dir %{_sysconfdir}/mono
+%dir %{_sysconfdir}/mono/1.0
+%dir %{_sysconfdir}/mono/2.0
+%config (noreplace) %{_sysconfdir}/mono/config
+%config (noreplace) %{_sysconfdir}/mono/1.0/machine.config
+%config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
 %{_libdir}/libikvm-native.so
 
 %files devel
@@ -377,7 +377,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/monodis
 %{_bindir}/pedump
 %{_bindir}/monodiet
-%mono_bin al
+%mono_bin_1 al al
+%mono_bin_2 al2 al
 %mono_bin caspol
 %mono_bin cert2spc
 %mono_bin cilc
@@ -427,6 +428,11 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll Microsoft.Build.Framework
 %gac_dll Microsoft.Build.Tasks
 %gac_dll Microsoft.Build.Utilities
+%{monodir}/2.0/MSBuild
+%{monodir}/2.0/Microsoft.Build.xsd
+%{monodir}/2.0/Microsoft.*.targets
+%{monodir}/2.0/Microsoft.Common.tasks
+%{monodir}/2.0/xbuild.rsp
 %{_bindir}/monograph
 %{_libdir}/libmono-profiler-aot.*
 %{_libdir}/libmono-profiler-cov.*
@@ -434,11 +440,11 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/dotnet.pc
 %{_libdir}/pkgconfig/mono-cairo.pc
 %{_libdir}/pkgconfig/mono.pc
-%{_includedir}/mono
-%{_datadir}/mono/cil/cil-opcodes.xml
-%dir %{_datadir}/mono
-%dir %{_datadir}/mono/cil
-%{monodir}/xbuild
+%{_includedir}/mono-1.0
+%{_datadir}/mono-1.0/mono/cil/cil-opcodes.xml
+%dir %{_datadir}/mono-1.0
+%dir %{_datadir}/mono-1.0/mono
+%dir %{_datadir}/mono-1.0/mono/cil
 
 %files nunit
 %defattr(-,root,root,-)
@@ -501,10 +507,13 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/soapsuds.1.gz
 %{_mandir}/man1/wsdl.1.gz
 %{_mandir}/man1/xsd.1.gz
-%config (noreplace) /etc/mono/browscap.ini
-%config (noreplace) /etc/mono/1.0/DefaultWsdlHelpGenerator.aspx
-%config (noreplace) /etc/mono/2.0/DefaultWsdlHelpGenerator.aspx
-%config (noreplace) /etc/mono/2.0/web.config
+%config (noreplace) %{_sysconfdir}/mono/browscap.ini
+%config (noreplace) %{_sysconfdir}/mono/1.0/DefaultWsdlHelpGenerator.aspx
+%config (noreplace) %{_sysconfdir}/mono/2.0/DefaultWsdlHelpGenerator.aspx
+%config (noreplace) %{_sysconfdir}/mono/2.0/web.config
+# Hmm, this doesn't seem to ship with the .exe file?
+%{_bindir}/httpcfg
+%{_mandir}/man1/httpcfg.1.gz
 
 %files data
 %defattr(-,root,root,-)
@@ -548,6 +557,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Thu Feb  8 2007 Alexander Larsson <alexl@redhat.com> - 1.2.3-1
+- update to 1.2.3
+
 * Mon Dec  4 2006 Alexander Larsson <alexl@redhat.com> - 1.2.2-1
 - update to 1.2.2
 - Mark config files as noreplace

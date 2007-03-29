@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -23,7 +23,7 @@ BuildRequires:  libunwind
 BuildRequires: automake libtool
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc
+ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha
 # Disabled due to strange build failure:
 # s390 s390x
 
@@ -557,6 +557,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Thu Mar 29 2007 Alexander Larsson <alexl@redhat.com> - 1.2.3-2
+- Also build on alpha (#232268)
+
 * Thu Feb  8 2007 Alexander Larsson <alexl@redhat.com> - 1.2.3-1
 - update to 1.2.3
 

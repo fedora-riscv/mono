@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -47,15 +47,15 @@ Requires:	libgdiplus
 Obsoletes:      mono-lib
 Provides:       mono-lib
 
+# Mono-basic was removed in 1.1.17
+Obsoletes:      mono-basic
+Provides:       mono-basic
+
 %description core
 This package contains the core of the Mono runtime including its
 Virtual Machine, Just-in-time compiler, C# compiler, security
 tools and libraries (corlib, XML, System.Security, ZipLib,
 I18N, Cairo and Mono.*).
-
-# Mono-basic was removed in 1.1.17
-Obsoletes:      mono-basic
-Provides:       mono-basic
 
 %package devel
 Summary:        Development tools for Mono
@@ -68,13 +68,13 @@ Requires:       glib2-devel
 Obsoletes:      mono-lib-devel
 Provides:       mono-lib-devel
 
-%description devel
-This package completes the Mono developer toolchain with the mono profiler,
-assembler and other various tools.
-
 # Temporary provides due to transient package, remove when rawhide is settled
 Obsoletes:      mono-devtools
 Provides:       mono-devtools
+
+%description devel
+This package completes the Mono developer toolchain with the mono profiler,
+assembler and other various tools.
 
 %package nunit
 Summary:        NUnit Testing Framework
@@ -557,6 +557,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Sun Apr  1 2007 Matthias Clasen <mclasen@redhat.com> - 1.2.3-3
+- Fix a spec format error (#210633)
+
 * Thu Mar 29 2007 Alexander Larsson <alexl@redhat.com> - 1.2.3-2
 - Also build on alpha (#232268)
 

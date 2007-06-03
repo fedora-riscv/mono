@@ -1,12 +1,12 @@
 Name:           mono
-Version:        1.2.3
-Release:        3%{?dist}
+Version:        1.2.4
+Release:        1%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
 License:        GPL, LGPL, MIT X11
 URL:            http://www.mono-project.com/
-Source0:        %{name}-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.bz2
 Source1:	monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -557,6 +557,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Sat Jun  2 2007 Christopher Aillon <caillon@redhat.com> 1.2.4-1
+- Update to 1.2.4
+
 * Sun Apr  1 2007 Matthias Clasen <mclasen@redhat.com> - 1.2.3-3
 - Fix a spec format error (#210633)
 

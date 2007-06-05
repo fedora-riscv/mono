@@ -356,6 +356,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll Mono.Security
 %gac_dll System
 %gac_dll System.Configuration
+%gac_dll System.Core
 %gac_dll System.Drawing
 %gac_dll System.Security
 %gac_dll System.Xml
@@ -377,6 +378,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/monodis
 %{_bindir}/pedump
 %{_bindir}/monodiet
+%{_bindir}/mono-api-diff
+%{_bindir}/mono-api-info
+%{_bindir}/mono-api-info2
 %mono_bin_1 al al
 %mono_bin_2 al2 al
 %mono_bin caspol
@@ -385,6 +389,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin dtd2xsd
 %mono_bin dtd2rng
 %mono_bin genxs
+%mono_bin installvst
 %mono_bin sgen
 %mono_bin_1 ilasm ilasm
 %mono_bin_2 ilasm2 ilasm
@@ -402,6 +407,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin secutil
 %mono_bin signcode
 %mono_bin xbuild
+%{monodir}/1.0/culevel.exe
+%{monodir}/1.0/culevel.exe.mdb
 %{monodir}/1.0/ictool.exe
 %{monodir}/1.0/ictool.exe.mdb
 %{_mandir}/man1/al.1.gz
@@ -422,6 +429,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/secutil.1.gz
 %{_mandir}/man1/sgen.1.gz
 %{_mandir}/man1/signcode.1.gz
+%{_mandir}/man1/vbnc.1.gz
 %{_mandir}/man1/monoburg.*
 %gac_dll PEAPI
 %gac_dll Microsoft.Build.Engine
@@ -500,6 +508,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Web.Services
 %mono_bin disco
 %mono_bin soapsuds
+%mono_bin_2 httpcfg httpcfg
 %mono_bin_1 wsdl wsdl
 %mono_bin_2 wsdl2 wsdl
 %mono_bin xsd
@@ -511,8 +520,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/1.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/2.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/2.0/web.config
-# Hmm, this doesn't seem to ship with the .exe file?
-%{_bindir}/httpcfg
 %{_mandir}/man1/httpcfg.1.gz
 
 %files data
@@ -531,6 +538,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %files data-sqlite
 %defattr(-,root,root,-)
 %gac_dll Mono.Data.SqliteClient
+%gac_dll Mono.Data.Sqlite
 
 %files data-sybase
 %defattr(-,root,root,-)

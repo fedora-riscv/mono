@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -565,6 +565,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Tue Aug 14 2007 Jesse Keating <jkeating@redhat.com> 1.2.4-2
+- Rebuild for buildsystem error
+
 * Sat Jun  2 2007 Christopher Aillon <caillon@redhat.com> 1.2.4-1
 - Update to 1.2.4
 

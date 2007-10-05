@@ -11,18 +11,7 @@ Index: mono-1.1.16/configure.in
      echo 'MCS_FLAGS = $(PLATFORM_DEBUG_FLAGS)' >> $srcdir/$mcsdir/build/config.make
      echo 'IL_FLAGS = /debug' >> $srcdir/$mcsdir/build/config.make
      echo "RUNTIME = $mono_build_root/runtime/mono-wrapper" >> $srcdir/$mcsdir/build/config.make
-Index: mono-1.1.16/mono/metadata/Makefile.am
-===================================================================
---- mono-1.1.16.orig/mono/metadata/Makefile.am
-+++ mono-1.1.16/mono/metadata/Makefile.am
-@@ -9,7 +9,7 @@ else
- # The mingw math.h has "extern inline" functions that dont appear in libs, so
- # optimisation is required to actually inline them
- AM_CFLAGS = -O
--assembliesdir = $(exec_prefix)/lib
-+assembliesdir = $(libdir)
- confdir = $(sysconfdir)
- endif
+
  
 Index: mono-1.1.16/scripts/Makefile.am
 ===================================================================
@@ -121,17 +110,6 @@ Index: mono-1.1.16/mcs/tools/cilc/res-Makefile
  
  CFLAGS += -static -fpic $(shell pkg-config --cflags glib-2.0 gobject-2.0 mono) $(EXTRAINCLUDES) -I.
  
---- mono-1.1.16.1/mono/metadata/Makefile.am.libdir	2006-07-05 23:55:46.000000000 +0200
-+++ mono-1.1.16.1/mono/metadata/Makefile.am	2006-08-17 17:54:36.000000000 +0200
-@@ -21,7 +21,7 @@
- #
- noinst_LTLIBRARIES = libmonoruntime.la libmonoruntime-static.la
- 
--INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/mono $(LIBGC_CFLAGS) $(GLIB_CFLAGS) -DMONO_BINDIR=\"$(bindir)/\" -DMONO_ASSEMBLIES=\"$(assembliesdir)\" -DMONO_CFG_DIR=\"$(confdir)\"
-+INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/mono $(LIBGC_CFLAGS) $(GLIB_CFLAGS) -DMONO_BINDIR=\"$(bindir)/\" -DMONO_ASSEMBLIES=\"$(assembliesdir)\" -DMONO_RELOC_LIBDIR=\"$(reloc_libdir)\" -DMONO_CFG_DIR=\"$(confdir)\"
- 
- #
- # Make sure any prefix changes are updated in the binaries too.
 --- mono-1.1.16.1/mono/metadata/assembly.c.libdir	2006-08-17 17:52:42.000000000 +0200
 +++ mono-1.1.16.1/mono/metadata/assembly.c	2006-08-17 17:56:21.000000000 +0200
 @@ -521,7 +521,7 @@

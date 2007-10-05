@@ -1,6 +1,6 @@
 Name:           mono
-Version:        1.2.4
-Release:        2%{?dist}
+Version:        1.2.5.1
+Release:        1%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -14,7 +14,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 1.2.1
+BuildRequires:  libgdiplus-devel >= 1.2.4
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -31,6 +31,8 @@ Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-1.1.13.4-ppc-threading.patch
 Patch3: mono-libdir.patch
 Patch4: mono-1.2.3-use-monodir.patch
+Patch5: mono-1.2.4-metadata.patch
+Patch6: mono-1251-metadata.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -251,6 +253,7 @@ which is fully managed and actively maintained.
 %setup -q
 %patch1 -p1 -b .selinux-ia64
 %patch2 -p1 -b .ppc-threading
+%patch5 -p1
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
 
@@ -316,6 +319,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %doc AUTHORS COPYING.LIB ChangeLog NEWS README
 %{_bindir}/mono
 %{_bindir}/monodir
+%{_bindir}/mono-api-*
+%{_bindir}/smcs
 %mono_bin certmgr
 %mono_bin chktrust
 %mono_bin gacutil
@@ -324,6 +329,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin mozroots
 %mono_bin setreg
 %mono_bin sn
+%mono_bin installvst
+%mono_bin monolinker
 %{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
 %{_libdir}/libMonoPosixHelper.so
@@ -336,6 +343,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/mozroots.1.gz
 %{_mandir}/man1/setreg.1.gz
 %{_mandir}/man1/sn.1.gz
+%{_mandir}/man1/vbnc.1.gz
+%{_mandir}/man1/monolinker.1.gz
+%{_mandir}/man1/resgen.1.gz
 %{_mandir}/man5/mono-config.5.gz
 %dir %{monodir}
 %dir %{monodir}/1.0
@@ -350,16 +360,17 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll Microsoft.VisualC
 %gac_dll Mono.C5
 %gac_dll Mono.Cairo
+%{_libdir}/mono/gac/Mono.Cecil
 %gac_dll Mono.CompilerServices.SymbolWriter
 %gac_dll Mono.GetOptions
 %gac_dll Mono.Posix
 %gac_dll Mono.Security
 %gac_dll System
 %gac_dll System.Configuration
-%gac_dll System.Core
 %gac_dll System.Drawing
 %gac_dll System.Security
 %gac_dll System.Xml
+%gac_dll System.Core
 %gac_dll cscompmgd
 %gac_dll CustomMarshalers
 %gac_dll OpenSystem.C
@@ -372,15 +383,12 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/1.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
 %{_libdir}/libikvm-native.so
+%mono_bin httpcfg
 
 %files devel
 %defattr(-,root,root,-)
 %{_bindir}/monodis
 %{_bindir}/pedump
-%{_bindir}/monodiet
-%{_bindir}/mono-api-diff
-%{_bindir}/mono-api-info
-%{_bindir}/mono-api-info2
 %mono_bin_1 al al
 %mono_bin_2 al2 al
 %mono_bin caspol
@@ -389,7 +397,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin dtd2xsd
 %mono_bin dtd2rng
 %mono_bin genxs
-%mono_bin installvst
 %mono_bin sgen
 %mono_bin_1 ilasm ilasm
 %mono_bin_2 ilasm2 ilasm
@@ -407,8 +414,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin secutil
 %mono_bin signcode
 %mono_bin xbuild
-%{monodir}/1.0/culevel.exe
-%{monodir}/1.0/culevel.exe.mdb
 %{monodir}/1.0/ictool.exe
 %{monodir}/1.0/ictool.exe.mdb
 %{_mandir}/man1/al.1.gz
@@ -429,7 +434,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/secutil.1.gz
 %{_mandir}/man1/sgen.1.gz
 %{_mandir}/man1/signcode.1.gz
-%{_mandir}/man1/vbnc.1.gz
 %{_mandir}/man1/monoburg.*
 %gac_dll PEAPI
 %gac_dll Microsoft.Build.Engine
@@ -453,6 +457,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %dir %{_datadir}/mono-1.0
 %dir %{_datadir}/mono-1.0/mono
 %dir %{_datadir}/mono-1.0/mono/cil
+%{_libdir}/mono/1.0/culevel*
 
 %files nunit
 %defattr(-,root,root,-)
@@ -508,7 +513,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Web.Services
 %mono_bin disco
 %mono_bin soapsuds
-%mono_bin_2 httpcfg httpcfg
 %mono_bin_1 wsdl wsdl
 %mono_bin_2 wsdl2 wsdl
 %mono_bin xsd
@@ -520,6 +524,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/1.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/2.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/2.0/web.config
+# Hmm, this doesn't seem to ship with the .exe file?
+%mono_bin httpcfg
 %{_mandir}/man1/httpcfg.1.gz
 
 %files data
@@ -565,11 +571,12 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
-* Tue Aug 14 2007 Jesse Keating <jkeating@redhat.com> 1.2.4-2
-- Rebuild for buildsystem error
+* Fri Oct 05 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 1.2.5.1-1
+- bump
+- added new parts (mono-linker, resgen and mono-cecil)
 
-* Sat Jun  2 2007 Christopher Aillon <caillon@redhat.com> 1.2.4-1
-- Update to 1.2.4
+* Thu Apr 21 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 1.2.4-1
+- update from 1.2.3
 
 * Sun Apr  1 2007 Matthias Clasen <mclasen@redhat.com> - 1.2.3-3
 - Fix a spec format error (#210633)

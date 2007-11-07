@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.5.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -33,6 +33,8 @@ Patch3: mono-libdir.patch
 Patch4: mono-1.2.3-use-monodir.patch
 Patch5: mono-1.2.4-metadata.patch
 Patch6: mono-1251-metadata.patch
+
+Patch7: mono-big-integer-CVE-2007-5197.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -256,6 +258,8 @@ which is fully managed and actively maintained.
 %patch5 -p1
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
+
+%patch7 -p0 -b .big-integer
 
 %build
 %ifarch ia64 s390
@@ -571,6 +575,10 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Wed Nov  7 2007 Alexander Larsson <alexl@redhat.com> - 1.2.5.1-2
+- Fix overflow in Mono.Math.BigInteger class (#367541)
+  CVE-2007-5197
+
 * Fri Oct 05 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 1.2.5.1-1
 - bump
 - added new parts (mono-linker, resgen and mono-cecil)

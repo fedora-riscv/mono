@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.5.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -258,6 +258,7 @@ which is fully managed and actively maintained.
 %patch5 -p1
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
+%patch6 -p1 -b .metadata
 
 %patch7 -p0 -b .big-integer
 
@@ -575,6 +576,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Nov  9 2007 Ray Strode <rstrode@redhat.com> - 1.2.5.1-3
+- Apply dropped patch (bug 371781), found by Eskil Bylund
+
 * Wed Nov  7 2007 Alexander Larsson <alexl@redhat.com> - 1.2.5.1-2
 - Fix overflow in Mono.Math.BigInteger class (#367541)
   CVE-2007-5197

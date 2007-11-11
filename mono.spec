@@ -1,6 +1,6 @@
 Name:           mono
-Version:        1.2.5.1
-Release:        4%{?dist}
+Version:        1.2.5.2
+Release:        1%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -576,6 +576,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Sun Nov 11 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.5.2-1
+- Bump to next version
+
 * Fri Nov  9 2007 Ray Strode <rstrode@redhat.com> - 1.2.5.1-4
 - Apply dropped patch (bug 371781), found by Eskil Bylund
 

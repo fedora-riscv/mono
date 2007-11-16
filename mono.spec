@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.5.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -138,7 +138,7 @@ System.Configuration.Install, System.Management, System.Messaging.
 %package winforms
 Summary:        Windows Forms implementation for Mono
 Group:          Development/Languages
-Requires:       mono-core = %{version}-%{release}
+Requires:       mono-core = %{version}-%{release}, libgdiplus-devel
 
 %description winforms
 This package provides a fully managed implementation of
@@ -576,6 +576,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Thu Nov 15 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.5.2-2
+- Added R libgdiplus to the winforms package. Fixes BZ 380131
+
 * Sun Nov 11 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.5.2-1
 - Bump to next version
 

@@ -1,17 +1,3 @@
-Index: mono-1.1.16/configure.in
-===================================================================
---- mono-1.1.16.orig/configure.in
-+++ mono-1.1.16/configure.in
-@@ -2000,7 +2000,7 @@ fi
-   if test x$cross_compiling = xno; then
-     echo "prefix=$prefix" > $srcdir/$mcsdir/build/config.make
-     echo "exec_prefix=$exec_prefix" >> $srcdir/$mcsdir/build/config.make
--    echo 'mono_libdir=${exec_prefix}/lib' >> $srcdir/$mcsdir/build/config.make
-+    echo "mono_libdir=$libdir" >> $srcdir/$mcsdir/build/config.make
-     echo 'MCS_FLAGS = $(PLATFORM_DEBUG_FLAGS)' >> $srcdir/$mcsdir/build/config.make
-     echo 'IL_FLAGS = /debug' >> $srcdir/$mcsdir/build/config.make
-     echo "RUNTIME = $mono_build_root/runtime/mono-wrapper" >> $srcdir/$mcsdir/build/config.make
-
  
 Index: mono-1.1.16/scripts/Makefile.am
 ===================================================================
@@ -38,64 +24,8 @@ Index: mono-1.1.16/scripts/mono-nunit.pc.in
  
  
  Name: Mono NUnit
-Index: mono-1.1.16/mint.pc.in
-===================================================================
---- mono-1.2.3/mint.pc.in	2007-01-28 14:04:26.000000000 +0000
-+++ mono-1.2.3/mint-new.pc.in	2007-01-28 14:10:02.000000000 +0000
-@@ -1,6 +1,6 @@
- prefix=${pcfiledir}/../..
- exec_prefix=${pcfiledir}/../..
--libdir=${prefix}/lib
-+libdir=${prefix}/@reloc_libdir@
- includedir=${prefix}/include/mono-@API_VER@
- 
- 
- 
-Index: mono-1.1.16/mono-cairo.pc.in
-===================================================================
---- mono-1.1.16.orig/mono-cairo.pc.in
-+++ mono-1.1.16/mono-cairo.pc.in
-@@ -6,4 +6,4 @@ includedir=${prefix}/include
- Name: Mono.Cairo
- Description: Cairo bindings for Mono
- Version: @VERSION@
--Libs: -r:${prefix}/lib/mono/1.0/Mono.Cairo.dll
-+Libs: -r:${libdir}/mono/1.0/Mono.Cairo.dll
-Index: mono-1.1.16/mcs/build/config-default.make
-===================================================================
---- mono-1.1.16.orig/mcs/build/config-default.make
-+++ mono-1.1.16/mcs/build/config-default.make
-@@ -17,7 +17,7 @@ LIBRARY_FLAGS = /noconfig
- CFLAGS = -g -O2
- prefix = /usr/local
- exec_prefix = $(prefix)
--mono_libdir = $(exec_prefix)/lib
-+mono_libdir = $(libdir)
- #RUNTIME = mono
- RUNTIME = false
- TEST_RUNTIME = MONO_PATH="$(topdir)/class/lib/$(PROFILE)$(PLATFORM_PATH_SEPARATOR)$(TEST_MONO_PATH)$(PLATFORM_PATH_SEPARATOR)$$MONO_PATH" $(RUNTIME) --debug
-Index: mono-1.1.16/mcs/build/profiles/atomic.make
-===================================================================
---- mono-1.1.16.orig/mcs/build/profiles/atomic.make
-+++ mono-1.1.16/mcs/build/profiles/atomic.make
-@@ -15,14 +15,14 @@ MCS = $(BOOTSTRAP_MCS)
- 
- # Get our installed libraries (an issue on windows)
- 
--PROFILE_MCS_FLAGS = /lib:$(prefix)/lib
-+PROFILE_MCS_FLAGS = /lib:$(libdir)
- 
- # Check that installed libraries even exist.
- 
- profile-check:
--	@if test '!' -f $(prefix)/lib/I18N.dll ; then \
-+	@if test '!' -f $(libdir)/I18N.dll ; then \
- 	    echo ; \
--	    echo "$(prefix)/lib/I18N.dll does not exist." ; \
-+	    echo "$(libdir)/I18N.dll does not exist." ; \
- 	    echo ; \
- 	    echo "This probably means that you are building from a miniature" ; \
- 	    echo "distribution of MCS or don't yet have an installed MCS at all." ; \
+
+
 
 Index: mono-1.1.16/mcs/tools/cilc/res-Makefile
 ===================================================================

@@ -1,11 +1,11 @@
 Name:           mono
-Version:        1.2.5.2
-Release:        2%{?dist}
+Version:        1.2.6
+Release:        4%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
 License:        GPL, LGPL, MIT X11
-URL:            http://www.mono-project.com/
+URL:            http://go-mono.com/sources-stable/%{name}-%{version}.tar.bz2
 Source0:        %{name}-%{version}.tar.bz2
 Source1:	monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -14,7 +14,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 1.2.4
+BuildRequires:  libgdiplus-devel >= 1.2.6
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -29,12 +29,12 @@ ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha
 
 Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-1.1.13.4-ppc-threading.patch
-Patch3: mono-libdir.patch
+Patch3: mono-libdir-126.patch
 Patch4: mono-1.2.3-use-monodir.patch
 Patch5: mono-1.2.4-metadata.patch
 Patch6: mono-1251-metadata.patch
-
 Patch7: mono-big-integer-CVE-2007-5197.patch
+Patch8: mono-mcs-config.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -46,14 +46,6 @@ metadata access libraries.
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
 Requires:	libgdiplus
-
-# Temporary provides due to transient package, remove when rawhide is settled
-Obsoletes:      mono-lib
-Provides:       mono-lib
-
-# Mono-basic was removed in 1.1.17
-Obsoletes:      mono-basic
-Provides:       mono-basic
 
 %description core
 This package contains the core of the Mono runtime including its
@@ -67,14 +59,6 @@ Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       pkgconfig
 Requires:       glib2-devel
-
-# Temporary provides due to transient package, remove when rawhide is settled
-Obsoletes:      mono-lib-devel
-Provides:       mono-lib-devel
-
-# Temporary provides due to transient package, remove when rawhide is settled
-Obsoletes:      mono-devtools
-Provides:       mono-devtools
 
 %description devel
 This package completes the Mono developer toolchain with the mono profiler,
@@ -253,13 +237,14 @@ which is fully managed and actively maintained.
 
 %prep
 %setup -q
+sed -i -e "s!@LIBDIR@!%{_libdir}!" %{PATCH8}
+%patch8 -p1 -b .config
 %patch1 -p1 -b .selinux-ia64
 %patch2 -p1 -b .ppc-threading
 %patch5 -p1
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
 %patch6 -p1 -b .metadata
-
 %patch7 -p0 -b .big-integer
 
 %build
@@ -292,7 +277,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 
 # This was removed upstream:
 %{__rm} -fr $RPM_BUILD_ROOT%{monodir}/gac/Mono.Security.Win32/[12]*
-%{__rm} $RPM_BUILD_ROOT%{monodir}/*/Mono.Security.Win32.dll
+%{__rm} -rf $RPM_BUILD_ROOT%{monodir}/1.0/Mono.Security.Win32.dll
+%{__rm} -rf $RPM_BUILD_ROOT%{monodir}/2.0/Mono.Security.Win32.dll
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/README*
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/barrett_diagram
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/*.html
@@ -326,16 +312,19 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/monodir
 %{_bindir}/mono-api-*
 %{_bindir}/smcs
+%{_bindir}/mono-test-install
 %mono_bin certmgr
 %mono_bin chktrust
 %mono_bin gacutil
 %mono_bin gmcs
 %mono_bin mcs
 %mono_bin mozroots
+%mono_bin mconfig
 %mono_bin setreg
 %mono_bin sn
 %mono_bin installvst
 %mono_bin monolinker
+%{monodir}/1.0/transform.exe
 %{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
 %{_libdir}/libMonoPosixHelper.so
@@ -351,6 +340,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/vbnc.1.gz
 %{_mandir}/man1/monolinker.1.gz
 %{_mandir}/man1/resgen.1.gz
+%{_mandir}/man1/mconfig.1.gz
 %{_mandir}/man5/mono-config.5.gz
 %dir %{monodir}
 %dir %{monodir}/1.0
@@ -366,6 +356,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll Mono.C5
 %gac_dll Mono.Cairo
 %{_libdir}/mono/gac/Mono.Cecil
+%{_libdir}/mono/gac/Mono.Cecil.Mdb
+%gac_dll Mono.Mozilla
 %gac_dll Mono.CompilerServices.SymbolWriter
 %gac_dll Mono.GetOptions
 %gac_dll Mono.Posix
@@ -387,6 +379,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/config
 %config (noreplace) %{_sysconfdir}/mono/1.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
+%config (noreplace) %{_sysconfdir}/mono/mconfig/config.xml
 %{_libdir}/libikvm-native.so
 %mono_bin httpcfg
 
@@ -457,6 +450,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/dotnet.pc
 %{_libdir}/pkgconfig/mono-cairo.pc
 %{_libdir}/pkgconfig/mono.pc
+%{_libdir}/pkgconfig/cecil.pc
 %{_includedir}/mono-1.0
 %{_datadir}/mono-1.0/mono/cil/cil-opcodes.xml
 %dir %{_datadir}/mono-1.0
@@ -516,6 +510,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Web
 %gac_dll System.Runtime.Serialization.Formatters.Soap
 %gac_dll System.Web.Services
+%gac_dll System.Web.Extensions.Design
+%gac_dll System.Web.Extensions
 %mono_bin disco
 %mono_bin soapsuds
 %mono_bin_1 wsdl wsdl
@@ -576,6 +572,15 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Tue Dec 16 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-4
+- bump new version
+- removed more redundant bits
+- url fix
+
+* Thu Nov 22 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-1
+- bump to preview 2
+- removed redundant bits of the spec file
+
 * Thu Nov 15 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.5.2-2
 - Added R libgdiplus to the winforms package. Fixes BZ 380131
 

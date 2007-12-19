@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.6
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -238,7 +238,6 @@ which is fully managed and actively maintained.
 
 %prep
 %setup -q
-sed -i -e "s!@LIBDIR@!%{_libdir}!" %{PATCH8}
 %patch8 -p1 -b .config
 %patch1 -p1 -b .selinux-ia64
 %patch2 -p1 -b .ppc-threading
@@ -254,12 +253,12 @@ export CFLAGS="-O2 -fno-strict-aliasing"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %endif
-autoreconf --force --install
+autoreconf -f -i -s
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
-%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes
-make
+%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes 
+make %{?_smp_mflags}
 
 
 %install
@@ -573,8 +572,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
-* Wed Dec 19 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-5
+* Wed Dec 19 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-6
 - added BR libunwind-devel for ia64 (bz426180)
+- fix for LIBDIR problem
 
 * Tue Dec 16 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-4
 - bump new version

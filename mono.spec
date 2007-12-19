@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.6
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -18,6 +18,7 @@ BuildRequires:  libgdiplus-devel >= 1.2.6
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
+BuildRequires:  libunwind-devel
 %endif
 # Required for mono-libdir.patch
 BuildRequires: automake libtool
@@ -572,6 +573,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Wed Dec 19 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-5
+- added BR libunwind-devel for ia64 (bz426180)
+
 * Tue Dec 16 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-4
 - bump new version
 - removed more redundant bits

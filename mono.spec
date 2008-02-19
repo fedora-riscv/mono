@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.6
-Release:        6.1%{?dist}
+Release:        7.1%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -575,6 +575,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 1.2.6-7.1
+- Autorebuild for GCC 4.3
+
 * Wed Dec 19 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-6.1
 - added BR libunwind-devel for ia64 (bz426180)
 - fix for LIBDIR problem

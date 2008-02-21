@@ -1,7 +1,7 @@
-Name:           mono
-Version:        1.2.6
-Release:        7.1%{?dist}
-Summary:        a .NET runtime environment
+Name:	mono
+Version:        1.9
+Release:        1%{?dist}
+Summary:        A .NET runtime environment
 
 Group:          Development/Languages
 License:        GPL, LGPL, MIT X11
@@ -243,7 +243,7 @@ sed -i -e 's!@@LIBDIR@@!%{_libdir}!' %{PATCH8}
 sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
 %patch1 -p1 -b .selinux-ia64
 %patch2 -p1 -b .ppc-threading
-%patch5 -p1
+%patch5 -p1 -b .monodir
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
 %patch6 -p1 -b .metadata
@@ -328,6 +328,12 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin installvst
 %mono_bin monolinker
 %{monodir}/1.0/transform.exe
+%{monodir}/?.0/installutil.*
+%{monodir}/2.1/System*
+%{monodir}/2.1/smcs*
+%{monodir}/2.1/mscorlib*
+%{monodir}/3.5/System.Web.Extensions*
+%{monodir}/3.5/System.Xml.Linq.dll
 %{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
 %{_libdir}/libMonoPosixHelper.so
@@ -348,6 +354,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %dir %{monodir}
 %dir %{monodir}/1.0
 %dir %{monodir}/2.0
+%dir %{monodir}/2.1
+%dir %{monodir}/3.5
 %dir %{monodir}/gac
 %dir %{monodir}/compat-*
 %gac_dll Commons.Xml.Relaxng
@@ -358,8 +366,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll Microsoft.VisualC
 %gac_dll Mono.C5
 %gac_dll Mono.Cairo
-%{_libdir}/mono/gac/Mono.Cecil
-%{_libdir}/mono/gac/Mono.Cecil.Mdb
+%{monodir}/gac/Mono.Cecil
+%{monodir}/gac/Mono.Cecil.Mdb
 %gac_dll Mono.Mozilla
 %gac_dll Mono.CompilerServices.SymbolWriter
 %gac_dll Mono.GetOptions
@@ -374,6 +382,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll cscompmgd
 %gac_dll CustomMarshalers
 %gac_dll OpenSystem.C
+%{monodir}/gac/System.Xml.Core
+%{monodir}/gac/System.Xml.Linq
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
 %dir %{_sysconfdir}/mono
@@ -383,6 +393,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/1.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/mconfig/config.xml
+%config (noreplace) %{_sysconfdir}/mono/2.0/settings.map
 %{_libdir}/libikvm-native.so
 %mono_bin httpcfg
 
@@ -575,8 +586,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
-* Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 1.2.6-7.1
-- Autorebuild for GCC 4.3
+* Mon Feb 04 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.9-1
+- bump to preview 2
+- spec file fixes
 
 * Wed Dec 19 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-6.1
 - added BR libunwind-devel for ia64 (bz426180)

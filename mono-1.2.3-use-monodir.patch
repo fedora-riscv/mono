@@ -4,18 +4,7 @@
  #!/bin/sh
 -exec @bindir@/@mono_interp@ $MONO_OPTIONS @mono_instdir@/@framework_version@/@exe_name@.exe "$@"
 +exec @bindir@/@mono_interp@ $MONO_OPTIONS `@bindir@/monodir`/@framework_version@/@exe_name@.exe "$@"
---- mono-1.2.3/scripts/mono-service.in	2007-01-25 06:11:11.000000000 +0000
-+++ mono-1.2.3/scripts/mono-service-new.in	2007-01-27 23:44:26.000000000 +0000
-@@ -35,7 +35,7 @@
- 
- export MONO_DISABLE_SHM=1
- if $debug; then
--   exec @bindir@/@mono_interp@ $MONO_OPTIONS @mono_instdir@/@framework_version@/mono-service.exe $args
-+   exec @bindir@/@mono_interp@ $MONO_OPTIONS `@bindir@/monodir`/@framework_version@/mono-service.exe $args
- else
--   exec @bindir@/@mono_interp@ $MONO_OPTIONS @mono_instdir@/@framework_version@/mono-service.exe $args </dev/null >& /dev/null &
-+   exec @bindir@/@mono_interp@ $MONO_OPTIONS `@bindir@/monodir`/@framework_version@/@exe_name@.exe $args </dev/null >& /dev/null &
- fi
+
 --- mono-1.2.3/scripts/script_umask.in	2006-08-25 20:35:14.000000000 +0100
 +++ mono-1.2.3/scripts/script_umask-new.in	2007-01-27 23:45:58.000000000 +0000
 @@ -1,3 +1,3 @@
@@ -23,3 +12,15 @@
  umask 077
 -exec @bindir@/@mono_interp@ $MONO_OPTIONS @mono_instdir@/@framework_version@/@exe_name@.exe "$@"
 +exec @bindir@/@mono_interp@ $MONO_OPTIONS `@bindir@/monodir`/@framework_version@/@exe_name@.exe "$@"
+--- mono-1.9/scripts/mono-service.in	2008-02-06 21:43:22.000000000 +0000
++++ mono-1.9/scripts/mono-service-new.in	2008-02-06 21:47:55.000000000 +0000
+@@ -35,7 +35,7 @@
+ 
+ export MONO_DISABLE_SHM=1
+ if $debug; then
+-   exec @bindir@/@mono_interp@ $MONO_OPTIONS @mono_instdir@/@framework_version@/mono-service.exe $args
++   exec @bindir@/@mono_interp@ $MONO_OPTIONS `@bindir@/monodir`/@framework_version@/mono-service.exe $args
+ else
+-   exec @bindir@/@mono_interp@ $MONO_OPTIONS @mono_instdir@/@framework_version@/mono-service.exe $args </dev/null > /dev/null 2>&1 &
++   exec @bindir@/@mono_interp@ $MONO_OPTIONS `@bindir@/monodir`/@framework_version@/@exe_name@.exe $args </dev/null > /dev/null 2>&1 &
+ fi

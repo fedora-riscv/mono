@@ -1,6 +1,6 @@
 Name:	mono
 Version:        1.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -503,7 +503,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin_1 mono-service mono-service
 %mono_bin_2 mono-service2 mono-service
 %{monodir}/gac/mono-service
-
 %gac_dll System.Management
 %gac_dll System.Messaging
 %gac_dll System.ServiceProcess
@@ -520,6 +519,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %files web
 %defattr(-,root,root,-)
 %gac_dll Mono.Http
+%gac_dll Mono.Web
 %gac_dll System.Runtime.Remoting
 %gac_dll System.Web
 %gac_dll System.Runtime.Serialization.Formatters.Soap
@@ -539,7 +539,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/1.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/2.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/2.0/web.config
-# Hmm, this doesn't seem to ship with the .exe file?
 %mono_bin httpcfg
 %{_mandir}/man1/httpcfg.1.gz
 
@@ -586,6 +585,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Thu Mar 06 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.9-2
+- bump to preview 4
+
 * Mon Feb 04 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.9-1
 - bump to preview 2
 - spec file fixes

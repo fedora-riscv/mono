@@ -1,6 +1,6 @@
 Name:           mono
 Version:        1.2.5.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        a .NET runtime environment
 
 Group:          Development/Languages
@@ -98,7 +98,8 @@ brings xUnit to all .NET languages.
 %package nunit-devel
 Summary: pkgconfig for nunit
 Group: Development/Libraries
-Requires: mono-core = %{version}-%{release} pkgconfig
+Requires: mono-core = %{version}-%{release}, pkgconfig
+Requires: mono-nunit
 
 %description nunit-devel
 Development files for nunit
@@ -576,6 +577,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Mon Mar 17 2008 Xavier Lamien <lxtnow[at]gmail.com> - 1.2.5.1-4
+- Added requrie on mono-nunit-devel
+
 * Fri Nov  9 2007 Ray Strode <rstrode@redhat.com> - 1.2.5.1-3
 - Apply dropped patch (bug 371781), found by Eskil Bylund
 

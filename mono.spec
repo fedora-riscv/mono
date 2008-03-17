@@ -1,6 +1,6 @@
 Name:	mono
 Version:        1.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -83,7 +83,8 @@ brings xUnit to all .NET languages.
 %package nunit-devel
 Summary: pkgconfig for nunit
 Group: Development/Libraries
-Requires: mono-core = %{version}-%{release} pkgconfig
+Requires: mono-core = %{version}-%{release}, pkgconfig
+Requires: mono-munit
 
 %description nunit-devel
 Development files for nunit
@@ -585,6 +586,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Mon Mar 17 2008 Xavier Lamien	<lxtnow@gmail.com> - 1.9-3
+- Added require on mono-munit-devel
+
 * Thu Mar 06 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.9-2
 - bump to preview 4
 

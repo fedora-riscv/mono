@@ -1,6 +1,6 @@
 Name:	mono
 Version:        1.9
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -250,6 +250,10 @@ sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
 %patch6 -p1 -b .metadata
 %patch7 -p0 -b .big-integer
 autoreconf -f -i -s
+
+# Add undeclared Arg
+sed -i "61a #define ARG_MAX	_POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
+
 
 %build
 %ifarch ia64 s390
@@ -586,6 +590,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Mon Apr 07 2008 Xavier Lamien <lxtnow@gmail.com> - 1.9-4
+- Added undeclared function bug #xxxx.
+
 * Mon Mar 17 2008 Xavier Lamien	<lxtnow@gmail.com> - 1.9-3
 - Added require on mono-nunit-devel
 

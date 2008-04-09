@@ -1,10 +1,10 @@
-Name:	mono
+Name:		mono
 Version:        1.9
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
-License:        GPL, LGPL, MIT X11
+License:        GPLv2 and LGPLv2+ and MIT
 URL:            http://go-mono.com/sources-stable/%{name}-%{version}.tar.bz2
 Source0:        %{name}-%{version}.tar.bz2
 Source1:	monodir.c
@@ -67,6 +67,7 @@ assembler and other various tools.
 
 %package nunit
 Summary:        NUnit Testing Framework
+License:	zlib with acknowledgement
 Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       glib2-devel
@@ -84,7 +85,7 @@ brings xUnit to all .NET languages.
 Summary: pkgconfig for nunit
 Group: Development/Libraries
 Requires: mono-core = %{version}-%{release}, pkgconfig
-Requires: mono-nunit
+Requires: mono-nunit = %{version}-%{release}
 
 %description nunit-devel
 Development files for nunit
@@ -479,6 +480,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 
 %files nunit
 %defattr(-,root,root,-)
+%doc mcs/nunit20/license.rtf mcs/nunit20/README
 %mono_bin_1 nunit-console nunit-console
 %mono_bin_2 nunit-console2 nunit-console
 %gac_dll nunit.core
@@ -590,6 +592,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Wed Apr 09 2008 Tom "spot" Callaway <tcallawa@redhat.com> - 1.9-5
+- fix licensing
+
 * Mon Apr 07 2008 Xavier Lamien <lxtnow@gmail.com> - 1.9-4
 - Added undeclared function bug #xxxx.
 

@@ -1,6 +1,6 @@
 Name:		mono
 Version:        1.9
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -22,6 +22,12 @@ BuildRequires:  libunwind-devel
 %endif
 # Required for mono-libdir.patch
 BuildRequires: automake libtool
+
+# Yes, mono actually depends on itself, because
+# we deleted the bootstrapping binaries. If you
+# need to bootstrap mono, comment out this BuildRequires
+# and don't delete the binaries in %%prep.
+BuildRequires: mono-core
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha
@@ -594,6 +600,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Apr 11 2008 Tom "spot" Callaway <tcallawa@redhat.com> - 1.9-7
+- since we're not bootstrapping with prebuilt binaries, BR: mono-core
+
 * Fri Apr 11 2008 Tom "spot" Callaway <tcallawa@redhat.com> - 1.9-6
 - Remove prebuilt binaries
 

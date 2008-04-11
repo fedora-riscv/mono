@@ -1,6 +1,6 @@
 Name:		mono
 Version:        1.9
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -255,6 +255,8 @@ autoreconf -f -i -s
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX	_POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 
+# Remove prebuilt binaries
+rm -rf mcs/class/lib/monolite/*
 
 %build
 %ifarch ia64 s390
@@ -592,6 +594,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Apr 11 2008 Tom "spot" Callaway <tcallawa@redhat.com> - 1.9-6
+- Remove prebuilt binaries
+
 * Wed Apr 09 2008 Tom "spot" Callaway <tcallawa@redhat.com> - 1.9-5
 - fix licensing
 

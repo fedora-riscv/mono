@@ -1,6 +1,6 @@
 Name:		mono
 Version:        1.9.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -600,6 +600,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Wed Apr 23 2008 Tom "spot" Callaway <tcallawa@redhat.com> 1.9.1-2
+- fix libdir in pc files
+
 * Tue Apr 15 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.9.1-1
 - bump to new beta
 

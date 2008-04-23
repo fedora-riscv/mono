@@ -1,6 +1,6 @@
 Name:		mono
 Version:        1.9.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -42,6 +42,7 @@ Patch5: mono-1.2.4-metadata.patch
 Patch6: mono-1251-metadata.patch
 Patch7: mono-big-integer-CVE-2007-5197.patch
 Patch8: mono-mcs-config.patch
+Patch9: mono-191-pcfiles.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -256,6 +257,7 @@ sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
 %patch4 -p1 -b .use-monodir
 %patch6 -p1 -b .metadata
 %patch7 -p0 -b .big-integer
+%patch9 -p1 -b .original
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -600,6 +602,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Mon Apr 21 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.9.1-2
+- pc file fixes
+
 * Tue Apr 15 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.9.1-1
 - bump to new beta
 

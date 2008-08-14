@@ -89,17 +89,3 @@ Index: mono-1.1.16/mcs/tools/cilc/res-Makefile
  				return dir;
  			return Path.Combine (dir, "lib");
  		}
---- mono-1.1.16.1/mcs/class/Microsoft.Build.Utilities/Mono.XBuild.Utilities/MonoLocationHelper.cs.libdir	2006-08-17 15:46:11.000000000 +0200
-+++ mono-1.1.16.1/mcs/class/Microsoft.Build.Utilities/Mono.XBuild.Utilities/MonoLocationHelper.cs	2006-08-17 15:46:53.000000000 +0200
-@@ -53,10 +53,10 @@
- 			xbuildDir = Path.Combine (t2.FullName, "xbuild");
- 			// /usr/local/lib
- 			t3 = t2.Parent;
-+			libDir = t3.FullName;
- 			// /usr/local
- 			t4 = t3.Parent;
- 			binDir = Path.Combine (t4.FullName, "bin");
--			libDir = Path.Combine (t4.FullName, "lib");
- 		}
- 	
- 		public static string GetBinDir ()

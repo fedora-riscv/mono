@@ -1,10 +1,10 @@
 Name:		mono
-Version:        1.9.1
-Release:        2%{?dist}
+Version:        2.0
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
-License:        GPLv2 and LGPLv2+ and MIT
+License:        MIT
 URL:            http://go-mono.com/sources-stable/%{name}-%{version}.tar.bz2
 Source0:        %{name}-%{version}.tar.bz2
 Source1:	monodir.c
@@ -14,7 +14,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 1.2.6
+BuildRequires:  libgdiplus-devel >= 2.0
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -35,14 +35,15 @@ ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha
 # s390 s390x
 
 Patch1: mono-1.1.13.4-selinux-ia64.patch
-Patch2: mono-1.1.13.4-ppc-threading.patch
+Patch2: mono-2.0-ppc-threading.patch
 Patch3: mono-libdir-126.patch
 Patch4: mono-1.2.3-use-monodir.patch
-Patch5: mono-1.2.4-metadata.patch
-Patch6: mono-1251-metadata.patch
-Patch7: mono-big-integer-CVE-2007-5197.patch
+Patch5: mono-big-integer-CVE-2007-5197.patch
 Patch8: mono-mcs-config.patch
-Patch9: mono-191-pcfiles.patch
+Patch7: mono-2.0-pcfiles.patch
+Patch6:mono-2.0-uselibdir.patch
+Patch9:mono-2.0-monoservice.patch
+Patch10: mono-2.0-metadata-makefile.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -252,12 +253,12 @@ sed -i -e 's!@@LIBDIR@@!%{_libdir}!' %{PATCH8}
 sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
 %patch1 -p1 -b .selinux-ia64
 %patch2 -p1 -b .ppc-threading
-%patch5 -p1 -b .monodir
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
-%patch6 -p1 -b .metadata
-%patch7 -p0 -b .big-integer
-%patch9 -p1 -b .original
+%patch6 -p1 -b .use-libdir
+%patch7 -p1 -b .pc-patches
+%patch9 -p1 -b .monoservice
+%patch10 -p1 -b .metadata
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -291,8 +292,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 # We put these inside rpm
 %{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-provides
 %{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-requires
-
-%{__rm} $RPM_BUILD_ROOT%{_bindir}/mbas
 
 # This was removed upstream:
 %{__rm} -fr $RPM_BUILD_ROOT%{monodir}/gac/Mono.Security.Win32/[12]*
@@ -337,6 +336,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin gacutil
 %mono_bin gmcs
 %mono_bin mcs
+%{_bindir}/mcs1
 %mono_bin mozroots
 %mono_bin mconfig
 %mono_bin setreg
@@ -349,11 +349,10 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{monodir}/2.1/smcs*
 %{monodir}/2.1/mscorlib*
 %{monodir}/3.5/System.Web.Extensions*
-%{monodir}/3.5/System.Xml.Linq.dll
+%{monodir}/2.0/System.Xml.Linq.dll
 %{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
-%{_libdir}/libMonoPosixHelper.so
-%{_libdir}/libMonoSupportW.so
+%{_libdir}/libmono-profiler-logging.so.*
 %{_mandir}/man1/certmgr.1.gz
 %{_mandir}/man1/chktrust.1.gz
 %{_mandir}/man1/gacutil.1.gz
@@ -384,7 +383,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll Mono.Cairo
 %{monodir}/gac/Mono.Cecil
 %{monodir}/gac/Mono.Cecil.Mdb
-%gac_dll Mono.Mozilla
 %gac_dll Mono.CompilerServices.SymbolWriter
 %gac_dll Mono.GetOptions
 %gac_dll Mono.Posix
@@ -395,10 +393,11 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Security
 %gac_dll System.Xml
 %gac_dll System.Core
+%{monodir}/gac/System.Net
 %gac_dll cscompmgd
 %gac_dll CustomMarshalers
 %gac_dll OpenSystem.C
-%{monodir}/gac/System.Xml.Core
+#%{monodir}/gac/System.Xml.Core
 %{monodir}/gac/System.Xml.Linq
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
@@ -410,8 +409,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/mconfig/config.xml
 %config (noreplace) %{_sysconfdir}/mono/2.0/settings.map
-%{_libdir}/libikvm-native.so
-%mono_bin httpcfg
+
 
 %files devel
 %defattr(-,root,root,-)
@@ -419,25 +417,32 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/pedump
 %mono_bin_1 al al
 %mono_bin_2 al2 al
+%{_bindir}/al1
 %mono_bin caspol
 %mono_bin cert2spc
 %mono_bin cilc
 %mono_bin dtd2xsd
 %mono_bin dtd2rng
-%mono_bin genxs
+%mono_bin_1 genxs1 genxs
+%{_bindir}/genxs
+%{_bindir}/genxs2
 %mono_bin sgen
 %mono_bin_1 ilasm ilasm
+%{_bindir}/ilasm1
 %mono_bin_2 ilasm2 ilasm
 %mono_bin macpack
 %mono_bin makecert
 %mono_bin mkbundle
+%{_bindir}/mkbundle1
 %mono_bin_1 monop monop
+%{_bindir}/monop1
 %mono_bin_2 monop2 monop
 %mono_bin mono-shlib-cop
 %mono_bin mono-xmltool
 %mono_bin permview
 %mono_bin prj2make
 %mono_bin_1 resgen resgen
+%{_bindir}/resgen1
 %mono_bin_2 resgen2 resgen
 %mono_bin secutil
 %mono_bin signcode
@@ -477,10 +482,16 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/libmono-profiler-aot.*
 %{_libdir}/libmono-profiler-cov.*
 %{_libdir}/libmono.so
+%{_libdir}/libMonoPosixHelper.so
+%{_libdir}/libMonoSupportW.so
+%{_libdir}/libmono-profiler-logging.so
+%{_libdir}/libikvm-native.so
 %{_libdir}/pkgconfig/dotnet.pc
 %{_libdir}/pkgconfig/mono-cairo.pc
 %{_libdir}/pkgconfig/mono.pc
 %{_libdir}/pkgconfig/cecil.pc
+%{_libdir}/pkgconfig/dotnet35.pc
+%{_libdir}/pkgconfig/smcs.pc
 %{_includedir}/mono-1.0
 %{_datadir}/mono-1.0/mono/cil/cil-opcodes.xml
 %dir %{_datadir}/mono-1.0
@@ -537,6 +548,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %defattr(-,root,root,-)
 %gac_dll Mono.Http
 %gac_dll Mono.Web
+%gac_dll Mono.WebBrowser
 %gac_dll System.Runtime.Remoting
 %gac_dll System.Web
 %gac_dll System.Runtime.Serialization.Formatters.Soap
@@ -546,13 +558,16 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin disco
 %mono_bin soapsuds
 %mono_bin_1 wsdl wsdl
+%{_bindir}/wsdl1
 %mono_bin_2 wsdl2 wsdl
-%mono_bin xsd
+%mono_bin_2 xsd2 xsd
+%mono_bin_1 xsd xsd
 %{_mandir}/man1/disco.1.gz
 %{_mandir}/man1/soapsuds.1.gz
 %{_mandir}/man1/wsdl.1.gz
 %{_mandir}/man1/xsd.1.gz
 %config (noreplace) %{_sysconfdir}/mono/browscap.ini
+%config (noreplace) %{_sysconfdir}/mono/2.0/Browsers/Compat.browser
 %config (noreplace) %{_sysconfdir}/mono/1.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/2.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/2.0/web.config
@@ -564,6 +579,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin sqlsharp
 %{_mandir}/man1/sqlsharp.1.gz
 %gac_dll System.Data
+%gac_dll System.Data.DataSetExtensions
+%gac_dll System.Data.Linq
 %gac_dll Mono.Data
 %gac_dll Mono.Data.Tds
 %gac_dll Mono.Data.TdsClient
@@ -602,6 +619,12 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Sat Aug 02 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-1
+- bump to 2.0 preview 1
+- alter licence to MIT only
+- renamed and clean up patch files
+- spec file fixes
+
 * Mon Apr 21 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.9.1-2
 - pc file fixes
 

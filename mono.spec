@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.0
-Release:        1%{?dist}
+Release:        4%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -10,7 +10,7 @@ Source0:        %{name}-%{version}.tar.bz2
 Source1:	monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  bison
+BuildRequires:  bison 
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
@@ -44,6 +44,7 @@ Patch7: mono-2.0-pcfiles.patch
 Patch6:mono-2.0-uselibdir.patch
 Patch9:mono-2.0-monoservice.patch
 Patch10: mono-2.0-metadata-makefile.patch
+Patch11: mono-2.0-swfxim.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -259,6 +260,7 @@ sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
 %patch7 -p1 -b .pc-patches
 %patch9 -p1 -b .monoservice
 %patch10 -p1 -b .metadata
+%patch11 -p1 -b .swfxim
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -277,7 +279,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
-%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes 
+%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static
 make
 
 
@@ -286,7 +288,6 @@ make
 make DESTDIR=$RPM_BUILD_ROOT install
 install monodir $RPM_BUILD_ROOT%{_bindir}
 
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.a
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 # We put these inside rpm
@@ -311,6 +312,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/browsercaps-updater.exe*
 %{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/mono-api-diff.exe
 %{__rm} $RPM_BUILD_ROOT%{monodir}/*/mono-api-info.exe
+%{__rm} $RPM_BUILD_ROOT/%_bindir/smcs
+%{__rm} $RPM_BUILD_ROOT/%_libdir/pkgconfig/smcs.pc
 
 %post -p /sbin/ldconfig
 
@@ -329,7 +332,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/mono
 %{_bindir}/monodir
 %{_bindir}/mono-api-*
-%{_bindir}/smcs
 %{_bindir}/mono-test-install
 %mono_bin certmgr
 %mono_bin chktrust
@@ -345,9 +347,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin monolinker
 %{monodir}/1.0/transform.exe
 %{monodir}/?.0/installutil.*
-%{monodir}/2.1/System*
-%{monodir}/2.1/smcs*
-%{monodir}/2.1/mscorlib*
 %{monodir}/3.5/System.Web.Extensions*
 %{monodir}/2.0/System.Xml.Linq.dll
 %{_bindir}/mkbundle2
@@ -369,7 +368,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %dir %{monodir}
 %dir %{monodir}/1.0
 %dir %{monodir}/2.0
-%dir %{monodir}/2.1
 %dir %{monodir}/3.5
 %dir %{monodir}/gac
 %dir %{monodir}/compat-*
@@ -393,11 +391,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Security
 %gac_dll System.Xml
 %gac_dll System.Core
-%{monodir}/gac/System.Net
 %gac_dll cscompmgd
 %gac_dll CustomMarshalers
 %gac_dll OpenSystem.C
-#%{monodir}/gac/System.Xml.Core
 %{monodir}/gac/System.Xml.Linq
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
@@ -491,7 +487,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/mono.pc
 %{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/dotnet35.pc
-%{_libdir}/pkgconfig/smcs.pc
 %{_includedir}/mono-1.0
 %{_datadir}/mono-1.0/mono/cil/cil-opcodes.xml
 %dir %{_datadir}/mono-1.0
@@ -619,6 +614,19 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Aug 22 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-4
+- fix for XIM with en_GB.UTF locale plus others
+
+* Mon Aug 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-3
+- removed canna-devel requirements
+- bump to preview 2
+- removed further bits for moonlight
+
+* Sun Aug 17 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-2
+- added Canna-devel BR and R Canna for mwf
+- removed the build of moonlight parts
+- disable-static on configure
+
 * Sat Aug 02 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-1
 - bump to 2.0 preview 1
 - alter licence to MIT only

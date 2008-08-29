@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -365,6 +365,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/resgen.1.gz
 %{_mandir}/man1/mconfig.1.gz
 %{_mandir}/man5/mono-config.5.gz
+%{_libdir}/libMonoPosixHelper.so
 %dir %{monodir}
 %dir %{monodir}/1.0
 %dir %{monodir}/2.0
@@ -478,7 +479,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/libmono-profiler-aot.*
 %{_libdir}/libmono-profiler-cov.*
 %{_libdir}/libmono.so
-%{_libdir}/libMonoPosixHelper.so
 %{_libdir}/libMonoSupportW.so
 %{_libdir}/libmono-profiler-logging.so
 %{_libdir}/libikvm-native.so
@@ -614,6 +614,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Aug 29 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-5
+- moved libMonoPosixHelper back to the main package
+
 * Fri Aug 22 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-4
 - fix for XIM with en_GB.UTF locale plus others
 

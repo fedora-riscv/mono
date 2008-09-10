@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -44,7 +44,6 @@ Patch7: mono-2.0-pcfiles.patch
 Patch6:mono-2.0-uselibdir.patch
 Patch9:mono-2.0-monoservice.patch
 Patch10: mono-2.0-metadata-makefile.patch
-Patch11: mono-2.0-swfxim.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -260,7 +259,6 @@ sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
 %patch7 -p1 -b .pc-patches
 %patch9 -p1 -b .monoservice
 %patch10 -p1 -b .metadata
-%patch11 -p1 -b .swfxim
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -279,7 +277,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
-%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static
+%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static --with-preview=yes 
 make
 
 
@@ -333,6 +331,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/monodir
 %{_bindir}/mono-api-*
 %{_bindir}/mono-test-install
+%{_bindir}/gacutil2
 %mono_bin certmgr
 %mono_bin chktrust
 %mono_bin gacutil
@@ -614,6 +613,12 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Tue Sep 09 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-6
+- Bump to RC1
+- Removed XIM patch
+- Added additional configure options
+- Fixed spec file
+
 * Fri Aug 29 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-5
 - moved libMonoPosixHelper back to the main package
 

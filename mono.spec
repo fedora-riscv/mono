@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.0
-Release:        8%{?dist}
+Release:        10%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -46,6 +46,9 @@ Patch9:mono-2.0-monoservice.patch
 Patch10: mono-2.0-metadata-makefile.patch
 Patch11: mono-2.0-tablelayout.patch
 Patch12: mono-2.0-mimeicon.patch
+Patch13: mono-2.0-BinarySerialization.patch
+Patch14: mono-2.0-DataTable.patch
+Patch15: mono-2.0-StringReplace.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -263,6 +266,9 @@ sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
 %patch10 -p1 -b .metadata
 %patch11 -p1 -b .tablelayout
 %patch12 -p1 -b .mimeicon
+%patch13 -p1 -b .serialisation
+%patch14 -p1 -b .datatable
+%patch15 -p1 -b .stringreplace
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -617,6 +623,14 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Oct 03 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-10
+- bump to RC4
+
+* Sun Sep 28 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-9
+- backported binaryserialisation and datatable patches
+- backported stringreplace optimisation
+- bump to RC3
+
 * Thu Sep 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-8
 - MimeIcon patch added
 

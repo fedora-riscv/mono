@@ -1,6 +1,6 @@
 Name:		mono
 Version:        1.9.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -30,7 +30,7 @@ BuildRequires: automake libtool
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha
+ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparcv9 alpha
 # Disabled due to strange build failure:
 # s390 s390x
 
@@ -600,6 +600,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Sat Oct 11 2008 Dennis Gilmore <dennis@ausil.us> 1.9.1-3
+- change sparc to sparcv9
+
 * Wed Apr 23 2008 Tom "spot" Callaway <tcallawa@redhat.com> 1.9.1-2
 - fix libdir in pc files
 

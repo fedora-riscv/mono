@@ -16,16 +16,20 @@
  includedir=${prefix}/include/mono-@API_VER@
  
  
---- mono-2.0/data/mono-cairo.pc.in	2008-08-03 15:59:34.000000000 +0100
-+++ mono-2.0/data/mono-cairo.pc-new.in	2008-08-03 15:59:55.000000000 +0100
-@@ -1,6 +1,6 @@
+--- mono-2.0/data/mono-cairo.pc.in	2008-07-01 18:51:07.000000000 +0100
++++ mono-2.0/data/mono-cairo.pc-new.in	2008-10-16 22:24:15.000000000 +0100
+@@ -1,9 +1,9 @@
  prefix=${pcfiledir}/../..
  exec_prefix=${pcfiledir}/../..
 -libdir=${prefix}/@reloc_libdir@
-+libdir=@libdir@
++libdir=${libdir}
  includedir=${prefix}/include
  
  Name: Mono.Cairo
+ Description: Cairo bindings for Mono
+ Version: @VERSION@
+-Libs: -r:${prefix}/lib/mono/1.0/Mono.Cairo.dll
++Libs: -r:${libdir}/mono/1.0/Mono.Cairo.dll
 --- mono-2.0/data/mono.pc.in	2008-07-01 18:51:07.000000000 +0100
 +++ mono-2.0/data/mono.pc-new.in	2008-08-03 15:59:18.000000000 +0100
 @@ -1,6 +1,6 @@

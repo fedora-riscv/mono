@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.0
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -623,6 +623,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Thu Oct 16 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-11
+- correct libdir in mono-cairo.pc file (BZ 467294)
+
 * Fri Oct 03 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-10
 - bump to RC4
 

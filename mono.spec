@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.0
-Release:        11%{?dist}
+Release:        11.1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -261,7 +261,9 @@ sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
 %patch6 -p1 -b .use-libdir
+sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .pc-patches
+sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 %patch9 -p1 -b .monoservice
 %patch10 -p1 -b .metadata
 %patch11 -p1 -b .tablelayout
@@ -623,6 +625,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Sat Oct 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-11.1
+- fix the last fix...
+
 * Thu Oct 16 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-11
 - correct libdir in mono-cairo.pc file (BZ 467294)
 

@@ -1,6 +1,6 @@
 Name:		mono
-Version:        2.0
-Release:        11.1%{?dist}
+Version:        2.0.1
+Release:        12%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -30,11 +30,10 @@ BuildRequires: automake libtool
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha
+ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha s390 s390x
 # Disabled due to strange build failure:
 # s390 s390x
 
-Patch1: mono-1.1.13.4-selinux-ia64.patch
 Patch2: mono-2.0-ppc-threading.patch
 Patch3: mono-libdir-126.patch
 Patch4: mono-1.2.3-use-monodir.patch
@@ -256,7 +255,6 @@ which is fully managed and actively maintained.
 sed -i -e 's!@@LIBDIR@@!%{_libdir}!' %{PATCH8}
 %patch8 -p1 -b .config
 sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
-%patch1 -p1 -b .selinux-ia64
 %patch2 -p1 -b .ppc-threading
 %patch3 -p1 -b .libdir
 %patch4 -p1 -b .use-monodir
@@ -280,16 +278,16 @@ sed -i "61a #define ARG_MAX	_POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 rm -rf mcs/class/lib/monolite/*
 
 %build
-%ifarch ia64 s390
-export CFLAGS="-O2 -fno-strict-aliasing"
+%ifarch ia64 s390 s390x
+export CFLAGS="-O2 -fno-strict-aliasing -DMONO_DISABLE_SHM=1"
 %else
-export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
+export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -DMONO_DISABLE_SHM=1"
 %endif
 #autoreconf -f -i -s
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
-%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static --with-preview=yes 
+%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static --with-preview=yes --with-libgdiplus=installed
 make
 
 
@@ -412,6 +410,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %dir %{_sysconfdir}/mono
 %dir %{_sysconfdir}/mono/1.0
 %dir %{_sysconfdir}/mono/2.0
+%dir %{_sysconfdir}/mono/mconfig
 %config (noreplace) %{_sysconfdir}/mono/config
 %config (noreplace) %{_sysconfdir}/mono/1.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
@@ -625,6 +624,14 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Fri Oct 24 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0.12
+- Update to 2.0.1
+- remove selinux patch
+- remove s390 disable
+
+* Tue Oct 21 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-11.2
+- fixed no ownership of etc-mono-mconfig directory
+
 * Sat Oct 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0-11.1
 - fix the last fix...
 

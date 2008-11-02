@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.0.1
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -279,9 +279,9 @@ rm -rf mcs/class/lib/monolite/*
 
 %build
 %ifarch ia64 s390 s390x
-export CFLAGS="-O2 -fno-strict-aliasing -DMONO_DISABLE_SHM=1"
+export CFLAGS="-O2 -fno-strict-aliasing"
 %else
-export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -DMONO_DISABLE_SHM=1"
+export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %endif
 #autoreconf -f -i -s
 
@@ -318,8 +318,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/mint.1
 %{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/CorCompare.exe
 %{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/browsercaps-updater.exe*
-%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/mono-api-diff.exe
-%{__rm} $RPM_BUILD_ROOT%{monodir}/*/mono-api-info.exe
+#%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/mono-api-diff.exe
+#%{__rm} $RPM_BUILD_ROOT%{monodir}/*/mono-api-info.exe
 %{__rm} $RPM_BUILD_ROOT/%_bindir/smcs
 %{__rm} $RPM_BUILD_ROOT/%_libdir/pkgconfig/smcs.pc
 
@@ -340,6 +340,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/mono
 %{_bindir}/monodir
 %{_bindir}/mono-api-*
+%{monodir}/1.0/mono-api-diff*
+%{monodir}/?.0/mono-api-info*
 %{_bindir}/mono-test-install
 %{_bindir}/gacutil2
 %mono_bin certmgr
@@ -624,6 +626,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll IBM.Data.DB2
 
 %changelog
+* Sun Nov 02 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0.13
+- Add in mono-api-diff and mono-api-info
+
 * Fri Oct 24 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0.12
 - Update to 2.0.1
 - remove selinux patch

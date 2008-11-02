@@ -1,5 +1,14 @@
---- mono-1.2.4/mono/metadata/Makefile.am	2007-04-21 15:18:32.000000000 +0100
-+++ mono-1.2.4/mono/metadata/Makefile.am-new	2007-04-21 18:03:33.000000000 +0100
+--- mono-2.0/mono/metadata/Makefile.am	2008-08-03 13:29:57.000000000 +0100
++++ mono-2.0/mono/metadata/Makefile-new.am	2008-08-03 15:50:47.000000000 +0100
+@@ -9,7 +9,7 @@
+ # optimisation is required to actually inline them
+ AM_CFLAGS = -O
+ else
+-assembliesdir = $(exec_prefix)/lib
++assembliesdir = $(libdir)
+ confdir = $(sysconfdir)
+ endif
+ 
 @@ -21,7 +21,7 @@
  #
  noinst_LTLIBRARIES = libmonoruntime.la libmonoruntime-static.la

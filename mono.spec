@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.2
-Release:        1.1.pre1%{?dist}
+Release:        2.pre1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -41,7 +41,7 @@ Patch4: mono-1.2.3-use-monodir.patch
 Patch5: mono-big-integer-CVE-2007-5197.patch
 Patch8: mono-mcs-config.patch
 Patch7: mono-2.2-pcfiles.patch
-Patch6:mono-2.0-uselibdir.patch
+Patch6:mono-2.2-uselibdir.patch
 Patch9:mono-2.0-monoservice.patch
 Patch10: mono-2.0-metadata-makefile.patch
 Patch11: mono-2.2-script.patch
@@ -677,6 +677,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Nov 25 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-2.pre1
+- fix monodoc libdir issues
+
 * Tue Nov 25 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.1.pre1
 - rebuild
 

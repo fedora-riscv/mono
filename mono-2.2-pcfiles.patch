@@ -1,0 +1,74 @@
+--- mono-2.2/data/cecil.pc.in	2008-11-18 21:10:32.000000000 +0000
++++ mono-2.2/data/cecil.pc-new.in	2008-11-18 21:12:20.000000000 +0000
+@@ -1,4 +1,4 @@
+-assemblies_dir=@prefix@/lib/mono
++assemblies_dir=@libdir@/mono
+ Libraries=${assemblies_dir}/gac/Mono.Cecil/0.6.9.0__0738eb9f132ed756/Mono.Cecil.dll
+ 
+ Name: Mono Internal -- Do not use.
+--- mono-2.2/data/mint.pc.in	2008-11-18 21:10:32.000000000 +0000
++++ mono-2.2/data/mint.pc-new.in	2008-11-18 21:12:55.000000000 +0000
+@@ -1,6 +1,6 @@
+ prefix=${pcfiledir}/../..
+ exec_prefix=${pcfiledir}/../..
+-libdir=${prefix}/lib
++libdir=@libdir@
+ includedir=${prefix}/include/mono-@API_VER@
+ 
+ 
+--- mono-2.2/data/mono-cairo.pc.in	2008-11-18 21:10:32.000000000 +0000
++++ mono-2.2/data/mono-cairo.pc-new.in	2008-11-18 21:13:30.000000000 +0000
+@@ -1,6 +1,6 @@
+ prefix=${pcfiledir}/../..
+ exec_prefix=${pcfiledir}/../..
+-libdir=${prefix}/@reloc_libdir@
++libdir=@libdir@
+ includedir=${prefix}/include
+ 
+ Name: Mono.Cairo
+--- mono-2.2/data/monodoc.pc.in	2008-11-11 04:56:15.000000000 +0000
++++ mono-2.2/data/monodoc.pc-new.in	2008-11-18 21:13:46.000000000 +0000
+@@ -1,6 +1,6 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+-libdir=@prefix@/lib
++libdir=@libdir@
+ sourcesdir=${libdir}/monodoc/sources
+ 
+ Name: Monodoc
+--- mono-2.2/data/mono-lineeditor.pc.in	2008-11-11 04:56:15.000000000 +0000
++++ mono-2.2/data/mono-lineeditor.pc-new.in	2008-11-18 21:14:18.000000000 +0000
+@@ -1,5 +1,5 @@
+ prefix=${pcfiledir}/../..
+-assemblies_dir=${prefix}/lib/mono-source-libs
++assemblies_dir=@libdir@/mono-source-libs
+ Sources=${assemblies_dir}/getline.cs
+ 
+ Name: Mono.Terminal.LineEditor
+--- mono-2.2/data/mono-nunit.pc.in	2008-11-11 04:56:15.000000000 +0000
++++ mono-2.2/data/mono-nunit.pc-new.in	2008-11-18 21:14:34.000000000 +0000
+@@ -1,6 +1,6 @@
+ prefix=${pcfiledir}/../..
+ exec_prefix=${prefix}
+-libdir=${exec_prefix}/lib
++libdir=@libdir@
+ 
+ 
+ Name: Mono NUnit
+--- mono-2.2/data/mono-options.pc.in	2008-11-11 04:56:15.000000000 +0000
++++ mono-2.2/data/mono-options.pc-new.in	2008-11-18 21:14:49.000000000 +0000
+@@ -1,5 +1,5 @@
+ prefix=${pcfiledir}/../..
+-assemblies_dir=${prefix}/lib/mono-source-libs
++assemblies_dir=@libdir@/mono-source-libs
+ Sources=${assemblies_dir}/Options.cs
+ 
+ Name: Mono.Options
+--- mono-2.2/data/smcs.pc.in	2008-11-18 21:10:32.000000000 +0000
++++ mono-2.2/data/smcs.pc-new.in	2008-11-18 21:17:54.000000000 +0000
+@@ -1,4 +1,4 @@
+-assemblies_dir=@prefix@/lib/mono
++assemblies_dir=@libdir@/mono
+ Libraries=${assemblies_dir}/2.1/smcs.exe
+ 
+ Name: Mono Internal -- Do not use.

@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.2
-Release:        1.pre1%{?dist}
+Release:        1.1.pre1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -230,20 +230,21 @@ This package contains the ADO.NET Data provider for MySQL. This is
 no longer maintained. MySQL AB now provides MySQL Connector/Net
 which is fully managed and actively maintained.
 
-%package monodoc
+%package -n monodoc
 Summary:	The mono documentation system
 Group:		Documentation
 Requires:	mono-core = %{version}-%{release}
 
-%description monodoc
+%description -n monodoc
 monodoc is the documentation package for the mono .NET environment
 
-%package monodoc-devel
+%package -n monodoc-devel
 Summary: .pc file for monodoc
 Group: Documentation
-Requires: %{name} = %{version}-%{release} pkgconfig
+Requires: monodoc = %{version}-%{release} pkgconfig
+Requires: mono-core = %{version}-%{release}
 
-%description monodoc-devel
+%description -n monodoc-devel
 Development file for monodoc
 
 %define monodir %{_libdir}/mono
@@ -349,10 +350,10 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/mono
 %{_bindir}/monodir
 %{_bindir}/mono-api-*
-%{_bindir}/csharp
+%mono_bin csharp
 %{_bindir}/gacutil1
-%{_bindir}/mod
-%{_bindir}/mono-cil-strip
+%mono_bin mod
+%mono_bin mono-cil-strip
 %{monodir}/1.0/mono-api-diff*
 %{monodir}/?.0/mono-api-info*
 %{_bindir}/mono-test-install
@@ -418,6 +419,13 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Security
 %gac_dll System.Xml
 %gac_dll System.Core
+%gac_dll Mono.CSharp
+%gac_dll Mono.Management
+%gac_dll Mono.Simd
+%gac_dll System.ComponentModel.DataAnnotations
+%gac_dll System.IdentityModel.Selectors
+%gac_dll System.IdentityModel
+%gac_dll System.Runtime.Serialization
 %gac_dll cscompmgd
 %gac_dll CustomMarshalers
 %gac_dll OpenSystem.C
@@ -559,6 +567,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Management
 %gac_dll System.Messaging
 %gac_dll System.ServiceProcess
+%gac_dll System.ServiceModel
 %gac_dll System.Configuration.Install
 %gac_dll Microsoft.Vsa
 
@@ -577,6 +586,11 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Runtime.Remoting
 %gac_dll System.Web
 %gac_dll System.Runtime.Serialization.Formatters.Soap
+%{monodir}/compat-2.0/System.Web.Extensions*dll
+%gac_dll System.ServiceModel.Web
+%gac_dll System.Web.Abstractions
+%gac_dll System.Web.DynamicData
+%gac_dll System.Web.Routing
 %gac_dll System.Web.Services
 %gac_dll System.Web.Extensions.Design
 %gac_dll System.Web.Extensions
@@ -643,12 +657,13 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %defattr(-,root,root,-)
 %gac_dll IBM.Data.DB2
 
-%files monodoc
+%files -n monodoc
 %defattr(-, root, root)
 %{_libdir}/mono/gac/monodoc
 %{_libdir}/monodoc/*
-%{_libdir}/%{name}/
-%{_bindir}/mdoc*
+%{_libdir}/mono/monodoc/monodoc.dll
+%mono_bin mdoc
+%{_bindir}/mdoc-*
 %{_bindir}/mdass*
 %{_bindir}/mdval*
 %{_bindir}/mod
@@ -657,11 +672,14 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/monodoc*
 %{_mandir}/man5/mdoc*
 
-%files monodoc-devel
+%files -n monodoc-devel
 %defattr (-, root, root)
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Nov 25 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.1.pre1
+- rebuild
+
 * Mon Nov 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.pre1
 - Bump to 2.2 preview 1
 - remove old patches

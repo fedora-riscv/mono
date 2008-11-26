@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.2
-Release:        2.pre1%{?dist}
+Release:        3.pre1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -677,6 +677,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Nov 26 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-3.pre1
+- mono.pc libfile fix
+
 * Tue Nov 25 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-2.pre1
 - fix monodoc libdir issues
 

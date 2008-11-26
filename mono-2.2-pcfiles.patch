@@ -26,16 +26,7 @@
  includedir=${prefix}/include
  
  Name: Mono.Cairo
---- mono-2.2/data/monodoc.pc.in	2008-11-11 04:56:15.000000000 +0000
-+++ mono-2.2/data/monodoc.pc-new.in	2008-11-18 21:13:46.000000000 +0000
-@@ -1,6 +1,6 @@
- prefix=@prefix@
- exec_prefix=@exec_prefix@
--libdir=@prefix@/lib
-+libdir=@libdir@
- sourcesdir=${libdir}/monodoc/sources
- 
- Name: Monodoc
+
 --- mono-2.2/data/mono-lineeditor.pc.in	2008-11-11 04:56:15.000000000 +0000
 +++ mono-2.2/data/mono-lineeditor.pc-new.in	2008-11-18 21:14:18.000000000 +0000
 @@ -1,5 +1,5 @@
@@ -73,12 +64,27 @@
  
  Name: Mono Internal -- Do not use.
 
+--- mono-2.2/data/monodoc.pc.in	2008-11-13 23:22:27.000000000 +0000
++++ mono-2.2/data/monodoc.pc-new.in	2008-11-26 12:39:50.000000000 +0000
+@@ -1,9 +1,9 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+-libdir=@prefix@/lib
++libdir=@libdir@
+ sourcesdir=${libdir}/monodoc/sources
+ 
+ Name: Monodoc
+ Description: Monodoc - Mono Documentation Tools
+ Version: @VERSION@
+-Libs: /r:${prefix}/lib/mono/monodoc/monodoc.dll 
++Libs: /r:${libdir}/mono/monodoc/monodoc.dll 
 --- mono-2.2/data/mono.pc.in	2008-09-10 17:12:13.000000000 +0100
-+++ mono-2.2/data/mono.pc-new.in	2008-11-26 09:20:09.000000000 +0000
++++ mono-2.2/data/mono.pc-new.in	2008-11-26 12:47:07.000000000 +0000
 @@ -1,6 +1,6 @@
  prefix=${pcfiledir}/../..
  exec_prefix=${pcfiledir}/../..
 -libdir=${prefix}/@reloc_libdir@
-+libdir=@libdir@/
++libdir=@libdir@
  includedir=${prefix}/include/mono-@API_VER@
  sysconfdir=@sysconfdir@
+ 

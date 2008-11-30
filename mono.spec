@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.2
-Release:        4.pre1%{?dist}
+Release:        5.pre1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -35,16 +35,13 @@ ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha s390 s390x
 # Disabled due to strange build failure:
 # s390 s390x
 
-Patch2: mono-2.2-ppc-threading.patch
-Patch3: mono-libdir-126.patch
-Patch4: mono-1.2.3-use-monodir.patch
-Patch5: mono-big-integer-CVE-2007-5197.patch
-Patch8: mono-mcs-config.patch
-Patch7: mono-2.2-pcfiles.patch
-Patch6:mono-2.2-uselibdir.patch
-Patch9:mono-2.0-monoservice.patch
-Patch10: mono-2.0-metadata-makefile.patch
-Patch11: mono-2.2-script.patch
+Patch0: mono-2.2-ppc-threading.patch
+Patch1: mono-libdir-126.patch
+Patch2: mono-1.2.3-use-monodir.patch
+Patch3: mono-2.2-uselibdir.patch
+Patch4: mono-2.0-monoservice.patch
+Patch5: mono-2.0-metadata-makefile.patch
+Patch6: mono-2.2-winforms.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -266,19 +263,26 @@ Development file for monodoc
 
 %prep
 %setup -q
-sed -i -e 's!@@LIBDIR@@!%{_libdir}!' %{PATCH8}
-%patch8 -p1 -b .config
-sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
-%patch2 -p1 -b .ppc-threading
-%patch3 -p1 -b .libdir
-%patch11 -p1 -b .libdir
-%patch4 -p1 -b .use-monodir
-%patch6 -p1 -b .use-libdir
-sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
-%patch7 -p1 -b .pc-patches
-sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
-%patch9 -p1 -b .monoservice
-%patch10 -p1 -b .metadata
+
+%patch0 -p1 -b .ppc-threading
+%patch1 -p1 -b .libdir
+%patch2 -p1 -b .usemonodir
+%patch3 -p1 -b .uselibdir
+%patch4 -p1 -b .monoservice
+%patch5 -p1 -b .metadata-makefile
+%patch6 -p1 -b .winforms
+
+find . -name Makefile.in -or -name Makefile.am -or -name \*.pc.in \
+       -or -name \*.in -or -name \*.make \
+       | while read f ;
+         do
+           sed -i -e 's!$(prefix)/lib!%{_libdir}!' "$f" 
+           sed -i -e 's!@prefix@/lib!%{_libdir}!' "$f"
+           sed -i -e 's!/usr/lib!%{_libdir}!' "$f"
+           sed -i -e 's!${exec_prefix}/lib!%{_libdir}!' "$f" 
+           sed -i -e 's!${prefix}/@reloc_libdir@!%{_libdir}!' "$f";
+         done
+
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -677,6 +681,11 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Sun Nov 30 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-5.pre1
+- new patch for winforms problems
+- reorganised patches
+- use sed to fix the incorrect libdir issues - experimental!!!!
+
 * Wed Nov 26 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-4.pre1
 - mono.pc libfile fix
 

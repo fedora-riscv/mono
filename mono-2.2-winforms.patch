@@ -1,0 +1,92 @@
+--- mono-2.2/mcs/class/Managed.Windows.Forms/System.Windows.Forms/MenuAPI.cs	2008-11-13 23:30:08.000000000 +0000
++++ mono-2.2/mcs/class/Managed.Windows.Forms/System.Windows.Forms/MenuAPI-new.cs	2008-11-30 18:37:14.000000000 +0000
+@@ -740,7 +740,7 @@
+ 						SelectItem (item, item.MenuItems [0], false);
+ 						CurrentMenu = item;
+ 					}
+-				} else if (CurrentMenu.SelectedItem.IsPopup) {
++				} else if (CurrentMenu.SelectedItem != null && CurrentMenu.SelectedItem.IsPopup) {
+ 					item = CurrentMenu.SelectedItem;
+ 					ShowSubPopup (CurrentMenu, item);
+ 					SelectItem (item, item.MenuItems [0], false);
+@@ -782,7 +782,8 @@
+ 					}
+ 				} else {
+ 					HideSubPopups (CurrentMenu, TopMenu);
+-					CurrentMenu = CurrentMenu.parent_menu;
++					if (CurrentMenu.parent_menu != null)
++					  CurrentMenu = CurrentMenu.parent_menu;
+ 				}
+ 				break;
+ 
+--- mono-2.2/mcs/class/Managed.Windows.Forms/System.Windows.Forms/BindingSource.cs	2008-11-13 23:30:08.000000000 +0000
++++ mono-2.2/mcs/class/Managed.Windows.Forms/System.Windows.Forms/BindingSource-new.cs	2008-11-30 18:34:35.000000000 +0000
+@@ -284,7 +284,9 @@
+ 		[Browsable (false)]
+ 		public object Current {
+ 			get {
+-				return currency_manager.Current;
++			  if (currency_manager.Count > 0)
++			    return currency_manager.Current;
++			  return null;
+ 			}
+ 		}
+ 
+--- mono-2.2/mcs/class/Managed.Windows.Forms/System.Windows.Forms/DataGridViewRow.cs	2008-11-13 23:30:08.000000000 +0000
++++ mono-2.2/mcs/class/Managed.Windows.Forms/System.Windows.Forms/DataGridViewRow-new.cs	2008-11-30 18:33:10.000000000 +0000
+@@ -39,7 +39,6 @@
+ 		private AccessibleObject accessibilityObject;
+ 		private DataGridViewCellCollection cells;
+ 		private ContextMenuStrip contextMenuStrip;
+-		private object dataBoundItem;
+ 		private int dividerHeight;
+ 		private string errorText;
+ 		private DataGridViewRowHeaderCell headerCell;
+@@ -56,7 +55,6 @@
+ 			headerCell = new DataGridViewRowHeaderCell();
+ 			headerCell.SetOwningRow (this);
+ 			accessibilityObject = new AccessibleObject ();
+-			dataBoundItem = null;
+ 			SetState (DataGridViewElementStates.Visible);
+ 		}
+ 
+@@ -92,7 +90,15 @@
+ 		[Browsable (false)]
+ 		[EditorBrowsable (EditorBrowsableState.Advanced)]
+ 		public object DataBoundItem {
+-			get { return dataBoundItem; }
++			get { 
++			  if (base.DataGridView != null) {
++			    CurrencyManager data = DataGridView.BindingContext[DataGridView.DataSource] as CurrencyManager;
++			    if (data != null) {
++			      return data.List[base.Index];
++			    }
++			  }
++			  return null;
++			}
+ 		}
+ 
+ 		[Browsable (true)]
+--- mono-2.2/mcs/class/Managed.Windows.Forms/System.Windows.Forms/GroupBoxRenderer.cs	2008-09-10 17:22:36.000000000 +0100
++++ mono-2.2/mcs/class/Managed.Windows.Forms/System.Windows.Forms/GroupBoxRenderer-new.cs	2008-11-30 18:29:53.000000000 +0000
+@@ -99,7 +99,7 @@
+ 				// part of the bounds as height, they use it as the bottom, so the boxes are drawn in completely different
+ 				// places.  Rather than emulate this bug, we do it correctly.  After googling for a while, I don't think
+ 				// anyone has ever actually used this class for anything, so it should be fine.  :)
+-				Rectangle new_bounds = new Rectangle (bounds.Left, bounds.Top + (int)(font_size.Height / 2) - 1, bounds.Width, bounds.Height - (int)(font_size.Height / 2) + 1);
++				Rectangle new_bounds = new Rectangle (bounds.Left, bounds.Top + (int)(font_size.Height / 2), bounds.Width, bounds.Height - (int)(font_size.Height / 2));
+ 				
+ 				// Don't paint over the background where we are going to put the text
+ 				Region old_clip = g.Clip;
+@@ -110,7 +110,11 @@
+ 				g.Clip = old_clip;
+ 
+ 				if (groupBoxText != String.Empty)
++				{
++				  if (textColor == Color.Empty) 
++				    textColor = SystemColors.ControlText;
+ 					TextRenderer.DrawText (g, groupBoxText, font, new Point (bounds.Left + 8, bounds.Top), textColor, flags);
++				}
+ 			}
+ 		}
+ 

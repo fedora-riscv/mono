@@ -12,11 +12,4 @@
  		}
  	
  		internal static string GetBinDir ()
---- mono-2.2/docs/Makefile.am	2008-11-19 22:34:05.000000000 +0000
-+++ mono-2.2/docs/Makefile-new.am	2008-11-25 19:45:45.000000000 +0000
-@@ -1,4 +1,4 @@
--sourcesdir = $(prefix)/lib/monodoc/sources
-+sourcesdir = $(libdir)/monodoc/sources
- 
- sources_DATA = \
- 	monoapi.source \
+

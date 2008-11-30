@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.2
-Release:        5.pre1%{?dist}
+Release:        6.pre1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -279,6 +279,7 @@ find . -name Makefile.in -or -name Makefile.am -or -name \*.pc.in \
            sed -i -e 's!$(prefix)/lib!%{_libdir}!' "$f" 
            sed -i -e 's!@prefix@/lib!%{_libdir}!' "$f"
            sed -i -e 's!/usr/lib!%{_libdir}!' "$f"
+           sed -i -e 's!${prefix}/lib!%{_libdir}!' "$f"
            sed -i -e 's!${exec_prefix}/lib!%{_libdir}!' "$f" 
            sed -i -e 's!${prefix}/@reloc_libdir@!%{_libdir}!' "$f";
          done
@@ -681,6 +682,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Sun Nov 30 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-6.pre1
+- missed a sed invocation
+
 * Sun Nov 30 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-5.pre1
 - new patch for winforms problems
 - reorganised patches

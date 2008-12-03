@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.2
-Release:        6.pre1%{?dist}
+Release:        7.pre1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -42,6 +42,7 @@ Patch3: mono-2.2-uselibdir.patch
 Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
 Patch6: mono-2.2-winforms.patch
+Patch7: mono-22-libgdiwinform.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -131,7 +132,7 @@ System.Configuration.Install, System.Management, System.Messaging.
 %package winforms
 Summary:        Windows Forms implementation for Mono
 Group:          Development/Languages
-Requires:       mono-core = %{version}-%{release}, libgdiplus-devel
+Requires:       mono-core = %{version}-%{release}
 
 %description winforms
 This package provides a fully managed implementation of
@@ -271,6 +272,9 @@ Development file for monodoc
 %patch4 -p1 -b .monoservice
 %patch5 -p1 -b .metadata-makefile
 %patch6 -p1 -b .winforms
+%patch7 -p1 -b .libgdiplus
+
+mv configure.in configure.ini
 
 find . -name Makefile.in -or -name Makefile.am -or -name \*.pc.in \
        -or -name \*.in -or -name \*.make \
@@ -281,8 +285,11 @@ find . -name Makefile.in -or -name Makefile.am -or -name \*.pc.in \
            sed -i -e 's!/usr/lib!%{_libdir}!' "$f"
            sed -i -e 's!${prefix}/lib!%{_libdir}!' "$f"
            sed -i -e 's!${exec_prefix}/lib!%{_libdir}!' "$f" 
+	   sed -i -e 's!$(exec_prefix)/lib!%{_libdir}!' "$f"
            sed -i -e 's!${prefix}/@reloc_libdir@!%{_libdir}!' "$f";
          done
+
+mv configure.ini configure.in
 
 autoreconf -f -i -s
 
@@ -682,6 +689,10 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Dec 04 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-7.pre1
+- Add fix so that winforms doesn't need libgdiplus-devel
+- Add fix so the sed script works correctly on x86_64
+
 * Sun Nov 30 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-6.pre1
 - missed a sed invocation
 

@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.2
-Release:        7.pre1%{?dist}
+Release:        8.pre2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -274,22 +274,18 @@ Development file for monodoc
 %patch6 -p1 -b .winforms
 %patch7 -p1 -b .libgdiplus
 
-mv configure.in configure.ini
-
-find . -name Makefile.in -or -name Makefile.am -or -name \*.pc.in \
+find . -name Makefile.am -or -name \*.pc.in \
        -or -name \*.in -or -name \*.make \
        | while read f ;
          do
-           sed -i -e 's!$(prefix)/lib!%{_libdir}!' "$f" 
-           sed -i -e 's!@prefix@/lib!%{_libdir}!' "$f"
-           sed -i -e 's!/usr/lib!%{_libdir}!' "$f"
-           sed -i -e 's!${prefix}/lib!%{_libdir}!' "$f"
-           sed -i -e 's!${exec_prefix}/lib!%{_libdir}!' "$f" 
-	   sed -i -e 's!$(exec_prefix)/lib!%{_libdir}!' "$f"
-           sed -i -e 's!${prefix}/@reloc_libdir@!%{_libdir}!' "$f";
+           sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' "$f" 
+           sed -i -e 's!@prefix@/lib/!%{_libdir}/!' "$f"
+           sed -i -e 's!/usr/lib/!%{_libdir}/!' "$f"
+           sed -i -e 's!${prefix}/lib/!%{_libdir}/!' "$f"
+           sed -i -e 's!${exec_prefix}/lib/!%{_libdir}/!' "$f" 
+	   sed -i -e 's!$(exec_prefix)/lib/!%{_libdir}/!' "$f"
+           sed -i -e 's!${prefix}/@reloc_libdir@/!%{_libdir}/!' "$f";
          done
-
-mv configure.ini configure.in
 
 autoreconf -f -i -s
 
@@ -689,6 +685,10 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Dec 05 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-8.pre2
+- Bump to 2.2 preview 2
+- More sed fixes
+
 * Thu Dec 04 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-7.pre1
 - Add fix so that winforms doesn't need libgdiplus-devel
 - Add fix so the sed script works correctly on x86_64

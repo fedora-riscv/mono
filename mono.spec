@@ -1,12 +1,14 @@
+%define svnver 121507
+
 Name:		mono
 Version:        2.2
-Release:        8.pre2%{?dist}
+Release:        10.pre2.20081215svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
 License:        MIT
-URL:            http://go-mono.com/sources-stable/%{name}-%{version}.tar.bz2
-Source0:        %{name}-%{version}.tar.bz2
+URL:            %{name}-%{svnver}.tar.bz2
+Source0:        %{name}-%{svnver}.tar.bz2
 Source1:	monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -32,8 +34,6 @@ BuildRequires: mono-core
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha s390 s390x
-# Disabled due to strange build failure:
-# s390 s390x
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -41,8 +41,9 @@ Patch2: mono-1.2.3-use-monodir.patch
 Patch3: mono-2.2-uselibdir.patch
 Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
-Patch6: mono-2.2-winforms.patch
-Patch7: mono-22-libgdiwinform.patch
+Patch6: mono-22-libgdiwinform.patch
+Patch7: mono-22-libdir.patch
+
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -263,7 +264,7 @@ Development file for monodoc
   %{nil}
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{svnver}
 
 %patch0 -p1 -b .ppc-threading
 %patch1 -p1 -b .libdir
@@ -271,21 +272,10 @@ Development file for monodoc
 %patch3 -p1 -b .uselibdir
 %patch4 -p1 -b .monoservice
 %patch5 -p1 -b .metadata-makefile
-%patch6 -p1 -b .winforms
-%patch7 -p1 -b .libgdiplus
-
-find . -name Makefile.am -or -name \*.pc.in \
-       -or -name \*.in -or -name \*.make \
-       | while read f ;
-         do
-           sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' "$f" 
-           sed -i -e 's!@prefix@/lib/!%{_libdir}/!' "$f"
-           sed -i -e 's!/usr/lib/!%{_libdir}/!' "$f"
-           sed -i -e 's!${prefix}/lib/!%{_libdir}/!' "$f"
-           sed -i -e 's!${exec_prefix}/lib/!%{_libdir}/!' "$f" 
-	   sed -i -e 's!$(exec_prefix)/lib/!%{_libdir}/!' "$f"
-           sed -i -e 's!${prefix}/@reloc_libdir@/!%{_libdir}/!' "$f";
-         done
+%patch6 -p1 -b .libgdiplus
+sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
+%patch7 -p1 -b .libdir-22
+sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 
 autoreconf -f -i -s
 
@@ -334,7 +324,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/monostyle.1
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/oldmono.1
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/mint.1
-%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/CorCompare.exe
 %{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/browsercaps-updater.exe*
 %{__rm} $RPM_BUILD_ROOT/%_bindir/smcs
 %{__rm} $RPM_BUILD_ROOT/%_libdir/pkgconfig/smcs.pc
@@ -362,7 +351,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_bindir}/gacutil1
 %mono_bin mod
 %mono_bin mono-cil-strip
-%{monodir}/1.0/mono-api-diff*
 %{monodir}/?.0/mono-api-info*
 %{_bindir}/mono-test-install
 %{_bindir}/gacutil2
@@ -378,7 +366,8 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin sn
 %mono_bin installvst
 %mono_bin monolinker
-%{monodir}/1.0/transform.exe
+%{monodir}/2.0/mono-api-diff.exe
+%{monodir}/2.0/transform.exe
 %{monodir}/?.0/installutil.*
 %{monodir}/3.5/System.Web.Extensions*
 %{monodir}/2.0/System.Xml.Linq.dll
@@ -393,7 +382,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/mozroots.1.gz
 %{_mandir}/man1/setreg.1.gz
 %{_mandir}/man1/sn.1.gz
-%{_mandir}/man1/vbnc.1.gz
 %{_mandir}/man1/monolinker.1.gz
 %{_mandir}/man1/resgen.1.gz
 %{_mandir}/man1/mconfig.1.gz
@@ -507,7 +495,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/secutil.1.gz
 %{_mandir}/man1/sgen.1.gz
 %{_mandir}/man1/signcode.1.gz
-%{_mandir}/man1/monoburg.*
 %gac_dll PEAPI
 %gac_dll Microsoft.Build.Engine
 %gac_dll Microsoft.Build.Framework
@@ -542,13 +529,16 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 
 %files nunit
 %defattr(-,root,root,-)
-%doc mcs/nunit20/license.rtf mcs/nunit20/README
 %mono_bin_1 nunit-console nunit-console
 %mono_bin_2 nunit-console2 nunit-console
 %gac_dll nunit.core
 %gac_dll nunit.framework
 %gac_dll nunit.util
 %gac_dll nunit.mocks
+%gac_dll nunit-console-runner
+%gac_dll nunit.core.extensions
+%gac_dll nunit.core.interfaces
+%gac_dll nunit.framework.extensions
 
 %files nunit-devel
 %defattr(-,root,root,-)
@@ -578,6 +568,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.ServiceModel
 %gac_dll System.Configuration.Install
 %gac_dll Microsoft.Vsa
+%gac_dll Mono.Messaging.RabbitMQ
+%gac_dll Mono.Messaging
+%gac_dll RabbitMQ.Client
 
 %files winforms
 %defattr(-,root,root,-)
@@ -685,6 +678,15 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Dec 10 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-10.pre2.20081215svn121507
+- removed the winform patch
+- move to svn
+- removed files no longer built
+- removed vbnc manual
+
+* Tue Dec 09 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-9.pre2
+- remove the seds and just use patches
+
 * Fri Dec 05 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-8.pre2
 - Bump to 2.2 preview 2
 - More sed fixes

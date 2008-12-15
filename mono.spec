@@ -1,8 +1,8 @@
-%define svnver 121507
+%define svnver 121536
 
 Name:		mono
 Version:        2.2
-Release:        10.pre2.20081215svn%{svnver}%{?dist}
+Release:        11.pre3.20081215svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -33,7 +33,7 @@ Obsoletes:     monodoc, monodoc-devel
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha s390 s390x
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -678,6 +678,10 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Dec 15 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-11.pre3.20081215svn121536
+- Exclude ppc due to build problems (temporary)
+- Moved to pre3 in sync with Novell releases
+
 * Wed Dec 10 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-10.pre2.20081215svn121507
 - removed the winform patch
 - move to svn

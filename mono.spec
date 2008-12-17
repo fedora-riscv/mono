@@ -1,8 +1,8 @@
-%define svnver 121536
+%define svnver 121605
 
 Name:		mono
 Version:        2.2
-Release:        11.pre3.20081215svn%{svnver}%{?dist}
+Release:        11.pre3.20081216svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -149,6 +149,15 @@ Requires:       mono-core = %{version}-%{release}
 This package provides the ASP.NET libraries and runtime for
 development of web application, web services and remoting support.
 
+%package web-devel
+Summary:        Development files for system.web
+Group:          Development/Languages
+Requires:       mono-core = %{version}-%{release}
+Requires:	mono-web = %{version}-%{release} pkgconfig
+
+%description web-devel
+This package provides the .pc file for mono-web
+
 %package data
 Summary:        Database connectivity for Mono
 Group:          Development/Languages
@@ -276,6 +285,7 @@ Development file for monodoc
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
+sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
 
 autoreconf -f -i -s
 
@@ -614,6 +624,10 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin httpcfg
 %{_mandir}/man1/httpcfg.1.gz
 
+%files web-devel
+%defattr(-,root,root,-)
+%{_libdir}/pkgconfig/system.web.extensions_1.0.pc
+
 %files data
 %defattr(-,root,root,-)
 %mono_bin sqlsharp
@@ -678,6 +692,11 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Dec 16 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-11.pre3.20081216svn121605
+- Fixes problems with web references
+- Fixes x86_64 build problems
+- Added new web-devel subpackage
+
 * Mon Dec 15 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-11.pre3.20081215svn121536
 - Exclude ppc due to build problems (temporary)
 - Moved to pre3 in sync with Novell releases

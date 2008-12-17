@@ -1,8 +1,8 @@
-%define svnver 121605
+%define svnver 121664
 
 Name:		mono
 Version:        2.2
-Release:        11.pre3.20081216svn%{svnver}%{?dist}
+Release:        12.pre3.20081217svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -286,6 +286,8 @@ sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
+sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
+sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
 
 autoreconf -f -i -s
 
@@ -627,6 +629,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %files web-devel
 %defattr(-,root,root,-)
 %{_libdir}/pkgconfig/system.web.extensions_1.0.pc
+%{_libdir}/pkgconfig/system.web.extensions.design_1.0.pc
 
 %files data
 %defattr(-,root,root,-)
@@ -692,6 +695,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Dec 17 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-12.pre3.20081217svn121664
+- Fix libdir issue with monodoc
+
 * Tue Dec 16 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-11.pre3.20081216svn121605
 - Fixes problems with web references
 - Fixes x86_64 build problems

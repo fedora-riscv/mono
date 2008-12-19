@@ -2,7 +2,7 @@
 
 Name:		mono
 Version:        2.2
-Release:        13.pre3.20081219svn%{svnver}%{?dist}
+Release:        14.pre3.20081219svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -30,7 +30,10 @@ Obsoletes:     monodoc, monodoc-devel
 # we deleted the bootstrapping binaries. If you
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
+
+%ifarch !ppc
 BuildRequires: mono-core
+%endif
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc
@@ -295,8 +298,10 @@ autoreconf -f -i -s
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX	_POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 
+%ifarch !ppc
 # Remove prebuilt binaries
 rm -rf mcs/class/lib/monolite/*
+%endif
 
 %build
 %ifarch ia64 s390 s390x
@@ -696,6 +701,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Dec 19 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-14.pre3.20081219svn121833
+- Get PPC to build itself, will be disabled from the next build
+
 * Fri Dec 19 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-13.pre3.20081219svn121833
 - Lots more fixes
 - New patch for ppc archs

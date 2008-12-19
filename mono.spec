@@ -1,8 +1,8 @@
-%define svnver 121664
+%define svnver 121833
 
 Name:		mono
 Version:        2.2
-Release:        12.pre3.20081217svn%{svnver}%{?dist}
+Release:        13.pre3.20081219svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -33,7 +33,7 @@ Obsoletes:     monodoc, monodoc-devel
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -43,7 +43,7 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
 Patch6: mono-22-libgdiwinform.patch
 Patch7: mono-22-libdir.patch
-
+Patch8: mono-svn-ppcreordering.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -285,6 +285,7 @@ Development file for monodoc
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
+%patch8 -p1 -b .ppc-reorder
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
@@ -695,6 +696,11 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Dec 19 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-13.pre3.20081219svn121833
+- Lots more fixes
+- New patch for ppc archs
+- Re-enable ppc build
+
 * Wed Dec 17 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-12.pre3.20081217svn121664
 - Fix libdir issue with monodoc
 

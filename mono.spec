@@ -1,8 +1,8 @@
-%define svnver 121833
+%define svnver 122032
 
 Name:		mono
 Version:        2.2
-Release:        14.pre3.20081219svn%{svnver}%{?dist}
+Release:        14.RC1.20081223svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -31,9 +31,7 @@ Obsoletes:     monodoc, monodoc-devel
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
 
-%ifarch !ppc
 BuildRequires: mono-core
-%endif
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc
@@ -46,7 +44,6 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
 Patch6: mono-22-libgdiwinform.patch
 Patch7: mono-22-libdir.patch
-Patch8: mono-svn-ppcreordering.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -109,8 +106,6 @@ Requires:       mono-core = %{version}-%{release}
 %description locale-extras
 This package contains assemblies to support I18N applications for
 non-latin alphabets.
-
-# The above seems safe
 
 %package jscript
 Summary:        JScript .NET support for Mono
@@ -220,7 +215,6 @@ Requires:       mono-core = %{version}-%{release}
 This package contains the ADO.NET Data provider for the Firebird
 database.
 
-# This uses the upstream package name, don't know why its not mono-data-*
 %package -n ibm-data-db2
 Summary:        IBM DB2 database connectivity for Mono
 Group:          Development/Languages
@@ -230,7 +224,6 @@ Requires:       mono-core = %{version}-%{release}
 This package contains the ADO.NET Data provider for the IBM DB2
 Universal database.
 
-# This uses the upstream package name, don't know why its not mono-data-*
 %package -n bytefx-data-mysql
 Summary:        MySQL database connectivity for Mono
 Group:          Development/Languages
@@ -288,7 +281,6 @@ Development file for monodoc
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
-%patch8 -p1 -b .ppc-reorder
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
@@ -298,10 +290,8 @@ autoreconf -f -i -s
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX	_POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 
-%ifarch !ppc
 # Remove prebuilt binaries
 rm -rf mcs/class/lib/monolite/*
-%endif
 
 %build
 %ifarch ia64 s390 s390x
@@ -309,7 +299,6 @@ export CFLAGS="-O2 -fno-strict-aliasing"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %endif
-#autoreconf -f -i -s
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
@@ -318,33 +307,33 @@ make
 
 
 %install
-%{__rm} -rf $RPM_BUILD_ROOT
-make DESTDIR=$RPM_BUILD_ROOT install
-install monodir $RPM_BUILD_ROOT%{_bindir}
+%{__rm} -rf %{buildroot}
+make DESTDIR=%{buildroot} install
+install monodir %{buildroot}%{_bindir}
 
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+%{__rm} %{buildroot}%{_libdir}/*.la
 
 # We put these inside rpm
-%{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-provides
-%{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-requires
+%{__rm} %{buildroot}%{_bindir}/mono-find-provides
+%{__rm} %{buildroot}%{_bindir}/mono-find-requires
 
 # This was removed upstream:
-%{__rm} -fr $RPM_BUILD_ROOT%{monodir}/gac/Mono.Security.Win32/[12]*
-%{__rm} -rf $RPM_BUILD_ROOT%{monodir}/1.0/Mono.Security.Win32.dll
-%{__rm} -rf $RPM_BUILD_ROOT%{monodir}/2.0/Mono.Security.Win32.dll
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/README*
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/barrett_diagram
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/*.html
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/gc.man
-%{__rm} $RPM_BUILD_ROOT/%_bindir/jay
-%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/jay
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/jay.1
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/monostyle.1
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/oldmono.1
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/mint.1
-%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/browsercaps-updater.exe*
-%{__rm} $RPM_BUILD_ROOT/%_bindir/smcs
-%{__rm} $RPM_BUILD_ROOT/%_libdir/pkgconfig/smcs.pc
+%{__rm} -fr %{buildroot}%{monodir}/gac/Mono.Security.Win32/[12]*
+%{__rm} -rf %{buildroot}%{monodir}/1.0/Mono.Security.Win32.dll
+%{__rm} -rf %{buildroot}%{monodir}/2.0/Mono.Security.Win32.dll
+%{__rm} %{buildroot}%{_datadir}/libgc-mono/README*
+%{__rm} %{buildroot}%{_datadir}/libgc-mono/barrett_diagram
+%{__rm} %{buildroot}%{_datadir}/libgc-mono/*.html
+%{__rm} %{buildroot}%{_datadir}/libgc-mono/gc.man
+%{__rm} %{buildroot}/%_bindir/jay
+%{__rm} -r %{buildroot}%{_datadir}/jay
+%{__rm} %{buildroot}%{_mandir}/man1/jay.1
+%{__rm} %{buildroot}%{_mandir}/man1/monostyle.1
+%{__rm} %{buildroot}%{_mandir}/man1/oldmono.1
+%{__rm} %{buildroot}%{_mandir}/man1/mint.1
+%{__rm} %{buildroot}%{monodir}/1.0/browsercaps-updater.exe*
+%{__rm} %{buildroot}/%_bindir/smcs
+%{__rm} %{buildroot}/%_libdir/pkgconfig/smcs.pc
 
 %find_lang mcs
 
@@ -357,7 +346,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %postun devel -p /sbin/ldconfig
 
 %clean
-%{__rm} -rf $RPM_BUILD_ROOT
+%{__rm} -rf %{buildroot}
 
 %files core -f mcs.lang
 %defattr(-,root,root,-)
@@ -701,6 +690,11 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Dec 23 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-14.RC1.20081223svn122032
+- Remove ppc self-build parts and ppc reordering patch
+- Update from svm
+- Minor spec file cleanups
+
 * Fri Dec 19 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-14.pre3.20081219svn121833
 - Get PPC to build itself, will be disabled from the next build
 

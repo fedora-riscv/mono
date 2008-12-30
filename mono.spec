@@ -1,8 +1,8 @@
-%define svnver 122032
+%define svnver 122181
 
 Name:		mono
 Version:        2.2
-Release:        14.RC1.20081223svn%{svnver}%{?dist}
+Release:        15.RC1.20081229svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -690,10 +690,14 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Dec 29 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-15.RC1.20081229svn122181
+- Update from svn
+
 * Tue Dec 23 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-14.RC1.20081223svn122032
 - Remove ppc self-build parts and ppc reordering patch
-- Update from svm
+- Update from svn
 - Minor spec file cleanups
+
 
 * Fri Dec 19 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-14.pre3.20081219svn121833
 - Get PPC to build itself, will be disabled from the next build

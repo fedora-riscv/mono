@@ -1,8 +1,8 @@
-%define svnver 122181
+%define svnver 122288
 
 Name:		mono
 Version:        2.2
-Release:        15.RC1.20081229svn%{svnver}%{?dist}
+Release:        15.RC1.20081231svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -690,6 +690,9 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Dec 31 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-15.RC1.20081231svn122288
+- Important updates from svn
+
 * Mon Dec 29 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-15.RC1.20081229svn122181
 - Update from svn
 

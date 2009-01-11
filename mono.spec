@@ -1,8 +1,8 @@
-%define svnver 122388
+%define svnver 122990
 
 Name:		mono
 Version:        2.2
-Release:        15.RC1.20090401svn%{svnver}%{?dist}
+Release:        16.RC2.20091001svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -373,8 +373,6 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin sn
 %mono_bin installvst
 %mono_bin monolinker
-%{monodir}/2.0/mono-api-diff.exe
-%{monodir}/2.0/transform.exe
 %{monodir}/?.0/installutil.*
 %{monodir}/3.5/System.Web.Extensions*
 %{monodir}/2.0/System.Xml.Linq.dll
@@ -690,6 +688,12 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Sat Jan 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-16.RC2.20091001svn122990
+- Updates from svn
+- Change to RC2
+- Removed mono-api-diff.exe and transform.exe from spec
+- Fixes some problems with winforms on some boxes
+
 * Sun Jan 04 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-15.RC1.20090401svn122388
 - Updates from svn
 

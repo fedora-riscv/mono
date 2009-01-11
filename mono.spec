@@ -1,8 +1,8 @@
-%define svnver 122990
+%define svnver 122994
 
 Name:		mono
 Version:        2.2
-Release:        16.RC2.20091001svn%{svnver}%{?dist}
+Release:        17.RC2.20091101svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -23,7 +23,7 @@ BuildRequires:  libunwind
 BuildRequires:  libunwind-devel
 %endif
 # Required for mono-libdir.patch
-BuildRequires: automake libtool
+BuildRequires: automake libtool gettext-devel
 Obsoletes:     monodoc, monodoc-devel
 
 # Yes, mono actually depends on itself, because
@@ -688,11 +688,12 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Sat Jan 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-16.RC2.20091001svn122990
+* Sun Jan 11 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-17.RC2.20091101svn122991
 - Updates from svn
 - Change to RC2
 - Removed mono-api-diff.exe and transform.exe from spec
 - Fixes some problems with winforms on some boxes
+- Added gettext-devel
 
 * Sun Jan 04 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-15.RC1.20090401svn122388
 - Updates from svn

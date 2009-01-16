@@ -1,0 +1,10 @@
+--- mono-2.2/data/config.in	2008-11-30 19:34:24.000000000 +0000
++++ mono-2.2/data/config-new.in	2008-12-02 23:57:51.000000000 +0000
+@@ -15,6 +15,7 @@
+ 	<dllmap dll="i:msvcrt.dll" target="@LIBC@" os="!windows"/>
+ 	<dllmap dll="sqlite" target="@SQLITE@" os="!windows"/>
+ 	<dllmap dll="sqlite3" target="@SQLITE3@" os="!windows"/>
++	<dllmap dll="gdiplus.dll" target="libgdiplus.so.0" os="linux"/>
+ 	<dllmap dll="libX11" target="@X11@" os="!windows" />
+ 	<dllmap dll="libcairo-2.dll" target="libcairo.so.2" os="!windows"/>
+ 	<dllmap dll="i:kernel32.dll">

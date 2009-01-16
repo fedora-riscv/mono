@@ -1,12 +1,12 @@
 Name:		mono
-Version:        2.0.1
-Release:        13%{?dist}
+Version:        2.2
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
 License:        MIT
-URL:            http://go-mono.com/sources-stable/%{name}-%{version}.tar.bz2
-Source0:        %{name}-%{version}.tar.bz2
+URL:		http://ftp.novell.com/pub/mono/sources-stable/
+Source0:        http://ftp.novell.com/pub/mono/sources-stable/%{name}-%{version}.tar.bz2
 Source1:	monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -14,40 +14,34 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 2.0
+BuildRequires:  libgdiplus-devel >= 2.2
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
 BuildRequires:  libunwind-devel
 %endif
 # Required for mono-libdir.patch
-BuildRequires: automake libtool
+BuildRequires: automake libtool gettext-devel
+Obsoletes:     monodoc, monodoc-devel
 
 # Yes, mono actually depends on itself, because
 # we deleted the bootstrapping binaries. If you
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
+
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ppc ia64 armv4l sparc alpha s390 s390x
-# Disabled due to strange build failure:
-# s390 s390x
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc
 
-Patch2: mono-2.0-ppc-threading.patch
-Patch3: mono-libdir-126.patch
-Patch4: mono-1.2.3-use-monodir.patch
-Patch5: mono-big-integer-CVE-2007-5197.patch
-Patch8: mono-mcs-config.patch
-Patch7: mono-2.0-pcfiles.patch
-Patch6:mono-2.0-uselibdir.patch
-Patch9:mono-2.0-monoservice.patch
-Patch10: mono-2.0-metadata-makefile.patch
-Patch11: mono-2.0-tablelayout.patch
-Patch12: mono-2.0-mimeicon.patch
-Patch13: mono-2.0-BinarySerialization.patch
-Patch14: mono-2.0-DataTable.patch
-Patch15: mono-2.0-StringReplace.patch
+Patch0: mono-2.2-ppc-threading.patch
+Patch1: mono-libdir-126.patch
+Patch2: mono-1.2.3-use-monodir.patch
+Patch3: mono-2.2-uselibdir.patch
+Patch4: mono-2.0-monoservice.patch
+Patch5: mono-2.0-metadata-makefile.patch
+Patch6: mono-22-libgdiwinform.patch
+Patch7: mono-22-libdir.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -111,8 +105,6 @@ Requires:       mono-core = %{version}-%{release}
 This package contains assemblies to support I18N applications for
 non-latin alphabets.
 
-# The above seems safe
-
 %package jscript
 Summary:        JScript .NET support for Mono
 Group:          Development/Languages
@@ -137,7 +129,7 @@ System.Configuration.Install, System.Management, System.Messaging.
 %package winforms
 Summary:        Windows Forms implementation for Mono
 Group:          Development/Languages
-Requires:       mono-core = %{version}-%{release}, libgdiplus-devel
+Requires:       mono-core = %{version}-%{release}
 
 %description winforms
 This package provides a fully managed implementation of
@@ -212,7 +204,6 @@ Requires:       mono-core = %{version}-%{release}
 This package contains the ADO.NET Data provider for the Firebird
 database.
 
-# This uses the upstream package name, don't know why its not mono-data-*
 %package -n ibm-data-db2
 Summary:        IBM DB2 database connectivity for Mono
 Group:          Development/Languages
@@ -222,7 +213,6 @@ Requires:       mono-core = %{version}-%{release}
 This package contains the ADO.NET Data provider for the IBM DB2
 Universal database.
 
-# This uses the upstream package name, don't know why its not mono-data-*
 %package -n bytefx-data-mysql
 Summary:        MySQL database connectivity for Mono
 Group:          Development/Languages
@@ -232,6 +222,23 @@ Requires:       mono-core = %{version}-%{release}
 This package contains the ADO.NET Data provider for MySQL. This is
 no longer maintained. MySQL AB now provides MySQL Connector/Net
 which is fully managed and actively maintained.
+
+%package -n monodoc
+Summary:	The mono documentation system
+Group:		Documentation
+Requires:	mono-core = %{version}-%{release}
+
+%description -n monodoc
+monodoc is the documentation package for the mono .NET environment
+
+%package -n monodoc-devel
+Summary: .pc file for monodoc
+Group: Documentation
+Requires: monodoc = %{version}-%{release} pkgconfig
+Requires: mono-core = %{version}-%{release}
+
+%description -n monodoc-devel
+Development file for monodoc
 
 %define monodir %{_libdir}/mono
 %define gac_dll(dll)  %{monodir}/gac/%{1} \
@@ -252,23 +259,19 @@ which is fully managed and actively maintained.
 
 %prep
 %setup -q
-sed -i -e 's!@@LIBDIR@@!%{_libdir}!' %{PATCH8}
-%patch8 -p1 -b .config
-sed -i -e 's!%{_libdir}!@@LIBDIR@@!' %{PATCH8}
-%patch2 -p1 -b .ppc-threading
-%patch3 -p1 -b .libdir
-%patch4 -p1 -b .use-monodir
-%patch6 -p1 -b .use-libdir
+
+%patch0 -p1 -b .ppc-threading
+%patch1 -p1 -b .libdir
+%patch2 -p1 -b .usemonodir
+%patch3 -p1 -b .uselibdir
+%patch4 -p1 -b .monoservice
+%patch5 -p1 -b .metadata-makefile
+%patch6 -p1 -b .libgdiplus
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
-%patch7 -p1 -b .pc-patches
+%patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
-%patch9 -p1 -b .monoservice
-%patch10 -p1 -b .metadata
-%patch11 -p1 -b .tablelayout
-%patch12 -p1 -b .mimeicon
-%patch13 -p1 -b .serialisation
-%patch14 -p1 -b .datatable
-%patch15 -p1 -b .stringreplace
+sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
+
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -283,7 +286,6 @@ export CFLAGS="-O2 -fno-strict-aliasing"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %endif
-#autoreconf -f -i -s
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
@@ -292,36 +294,35 @@ make
 
 
 %install
-%{__rm} -rf $RPM_BUILD_ROOT
-make DESTDIR=$RPM_BUILD_ROOT install
-install monodir $RPM_BUILD_ROOT%{_bindir}
+%{__rm} -rf %{buildroot}
+make DESTDIR=%{buildroot} install
+install monodir %{buildroot}%{_bindir}
 
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+%{__rm} %{buildroot}%{_libdir}/*.la
 
 # We put these inside rpm
-%{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-provides
-%{__rm} $RPM_BUILD_ROOT%{_bindir}/mono-find-requires
+%{__rm} %{buildroot}%{_bindir}/mono-find-provides
+%{__rm} %{buildroot}%{_bindir}/mono-find-requires
 
 # This was removed upstream:
-%{__rm} -fr $RPM_BUILD_ROOT%{monodir}/gac/Mono.Security.Win32/[12]*
-%{__rm} -rf $RPM_BUILD_ROOT%{monodir}/1.0/Mono.Security.Win32.dll
-%{__rm} -rf $RPM_BUILD_ROOT%{monodir}/2.0/Mono.Security.Win32.dll
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/README*
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/barrett_diagram
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/*.html
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/libgc-mono/gc.man
-%{__rm} $RPM_BUILD_ROOT/%_bindir/jay
-%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/jay
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/jay.1
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/monostyle.1
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/oldmono.1
-%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/mint.1
-%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/CorCompare.exe
-%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/browsercaps-updater.exe*
-#%{__rm} $RPM_BUILD_ROOT%{monodir}/1.0/mono-api-diff.exe
-#%{__rm} $RPM_BUILD_ROOT%{monodir}/*/mono-api-info.exe
-%{__rm} $RPM_BUILD_ROOT/%_bindir/smcs
-%{__rm} $RPM_BUILD_ROOT/%_libdir/pkgconfig/smcs.pc
+%{__rm} -fr %{buildroot}%{monodir}/gac/Mono.Security.Win32/[12]*
+%{__rm} -rf %{buildroot}%{monodir}/1.0/Mono.Security.Win32.dll
+%{__rm} -rf %{buildroot}%{monodir}/2.0/Mono.Security.Win32.dll
+%{__rm} %{buildroot}%{_datadir}/libgc-mono/README*
+%{__rm} %{buildroot}%{_datadir}/libgc-mono/barrett_diagram
+%{__rm} %{buildroot}%{_datadir}/libgc-mono/*.html
+%{__rm} %{buildroot}%{_datadir}/libgc-mono/gc.man
+%{__rm} %{buildroot}/%_bindir/jay
+%{__rm} -r %{buildroot}%{_datadir}/jay
+%{__rm} %{buildroot}%{_mandir}/man1/jay.1
+%{__rm} %{buildroot}%{_mandir}/man1/monostyle.1
+%{__rm} %{buildroot}%{_mandir}/man1/oldmono.1
+%{__rm} %{buildroot}%{_mandir}/man1/mint.1
+%{__rm} %{buildroot}%{monodir}/1.0/browsercaps-updater.exe*
+%{__rm} %{buildroot}/%_bindir/smcs
+%{__rm} %{buildroot}/%_libdir/pkgconfig/smcs.pc
+
+%find_lang mcs
 
 %post -p /sbin/ldconfig
 
@@ -332,15 +333,18 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %postun devel -p /sbin/ldconfig
 
 %clean
-%{__rm} -rf $RPM_BUILD_ROOT
+%{__rm} -rf %{buildroot}
 
-%files core
+%files core -f mcs.lang
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB ChangeLog NEWS README
 %{_bindir}/mono
 %{_bindir}/monodir
 %{_bindir}/mono-api-*
-%{monodir}/1.0/mono-api-diff*
+%mono_bin csharp
+%{_bindir}/gacutil1
+%mono_bin mod
+%mono_bin mono-cil-strip
 %{monodir}/?.0/mono-api-info*
 %{_bindir}/mono-test-install
 %{_bindir}/gacutil2
@@ -356,13 +360,15 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %mono_bin sn
 %mono_bin installvst
 %mono_bin monolinker
-%{monodir}/1.0/transform.exe
 %{monodir}/?.0/installutil.*
 %{monodir}/3.5/System.Web.Extensions*
 %{monodir}/2.0/System.Xml.Linq.dll
 %{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
 %{_libdir}/libmono-profiler-logging.so.*
+%{_libdir}/mono/1.0/CorCompare.exe
+%{_libdir}/mono/1.0/mono-api-diff.exe
+%{_libdir}/mono/1.0/transform.exe
 %{_mandir}/man1/certmgr.1.gz
 %{_mandir}/man1/chktrust.1.gz
 %{_mandir}/man1/gacutil.1.gz
@@ -371,11 +377,14 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/mozroots.1.gz
 %{_mandir}/man1/setreg.1.gz
 %{_mandir}/man1/sn.1.gz
-%{_mandir}/man1/vbnc.1.gz
 %{_mandir}/man1/monolinker.1.gz
 %{_mandir}/man1/resgen.1.gz
 %{_mandir}/man1/mconfig.1.gz
 %{_mandir}/man5/mono-config.5.gz
+%{_mandir}/man1/csharp.1.gz
+%{_mandir}/man1/mono-cil-strip.1.gz
+%{_mandir}/man1/monoburg.1.gz
+%{_mandir}/man1/vbnc.1.gz
 %{_libdir}/libMonoPosixHelper.so
 %dir %{monodir}
 %dir %{monodir}/1.0
@@ -403,6 +412,13 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Security
 %gac_dll System.Xml
 %gac_dll System.Core
+%gac_dll Mono.CSharp
+%gac_dll Mono.Management
+%gac_dll Mono.Simd
+%gac_dll System.ComponentModel.DataAnnotations
+%gac_dll System.IdentityModel.Selectors
+%gac_dll System.IdentityModel
+%gac_dll System.Runtime.Serialization
 %gac_dll cscompmgd
 %gac_dll CustomMarshalers
 %gac_dll OpenSystem.C
@@ -418,7 +434,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/mconfig/config.xml
 %config (noreplace) %{_sysconfdir}/mono/2.0/settings.map
-
+%{_libdir}/mono-source-libs/
 
 %files devel
 %defattr(-,root,root,-)
@@ -476,7 +492,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_mandir}/man1/secutil.1.gz
 %{_mandir}/man1/sgen.1.gz
 %{_mandir}/man1/signcode.1.gz
-%{_mandir}/man1/monoburg.*
 %gac_dll PEAPI
 %gac_dll Microsoft.Build.Engine
 %gac_dll Microsoft.Build.Framework
@@ -499,6 +514,9 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %{_libdir}/pkgconfig/mono.pc
 %{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/dotnet35.pc
+%{_libdir}/pkgconfig/mono-lineeditor.pc
+%{_libdir}/pkgconfig/mono-options.pc
+%{_libdir}/pkgconfig/wcf.pc
 %{_includedir}/mono-1.0
 %{_datadir}/mono-1.0/mono/cil/cil-opcodes.xml
 %dir %{_datadir}/mono-1.0
@@ -508,7 +526,6 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 
 %files nunit
 %defattr(-,root,root,-)
-%doc mcs/nunit20/license.rtf mcs/nunit20/README
 %mono_bin_1 nunit-console nunit-console
 %mono_bin_2 nunit-console2 nunit-console
 %gac_dll nunit.core
@@ -541,6 +558,7 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Management
 %gac_dll System.Messaging
 %gac_dll System.ServiceProcess
+%gac_dll System.ServiceModel
 %gac_dll System.Configuration.Install
 %gac_dll Microsoft.Vsa
 
@@ -559,6 +577,11 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %gac_dll System.Runtime.Remoting
 %gac_dll System.Web
 %gac_dll System.Runtime.Serialization.Formatters.Soap
+%{monodir}/compat-2.0/System.Web.Extensions*dll
+%gac_dll System.ServiceModel.Web
+%gac_dll System.Web.Abstractions
+%gac_dll System.Web.DynamicData
+%gac_dll System.Web.Routing
 %gac_dll System.Web.Services
 %gac_dll System.Web.Extensions.Design
 %gac_dll System.Web.Extensions
@@ -625,7 +648,32 @@ install monodir $RPM_BUILD_ROOT%{_bindir}
 %defattr(-,root,root,-)
 %gac_dll IBM.Data.DB2
 
+%files -n monodoc
+%defattr(-, root, root)
+%{_libdir}/mono/gac/monodoc
+%{_libdir}/monodoc/*
+%{_libdir}/mono/monodoc/monodoc.dll
+%mono_bin mdoc
+%{_bindir}/mdoc-*
+%{_bindir}/mdass*
+%{_bindir}/mdval*
+%{_bindir}/mod
+%{_bindir}/monodoc*
+%{_mandir}/man1/md*
+%{_mandir}/man1/monodoc*
+%{_mandir}/man5/mdoc*
+
+%files -n monodoc-devel
+%defattr (-, root, root)
+%{_libdir}/pkgconfig/monodoc.pc
+
 %changelog
+* Fri Jan 16 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1
+- Bump to 2.2 release
+- Huge number of changes since 2.01
+- Fix now included so winforms no longer has circular dep
+- Obsoletes monodoc
+
 * Sun Nov 02 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0.13
 - Add in mono-api-diff and mono-api-info
 

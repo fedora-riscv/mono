@@ -1,8 +1,8 @@
-%define svnver 123642
+%define svnver 125709
 
 Name:		mono
 Version:        2.4
-Release:        1.20091601svn%{svnver}%{?dist}
+Release:        5.pre2.20090502svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -302,7 +302,11 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
+%ifarch x86_64 ia64
+%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static --with-preview=yes --with-libgdiplus=installed --enable-big-arrays
+%else
 %configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static --with-preview=yes --with-libgdiplus=installed
+%endif
 make
 
 
@@ -688,6 +692,17 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Feb 05 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-5.pre2.20090502svn125515
+- Update from svn
+- rename to pre2
+
+* Sat Jan 24 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-2.20092401svn124412
+- Update from svn
+- Added support for big arrays (64 bit archs only)
+
+* Sun Jan 18 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-1.20091801svn123751
+- Update from svn
+
 * Fri Jan 16 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-1.20091601svn123642
 - Move to 2.4 branch
 - Update from svn

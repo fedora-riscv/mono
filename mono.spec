@@ -1,8 +1,8 @@
-%define svnver 125709
+%define svnver 126522
 
 Name:		mono
 Version:        2.4
-Release:        5.pre2.20090502svn%{svnver}%{?dist}
+Release:        6.pre2.20091002svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -302,11 +302,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
-%ifarch x86_64 ia64
-%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static --with-preview=yes --with-libgdiplus=installed --enable-big-arrays
-%else
 %configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static --with-preview=yes --with-libgdiplus=installed
-%endif
 make
 
 
@@ -462,7 +458,6 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin dtd2rng
 %mono_bin_1 genxs1 genxs
 %{_bindir}/genxs
-%{_bindir}/genxs2
 %mono_bin sgen
 %mono_bin_1 ilasm ilasm
 %{_bindir}/ilasm1
@@ -692,6 +687,11 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Feb 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-6.pre2.20091002svn126522
+- Update from svn
+- removed big array support (seems to be causing some problems)
+- removed genxs2
+
 * Thu Feb 05 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-5.pre2.20090502svn125515
 - Update from svn
 - rename to pre2

@@ -1,8 +1,8 @@
-%define svnver 126522
+%define svnver 127216
 
 Name:		mono
 Version:        2.4
-Release:        6.pre2.20091002svn%{svnver}%{?dist}
+Release:        7.pre3.20091702svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -687,6 +687,10 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Feb 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-7.pre3.20091702svn127216
+- Update from svn
+- Retagged to preview 3
+
 * Tue Feb 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-6.pre2.20091002svn126522
 - Update from svn
 - removed big array support (seems to be causing some problems)

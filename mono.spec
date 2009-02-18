@@ -1,8 +1,8 @@
-%define svnver 127216
+%define svnver 127307
 
 Name:		mono
 Version:        2.4
-Release:        7.pre3.20091702svn%{svnver}%{?dist}
+Release:        7.pre3.20091802svn%{svnver}%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -687,9 +687,10 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Tue Feb 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-7.pre3.20091702svn127216
+* Wed Feb 18 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-7.pre3.20091802svn127307
 - Update from svn
 - Retagged to preview 3
+- Corrected date
 
 * Tue Feb 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-6.pre2.20091002svn126522
 - Update from svn

@@ -1,14 +1,12 @@
-%define svnver 127307
-
 Name:		mono
 Version:        2.4
-Release:        8.pre3.20091802svn%{svnver}%{?dist}
+Release:        8.RC1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
 License:        MIT
-URL:            %{name}-%{svnver}.tar.bz2
-Source0:        %{name}-%{svnver}.tar.bz2
+URL:            http://mono.ximian.com/monobuild/preview/sources-preview/
+Source0:        %{name}-%{version}.tar.bz2
 Source1:	monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -16,7 +14,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 2.2
+BuildRequires:  libgdiplus-devel >= 2.4
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -269,7 +267,7 @@ Development file for monodoc
   %{nil}
 
 %prep
-%setup -q -n %{name}-%{svnver}
+%setup -q 
 
 %patch0 -p1 -b .ppc-threading
 %patch1 -p1 -b .libdir
@@ -687,13 +685,10 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4-8.pre3.20091802svn127307
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
-
-* Wed Feb 18 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-7.pre3.20091802svn127307
-- Update from svn
-- Retagged to preview 3
-- Corrected date
+* Fri Feb 27 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-8.RC1
+- Built using official tarball release
+- BR now uses libgdiplus >= 2.4
+- Bump to RC1
 
 * Tue Feb 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-6.pre2.20091002svn126522
 - Update from svn

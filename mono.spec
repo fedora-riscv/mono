@@ -282,7 +282,6 @@ sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
-sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' data/mono-cairo.pc.in
 
 autoreconf -f -i -s
 
@@ -686,8 +685,8 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Sat Mar 07 2009 Xavier Lamien <lxtnow@gmail.com> - 2.4-9.RC1
-- Fix libdir on mono-cairo pkg-config.
+* Sat Mar 07 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-9.RC1
+- Fix libdir issue with mono-cairo
 
 * Fri Feb 27 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-8.RC1
 - Built using official tarball release

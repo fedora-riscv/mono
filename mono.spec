@@ -1,12 +1,12 @@
 Name:		mono
-Version:        2.2
-Release:        2%{?dist}
+Version:        2.4
+Release:        10.RC2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
 License:        MIT
-URL:		http://ftp.novell.com/pub/mono/sources-stable/
-Source0:        http://ftp.novell.com/pub/mono/sources-stable/%{name}-%{version}.tar.bz2
+URL:            http://mono.ximian.com/monobuild/preview/sources-preview/
+Source0:        %{name}-%{version}.tar.bz2
 Source1:	monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -14,7 +14,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 2.2
+BuildRequires:  libgdiplus-devel >= 2.4
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -145,6 +145,15 @@ Requires:       mono-core = %{version}-%{release}
 This package provides the ASP.NET libraries and runtime for
 development of web application, web services and remoting support.
 
+%package web-devel
+Summary:        Development files for system.web
+Group:          Development/Languages
+Requires:       mono-core = %{version}-%{release}
+Requires:	mono-web = %{version}-%{release} pkgconfig
+
+%description web-devel
+This package provides the .pc file for mono-web
+
 %package data
 Summary:        Database connectivity for Mono
 Group:          Development/Languages
@@ -258,7 +267,7 @@ Development file for monodoc
   %{nil}
 
 %prep
-%setup -q
+%setup -q 
 
 %patch0 -p1 -b .ppc-threading
 %patch1 -p1 -b .libdir
@@ -270,6 +279,9 @@ Development file for monodoc
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
+sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
+sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
+sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
 
 autoreconf -f -i -s
@@ -366,9 +378,6 @@ install monodir %{buildroot}%{_bindir}
 %{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
 %{_libdir}/libmono-profiler-logging.so.*
-%{_libdir}/mono/1.0/CorCompare.exe
-%{_libdir}/mono/1.0/mono-api-diff.exe
-%{_libdir}/mono/1.0/transform.exe
 %{_mandir}/man1/certmgr.1.gz
 %{_mandir}/man1/chktrust.1.gz
 %{_mandir}/man1/gacutil.1.gz
@@ -383,8 +392,6 @@ install monodir %{buildroot}%{_bindir}
 %{_mandir}/man5/mono-config.5.gz
 %{_mandir}/man1/csharp.1.gz
 %{_mandir}/man1/mono-cil-strip.1.gz
-%{_mandir}/man1/monoburg.1.gz
-%{_mandir}/man1/vbnc.1.gz
 %{_libdir}/libMonoPosixHelper.so
 %dir %{monodir}
 %dir %{monodir}/1.0
@@ -450,7 +457,6 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin dtd2rng
 %mono_bin_1 genxs1 genxs
 %{_bindir}/genxs
-%{_bindir}/genxs2
 %mono_bin sgen
 %mono_bin_1 ilasm ilasm
 %{_bindir}/ilasm1
@@ -532,6 +538,10 @@ install monodir %{buildroot}%{_bindir}
 %gac_dll nunit.framework
 %gac_dll nunit.util
 %gac_dll nunit.mocks
+%gac_dll nunit-console-runner
+%gac_dll nunit.core.extensions
+%gac_dll nunit.core.interfaces
+%gac_dll nunit.framework.extensions
 
 %files nunit-devel
 %defattr(-,root,root,-)
@@ -561,6 +571,9 @@ install monodir %{buildroot}%{_bindir}
 %gac_dll System.ServiceModel
 %gac_dll System.Configuration.Install
 %gac_dll Microsoft.Vsa
+%gac_dll Mono.Messaging.RabbitMQ
+%gac_dll Mono.Messaging
+%gac_dll RabbitMQ.Client
 
 %files winforms
 %defattr(-,root,root,-)
@@ -603,6 +616,12 @@ install monodir %{buildroot}%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/2.0/web.config
 %mono_bin httpcfg
 %{_mandir}/man1/httpcfg.1.gz
+
+%files web-devel
+%defattr(-,root,root,-)
+%{_libdir}/pkgconfig/mono.web.pc
+%{_libdir}/pkgconfig/system.web.extensions_1.0.pc
+%{_libdir}/pkgconfig/system.web.extensions.design_1.0.pc
 
 %files data
 %defattr(-,root,root,-)
@@ -668,14 +687,116 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Tue Mar 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-2
-- Fix mono-cairo libdir issue
+* Tue Mar 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-10.RC2
+- Bump to RC2
 
-* Fri Jan 16 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1
-- Bump to 2.2 release
-- Huge number of changes since 2.01
-- Fix now included so winforms no longer has circular dep
-- Obsoletes monodoc
+* Sat Mar 07 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-9.RC1
+- Fix libdir issue with mono-cairo
+
+* Fri Feb 27 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-8.RC1
+- Built using official tarball release
+- BR now uses libgdiplus >= 2.4
+- Bump to RC1
+
+* Tue Feb 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-6.pre2.20091002svn126522
+- Update from svn
+- removed big array support (seems to be causing some problems)
+- removed genxs2
+
+* Thu Feb 05 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-5.pre2.20090502svn125515
+- Update from svn
+- rename to pre2
+
+* Sat Jan 24 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-2.20092401svn124412
+- Update from svn
+- Added support for big arrays (64 bit archs only)
+
+* Sun Jan 18 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-1.20091801svn123751
+- Update from svn
+
+* Fri Jan 16 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-1.20091601svn123642
+- Move to 2.4 branch
+- Update from svn
+
+* Sun Jan 11 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-17.RC2.20091101svn122991
+- Updates from svn
+- Change to RC2
+- Removed mono-api-diff.exe and transform.exe from spec
+- Fixes some problems with winforms on some boxes
+- Added gettext-devel
+
+* Sun Jan 04 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-15.RC1.20090401svn122388
+- Updates from svn
+
+* Wed Dec 31 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-15.RC1.20081231svn122288
+- Important updates from svn
+
+* Mon Dec 29 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-15.RC1.20081229svn122181
+- Update from svn
+
+* Tue Dec 23 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-14.RC1.20081223svn122032
+- Remove ppc self-build parts and ppc reordering patch
+- Update from svn
+- Minor spec file cleanups
+
+* Fri Dec 19 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-14.pre3.20081219svn121833
+- Get PPC to build itself, will be disabled from the next build
+
+* Fri Dec 19 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-13.pre3.20081219svn121833
+- Lots more fixes
+- New patch for ppc archs
+- Re-enable ppc build
+
+* Wed Dec 17 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-12.pre3.20081217svn121664
+- Fix libdir issue with monodoc
+
+* Tue Dec 16 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-11.pre3.20081216svn121605
+- Fixes problems with web references
+- Fixes x86_64 build problems
+- Added new web-devel subpackage
+
+* Mon Dec 15 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-11.pre3.20081215svn121536
+- Exclude ppc due to build problems (temporary)
+- Moved to pre3 in sync with Novell releases
+
+* Wed Dec 10 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-10.pre2.20081215svn121507
+- removed the winform patch
+- move to svn
+- removed files no longer built
+- removed vbnc manual
+
+* Tue Dec 09 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-9.pre2
+- remove the seds and just use patches
+
+* Fri Dec 05 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-8.pre2
+- Bump to 2.2 preview 2
+- More sed fixes
+
+* Thu Dec 04 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-7.pre1
+- Add fix so that winforms doesn't need libgdiplus-devel
+- Add fix so the sed script works correctly on x86_64
+
+* Sun Nov 30 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-6.pre1
+- missed a sed invocation
+
+* Sun Nov 30 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-5.pre1
+- new patch for winforms problems
+- reorganised patches
+- use sed to fix the incorrect libdir issues - experimental!!!!
+
+* Wed Nov 26 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-4.pre1
+- mono.pc libfile fix
+
+* Tue Nov 25 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-2.pre1
+- fix monodoc libdir issues
+
+* Tue Nov 25 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.1.pre1
+- rebuild
+
+* Mon Nov 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.pre1
+- Bump to 2.2 preview 1
+- remove old patches
+- add build information for monodoc
 
 * Sun Nov 02 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.0.13
 - Add in mono-api-diff and mono-api-info

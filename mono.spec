@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -668,6 +668,9 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Mar 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-2
+- Fix mono-cairo libdir issue
+
 * Fri Jan 16 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1
 - Bump to 2.2 release
 - Huge number of changes since 2.01

@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.4
-Release:        9.RC1%{?dist}
+Release:        10.RC2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -279,6 +279,7 @@ Development file for monodoc
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
+sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
@@ -618,6 +619,7 @@ install monodir %{buildroot}%{_bindir}
 
 %files web-devel
 %defattr(-,root,root,-)
+%{_libdir}/pkgconfig/mono.web.pc
 %{_libdir}/pkgconfig/system.web.extensions_1.0.pc
 %{_libdir}/pkgconfig/system.web.extensions.design_1.0.pc
 
@@ -685,6 +687,9 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Mar 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-10.RC2
+- Bump to RC2
+
 * Sat Mar 07 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-9.RC1
 - Fix libdir issue with mono-cairo
 

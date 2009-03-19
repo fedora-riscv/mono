@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.4
-Release:        11.RC2%{?dist}
+Release:        11.RC3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -32,7 +32,7 @@ Obsoletes:     monodoc, monodoc-devel
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc sparcv9 alpha s390 s390x ppc
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -687,8 +687,8 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Tue Mar 17 2009 Dennis Gilmore <dennis@ausil.us> 2.4-11.RC2
-- we build 32 bit sparc sparcv9 these days
+* Wed Mar 18 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-11.RC3
+- Bump to RC3
 
 * Tue Mar 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-10.RC2
 - Bump to RC2

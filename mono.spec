@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.4
-Release:        11.RC3%{?dist}
+Release:        12%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -687,6 +687,9 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Mar 26 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-12
+- Full 2.4 release
+
 * Wed Mar 18 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-11.RC3
 - Bump to RC3
 

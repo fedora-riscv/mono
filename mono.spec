@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.4
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -301,7 +301,9 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
-%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static --with-preview=yes --with-libgdiplus=installed
+%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes \
+           --with-moonlight=yes --disable-static --with-preview=yes \
+           --with-libgdiplus=installed
 make
 
 
@@ -687,6 +689,9 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Apr 02 2009 Xavier Lamien <lxtnow@gmail.com> - 2.4-13
+- Enable moonlight support.
+
 * Thu Mar 26 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-12
 - Full 2.4 release
 

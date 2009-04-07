@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.4
-Release:        12.1%{?dist}
+Release:        13.1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -32,7 +32,7 @@ Obsoletes:     monodoc, monodoc-devel
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -249,9 +249,20 @@ Requires: mono-core = %{version}-%{release}
 %description -n monodoc-devel
 Development file for monodoc
 
+%package moonlight
+Summary:	All the parts required for moonlight compilation
+Group:		Development/Libraries
+Requires:	mono-core = %{version}-%{release}
+
+%description moonlight
+mono-moonlight are all the parts required for moonlight compilation
+
 %define monodir %{_libdir}/mono
 %define gac_dll(dll)  %{monodir}/gac/%{1} \
   %{monodir}/?.0/%{1}.dll \
+  %{nil}
+%define moon_dll(dll) %{monodir}/gac/%{1} \
+  %{monodir}/2.1/%{1}.dll \
   %{nil}
 %define mono_bin(bin) %{_bindir}/%{1} \
   %{monodir}/?.0/%{1}.exe \
@@ -301,7 +312,9 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
-%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes --with-moonlight=no --disable-static --with-preview=yes --with-libgdiplus=installed
+%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes \
+           --with-moonlight=yes --disable-static --with-preview=yes \
+           --with-libgdiplus=installed
 make
 
 
@@ -530,6 +543,13 @@ install monodir %{buildroot}%{_bindir}
 %dir %{_datadir}/mono-1.0/mono/cil
 %{_libdir}/mono/1.0/culevel*
 
+%files moonlight
+%defattr(-,root,root,-)
+%{_libdir}/mono/2.1/*.dll
+%{_libdir}/mono/2.1/*.mdb
+%{_libdir}/mono/2.1/smcs.exe
+%moon_dll System.Net
+
 %files nunit
 %defattr(-,root,root,-)
 %mono_bin_1 nunit-console nunit-console
@@ -687,7 +707,14 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Thu Mar 26 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-12.1
+* Mon Apr 06 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 2.4-13.1
+- Remove ppc support
+- moonlight parts are now in their own subpackage
+
+* Thu Apr 02 2009 Xavier Lamien <lxtnow@gmail.com> - 2.4-13
+- Enable moonlight support.
+
+* Thu Mar 26 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-12
 - Full 2.4 release
 
 * Wed Mar 18 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4-11.RC3

@@ -1,6 +1,6 @@
 Name:		mono
 Version:        2.4
-Release:        13.1%{?dist}
+Release:        13.2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -29,10 +29,10 @@ Obsoletes:     monodoc, monodoc-devel
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
 
-BuildRequires: mono-core
+#BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc ppc64
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -42,6 +42,7 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
 Patch6: mono-22-libgdiwinform.patch
 Patch7: mono-22-libdir.patch
+Patch8: mono-24-ppc-glocks.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -287,6 +288,7 @@ mono-moonlight are all the parts required for moonlight compilation
 %patch4 -p1 -b .monoservice
 %patch5 -p1 -b .metadata-makefile
 %patch6 -p1 -b .libgdiplus
+%patch8 -p1 -b .glocks-ppc
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
@@ -301,7 +303,7 @@ autoreconf -f -i -s
 sed -i "61a #define ARG_MAX	_POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 
 # Remove prebuilt binaries
-rm -rf mcs/class/lib/monolite/*
+#rm -rf mcs/class/lib/monolite/*
 
 %build
 %ifarch ia64 s390 s390x
@@ -707,6 +709,10 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Apr 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 2.4-13.2
+- Re-enable PPC and PPC64
+- sub point build for scratch build and bootstrap
+
 * Mon Apr 06 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 2.4-13.1
 - Remove ppc support
 - moonlight parts are now in their own subpackage

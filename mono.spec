@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.4
-Release:        14%{?dist}
+Release:        15.1.RC1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -294,7 +294,7 @@ mono-moonlight are all the parts required for moonlight compilation
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
-sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
+#sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
@@ -643,7 +643,7 @@ install monodir %{buildroot}%{_bindir}
 
 %files web-devel
 %defattr(-,root,root,-)
-%{_libdir}/pkgconfig/mono.web.pc
+#%{_libdir}/pkgconfig/mono.web.pc
 %{_libdir}/pkgconfig/system.web.extensions_1.0.pc
 %{_libdir}/pkgconfig/system.web.extensions.design_1.0.pc
 
@@ -711,6 +711,10 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-15
+- Revert to RC1 with changes to the spec file such as enabling moonlight so
+  that we have a working build for F11.
+
 * Fri Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-14
 - Remove bootstrap changes as it's not necessary.
 - remove ppc64 as we only had ppc before.

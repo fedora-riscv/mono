@@ -1,13 +1,15 @@
-Name:		mono
+Name:           mono
 Version:        2.4
-Release:        13.2%{?dist}
+Release:        14%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
 License:        MIT
-URL:            http://mono.ximian.com/monobuild/preview/sources-preview/
-Source0:        %{name}-%{version}.tar.bz2
-Source1:	monodir.c
+URL:            http://www.mono-project.com/Main_Page
+# Prereleases are available here
+# http://mono.ximian.com/monobuild/preview/sources-preview/
+Source0:        http://ftp.novell.com/pub/%{name}/sources/%{name}/%{name}-%{version}.tar.bz2
+Source1:        monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  bison 
@@ -29,10 +31,10 @@ Obsoletes:     monodoc, monodoc-devel
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
 
-#BuildRequires: mono-core
+BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc ppc64
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -303,7 +305,7 @@ autoreconf -f -i -s
 sed -i "61a #define ARG_MAX	_POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 
 # Remove prebuilt binaries
-#rm -rf mcs/class/lib/monolite/*
+rm -rf mcs/class/lib/monolite/*
 
 %build
 %ifarch ia64 s390 s390x
@@ -709,6 +711,12 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-14
+- Remove bootstrap changes as it's not necessary.
+- remove ppc64 as we only had ppc before.
+- Correct release number format
+- Fix Source and URL.
+
 * Fri Apr 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 2.4-13.2
 - Re-enable PPC and PPC64
 - sub point build for scratch build and bootstrap

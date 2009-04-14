@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.4
-Release:        15.1.RC1%{?dist}
+Release:        16.1.RC1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -34,7 +34,7 @@ Obsoletes:     monodoc, monodoc-devel
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparc alpha s390 s390x ppc
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390 s390x ppc
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -711,6 +711,9 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-16
+- set sparc32 to build sparcv9
+
 * Fri Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-15
 - Revert to RC1 with changes to the spec file such as enabling moonlight so
   that we have a working build for F11.

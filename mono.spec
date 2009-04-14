@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.4
-Release:        16.1.RC1%{?dist}
+Release:        17%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -294,7 +294,7 @@ mono-moonlight are all the parts required for moonlight compilation
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
-#sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
+sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
@@ -317,7 +317,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
 %configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes \
-           --with-moonlight=yes --disable-static --with-preview=yes \
+           --with-moonlight=yes --with-preview=yes \
            --with-libgdiplus=installed
 make
 
@@ -328,6 +328,7 @@ make DESTDIR=%{buildroot} install
 install monodir %{buildroot}%{_bindir}
 
 %{__rm} %{buildroot}%{_libdir}/*.la
+%{__rm} %{buildroot}%{_libdir}/*.a
 
 # We put these inside rpm
 %{__rm} %{buildroot}%{_bindir}/mono-find-provides
@@ -549,9 +550,17 @@ install monodir %{buildroot}%{_bindir}
 
 %files moonlight
 %defattr(-,root,root,-)
-%{_libdir}/mono/2.1/*.dll
 %{_libdir}/mono/2.1/*.mdb
 %{_libdir}/mono/2.1/smcs.exe
+%{_libdir}/mono/2.1/Mono.CompilerServices.SymbolWriter.dll
+%{_libdir}/mono/2.1/System.Core.dll
+%{_libdir}/mono/2.1/System.Runtime.Serialization.dll
+%{_libdir}/mono/2.1/System.ServiceModel.Web.dll
+%{_libdir}/mono/2.1/System.ServiceModel.dll
+%{_libdir}/mono/2.1/System.Xml.Linq.dll
+%{_libdir}/mono/2.1/System.Xml.dll
+%{_libdir}/mono/2.1/System.dll
+%{_libdir}/mono/2.1/mscorlib.dll
 %moon_dll System.Net
 
 %files nunit
@@ -643,7 +652,7 @@ install monodir %{buildroot}%{_bindir}
 
 %files web-devel
 %defattr(-,root,root,-)
-#%{_libdir}/pkgconfig/mono.web.pc
+%{_libdir}/pkgconfig/mono.web.pc
 %{_libdir}/pkgconfig/system.web.extensions_1.0.pc
 %{_libdir}/pkgconfig/system.web.extensions.design_1.0.pc
 
@@ -711,14 +720,18 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Fri Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-16
+* Tue Apr 14 2009 Toshio Kuratomi <toshio@fedoraproject.org> 2.4-17
+- Update to 2.4 final.
+- Statically link mono to libmono to work around bz #494026
+
+* Mon Apr 13 2009 Dennis Gilmore <ausil@fedoraproject.org> - 2.4-16
 - set sparc32 to build sparcv9
 
-* Fri Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-15
+* Mon Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-15
 - Revert to RC1 with changes to the spec file such as enabling moonlight so
   that we have a working build for F11.
 
-* Fri Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-14
+* Mon Apr 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 2.4-14
 - Remove bootstrap changes as it's not necessary.
 - remove ppc64 as we only had ppc before.
 - Correct release number format

@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.4
-Release:        17%{?dist}
+Release:        17%{?dist}.1
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -31,10 +31,10 @@ Obsoletes:     monodoc, monodoc-devel
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
 
-BuildRequires: mono-core
+#BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390 s390x ppc
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390 s390x ppc ppc64
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -305,7 +305,7 @@ autoreconf -f -i -s
 sed -i "61a #define ARG_MAX	_POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 
 # Remove prebuilt binaries
-rm -rf mcs/class/lib/monolite/*
+#rm -rf mcs/class/lib/monolite/*
 
 %build
 %ifarch ia64 s390 s390x
@@ -720,6 +720,12 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Apr 15 2009 Toshio Kuratomi <toshio@fedoraproject.org> 2.4-18
+- Enable bootstrap code and ppc64.  If this succeeds we'll build -19 right
+  afterwards with bootstrap code turned off.
+  Remember: you can't merge the ppc64 enabling to older branches without first
+  bootstrapping once.
+
 * Tue Apr 14 2009 Toshio Kuratomi <toshio@fedoraproject.org> 2.4-17
 - Update to 2.4 final.
 - Statically link mono to libmono to work around bz #494026

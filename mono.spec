@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.4
-Release:        19%{?dist}
+Release:        20%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -393,7 +393,6 @@ install monodir %{buildroot}%{_bindir}
 %{monodir}/?.0/installutil.*
 %{monodir}/3.5/System.Web.Extensions*
 %{monodir}/2.0/System.Xml.Linq.dll
-%{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
 %{_libdir}/libmono-profiler-logging.so.*
 %{_mandir}/man1/certmgr.1.gz
@@ -483,6 +482,7 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin makecert
 %mono_bin mkbundle
 %{_bindir}/mkbundle1
+%{_bindir}/mkbundle2
 %mono_bin_1 monop monop
 %{_bindir}/monop1
 %mono_bin_2 monop2 monop
@@ -720,6 +720,9 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon May 11 2009 Xavier Lamien <laxathom@fedoraproject.org> - 2.4-20
+- Move mkbundle2 to -devel.
+
 * Wed Apr 15 2009 Toshio Kuratomi <toshio@fedoraproject.org> 2.4-19
 - And turn off bootstrapping and make sure it rebuilds on all platforms.
 

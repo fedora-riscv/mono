@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -44,6 +44,7 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
 Patch6: mono-22-libgdiwinform.patch
 Patch7: mono-22-libdir.patch
+Patch8: mono-242-metadata-appconf.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -288,6 +289,7 @@ mono-moonlight are all the parts required for moonlight compilation
 %patch3 -p1 -b .uselibdir
 %patch4 -p1 -b .monoservice
 %patch5 -p1 -b .metadata-makefile
+%patch8 -p1 -b .metadata-appconf
 %patch6 -p1 -b .libgdiplus
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
@@ -435,9 +437,18 @@ install monodir %{buildroot}%{_bindir}
 %gac_dll System.Security
 %gac_dll System.Xml
 %gac_dll System.Core
+%gac_dll System.Configuration.Install
 %gac_dll Mono.CSharp
 %gac_dll Mono.Management
 %gac_dll Mono.Simd
+%gac_dll System.Web
+%gac_dll System.Web.Abstractions
+%gac_dll System.Web.DynamicData
+%gac_dll System.Web.Routing
+%gac_dll System.Web.Services
+%gac_dll System.Web.Extensions.Design
+%gac_dll System.Web.Extensions
+%{monodir}/compat-2.0/System.Web.Extensions*dll
 %gac_dll System.ComponentModel.DataAnnotations
 %gac_dll System.IdentityModel.Selectors
 %gac_dll System.IdentityModel
@@ -600,7 +611,6 @@ install monodir %{buildroot}%{_bindir}
 %gac_dll System.Messaging
 %gac_dll System.ServiceProcess
 %gac_dll System.ServiceModel
-%gac_dll System.Configuration.Install
 %gac_dll Microsoft.Vsa
 %gac_dll Mono.Messaging.RabbitMQ
 %gac_dll Mono.Messaging
@@ -619,16 +629,8 @@ install monodir %{buildroot}%{_bindir}
 %gac_dll Mono.Web
 %gac_dll Mono.WebBrowser
 %gac_dll System.Runtime.Remoting
-%gac_dll System.Web
 %gac_dll System.Runtime.Serialization.Formatters.Soap
-%{monodir}/compat-2.0/System.Web.Extensions*dll
 %gac_dll System.ServiceModel.Web
-%gac_dll System.Web.Abstractions
-%gac_dll System.Web.DynamicData
-%gac_dll System.Web.Routing
-%gac_dll System.Web.Services
-%gac_dll System.Web.Extensions.Design
-%gac_dll System.Web.Extensions
 %mono_bin disco
 %mono_bin soapsuds
 %mono_bin_1 wsdl wsdl
@@ -718,6 +720,11 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Sun Jun 14 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-2
+- Fix metadata makefile (duplicates appconf.h during make install)
+- Move System.Web to mono-core (bz 434709)
+- Move System.Configuration.Install to mono-core (bz 434709)
+
 * Tue Jun 09 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-1
 - Bump to 2.4.2 preview
 - remove ppc glocks patch

@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.4.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -42,7 +42,7 @@ Patch2: mono-1.2.3-use-monodir.patch
 Patch3: mono-2.2-uselibdir.patch
 Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
-Patch6: mono-22-libgdiwinform.patch
+Patch6: mono-242-libgdiplusconfig.patch
 Patch7: mono-22-libdir.patch
 Patch8: mono-242-metadata-appconf.patch
 
@@ -720,6 +720,10 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Jun 17 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-3
+- Bump to 2.4.2 preview 2
+- Fix libgdiplus winform patch
+
 * Sun Jun 14 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-2
 - Fix metadata makefile (duplicates appconf.h during make install)
 - Move System.Web to mono-core (bz 434709)

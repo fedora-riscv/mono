@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.4.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -720,6 +720,9 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jun 22 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-4
+- Bump to 2.4.2 RC 1
+
 * Wed Jun 17 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-3
 - Bump to 2.4.2 preview 2
 - Fix libgdiplus winform patch

@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.4.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -393,7 +393,6 @@ install monodir %{buildroot}%{_bindir}
 %{monodir}/?.0/installutil.*
 %{monodir}/3.5/System.Web.Extensions*
 %{monodir}/2.0/System.Xml.Linq.dll
-%{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
 %{_libdir}/libmono-profiler-logging.so.*
 %{_mandir}/man1/certmgr.1.gz
@@ -492,6 +491,7 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin makecert
 %mono_bin mkbundle
 %{_bindir}/mkbundle1
+%{_bindir}/mkbundle2
 %mono_bin_1 monop monop
 %{_bindir}/monop1
 %mono_bin_2 monop2 monop
@@ -720,6 +720,10 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Jun 30 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-5
+- Bump to 2.4.2 official release
+- Move mkbundle2 to devel (BZ 497187)
+
 * Mon Jun 22 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-4
 - Bump to 2.4.2 RC 1
 

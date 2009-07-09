@@ -1,6 +1,6 @@
 Name:           mono
-Version:        2.4.2
-Release:        5%{?dist}
+Version:        2.4.2.1
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -447,6 +447,7 @@ install monodir %{buildroot}%{_bindir}
 %gac_dll System.Web.Services
 %gac_dll System.Web.Extensions.Design
 %gac_dll System.Web.Extensions
+%gac_dll System.Web.Mvc
 %{monodir}/compat-2.0/System.Web.Extensions*dll
 %gac_dll System.ComponentModel.DataAnnotations
 %gac_dll System.IdentityModel.Selectors
@@ -720,6 +721,10 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Jul 09 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2.1-1
+- Bump to 2.4.2.1 release
+- Add system.web.mvc
+
 * Tue Jun 30 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-5
 - Bump to 2.4.2 official release
 - Move mkbundle2 to devel (BZ 497187)

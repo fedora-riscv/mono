@@ -1,5 +1,5 @@
 Name:           mono
-Version:        2.4.2.1
+Version:        2.4.2.2
 Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
@@ -721,6 +721,9 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Jul 17 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2.2-1
+- Patch for cve-2009-0217
+
 * Thu Jul 09 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2.1-1
 - Bump to 2.4.2.1 release
 - Add system.web.mvc

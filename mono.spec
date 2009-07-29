@@ -1,6 +1,8 @@
+#%define svnver	138447
+
 Name:           mono
-Version:        2.4.2.2
-Release:        2%{?dist}
+Version:        2.4.2.3
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -8,7 +10,7 @@ License:        MIT
 URL:            http://www.mono-project.com/Main_Page
 # Prereleases are available here
 # http://mono.ximian.com/monobuild/preview/sources-preview/
-Source0:        http://ftp.novell.com/pub/%{name}/sources/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://mono.ximian.com/monobuild/snapshot/sources-trunk/%name-%version.tar.bz2
 Source1:        monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -281,7 +283,7 @@ mono-moonlight are all the parts required for moonlight compilation
   %{nil}
 
 %prep
-%setup -q 
+%setup -q
 
 %patch0 -p1 -b .ppc-threading
 %patch1 -p1 -b .libdir
@@ -721,8 +723,8 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Sat Jul 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.2.2-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+* Wed Jul 29 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2.3.1
+- Update to 2.4.2.3
 
 * Fri Jul 17 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2.2-1
 - Patch for cve-2009-0217

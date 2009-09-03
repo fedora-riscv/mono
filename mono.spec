@@ -1,6 +1,8 @@
+#%define svnver 138447
+
 Name:           mono
-Version:        2.4
-Release:        19%{?dist}
+Version:        2.4.2.3
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -8,7 +10,7 @@ License:        MIT
 URL:            http://www.mono-project.com/Main_Page
 # Prereleases are available here
 # http://mono.ximian.com/monobuild/preview/sources-preview/
-Source0:        http://ftp.novell.com/pub/%{name}/sources/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://mono.ximian.com/monobuild/snapshot/sources-trunk/%name-%version.tar.bz2
 Source1:        monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -16,7 +18,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 2.4
+BuildRequires:  libgdiplus-devel >= 2.4.2
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -42,9 +44,9 @@ Patch2: mono-1.2.3-use-monodir.patch
 Patch3: mono-2.2-uselibdir.patch
 Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
-Patch6: mono-22-libgdiwinform.patch
+Patch6: mono-242-libgdiplusconfig.patch
 Patch7: mono-22-libdir.patch
-Patch8: mono-24-ppc-glocks.patch
+Patch8: mono-242-metadata-appconf.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -55,7 +57,7 @@ metadata access libraries.
 %package core
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
-Requires:	libgdiplus
+Requires:       libgdiplus
 
 %description core
 This package contains the core of the Mono runtime including its
@@ -76,7 +78,7 @@ assembler and other various tools.
 
 %package nunit
 Summary:        NUnit Testing Framework
-License:	zlib with acknowledgement
+License:        zlib with acknowledgement
 Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       glib2-devel
@@ -139,6 +141,15 @@ This package provides a fully managed implementation of
 System.Windows.Forms, the default graphical toolkit for .NET
 applications.
 
+%package wcf
+Summary:        Mono implementation of Windows Communication Foundation
+Group:          Development/Languages
+Requires:       mono-core = %{version}-%{release}
+
+%description wcf
+This package provides an implementation of WCF, the Windows Communication
+Foundation.
+
 %package web
 Summary:        ASP.NET, Remoting, and Web Services for Mono
 Group:          Development/Languages
@@ -152,7 +163,7 @@ development of web application, web services and remoting support.
 Summary:        Development files for system.web
 Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
-Requires:	mono-web = %{version}-%{release} pkgconfig
+Requires:       mono-web = %{version}-%{release} pkgconfig
 
 %description web-devel
 This package provides the .pc file for mono-web
@@ -236,9 +247,9 @@ no longer maintained. MySQL AB now provides MySQL Connector/Net
 which is fully managed and actively maintained.
 
 %package -n monodoc
-Summary:	The mono documentation system
-Group:		Documentation
-Requires:	mono-core = %{version}-%{release}
+Summary:        The mono documentation system
+Group:          Documentation
+Requires:       mono-core = %{version}-%{release}
 
 %description -n monodoc
 monodoc is the documentation package for the mono .NET environment
@@ -253,9 +264,9 @@ Requires: mono-core = %{version}-%{release}
 Development file for monodoc
 
 %package moonlight
-Summary:	All the parts required for moonlight compilation
-Group:		Development/Libraries
-Requires:	mono-core = %{version}-%{release}
+Summary:        All the parts required for moonlight compilation
+Group:          Development/Libraries
+Requires:       mono-core = %{version}-%{release}
 
 %description moonlight
 mono-moonlight are all the parts required for moonlight compilation
@@ -281,7 +292,7 @@ mono-moonlight are all the parts required for moonlight compilation
   %{nil}
 
 %prep
-%setup -q 
+%setup -q
 
 %patch0 -p1 -b .ppc-threading
 %patch1 -p1 -b .libdir
@@ -289,8 +300,8 @@ mono-moonlight are all the parts required for moonlight compilation
 %patch3 -p1 -b .uselibdir
 %patch4 -p1 -b .monoservice
 %patch5 -p1 -b .metadata-makefile
+%patch8 -p1 -b .metadata-appconf
 %patch6 -p1 -b .libgdiplus
-%patch8 -p1 -b .glocks-ppc
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
@@ -302,7 +313,7 @@ sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
 autoreconf -f -i -s
 
 # Add undeclared Arg
-sed -i "61a #define ARG_MAX	_POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
+sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 
 # Remove prebuilt binaries
 rm -rf mcs/class/lib/monolite/*
@@ -370,30 +381,20 @@ install monodir %{buildroot}%{_bindir}
 %doc AUTHORS COPYING.LIB ChangeLog NEWS README
 %{_bindir}/mono
 %{_bindir}/monodir
-%{_bindir}/mono-api-*
-%mono_bin csharp
-%{_bindir}/gacutil1
-%mono_bin mod
-%mono_bin mono-cil-strip
-%{monodir}/?.0/mono-api-info*
 %{_bindir}/mono-test-install
-%{_bindir}/gacutil2
 %mono_bin certmgr
 %mono_bin chktrust
+%mono_bin csharp
 %mono_bin gacutil
+%{_bindir}/gacutil1
+%{_bindir}/gacutil2
 %mono_bin gmcs
 %mono_bin mcs
 %{_bindir}/mcs1
 %mono_bin mozroots
-%mono_bin mconfig
 %mono_bin setreg
 %mono_bin sn
-%mono_bin installvst
-%mono_bin monolinker
-%{monodir}/?.0/installutil.*
-%{monodir}/3.5/System.Web.Extensions*
 %{monodir}/2.0/System.Xml.Linq.dll
-%{_bindir}/mkbundle2
 %{_libdir}/libmono.so.*
 %{_libdir}/libmono-profiler-logging.so.*
 %{_mandir}/man1/certmgr.1.gz
@@ -404,12 +405,8 @@ install monodir %{buildroot}%{_bindir}
 %{_mandir}/man1/mozroots.1.gz
 %{_mandir}/man1/setreg.1.gz
 %{_mandir}/man1/sn.1.gz
-%{_mandir}/man1/monolinker.1.gz
-%{_mandir}/man1/resgen.1.gz
-%{_mandir}/man1/mconfig.1.gz
 %{_mandir}/man5/mono-config.5.gz
 %{_mandir}/man1/csharp.1.gz
-%{_mandir}/man1/mono-cil-strip.1.gz
 %{_libdir}/libMonoPosixHelper.so
 %dir %{monodir}
 %dir %{monodir}/1.0
@@ -422,31 +419,27 @@ install monodir %{buildroot}%{_bindir}
 %gac_dll I18N.West
 %gac_dll ICSharpCode.SharpZipLib
 %{monodir}/compat-*/ICSharpCode.SharpZipLib.dll
+%{monodir}/gac/Mono.Cecil
+%{monodir}/gac/Mono.Cecil.Mdb
+%gac_dll cscompmgd
+%gac_dll CustomMarshalers
 %gac_dll Microsoft.VisualC
 %gac_dll Mono.C5
 %gac_dll Mono.Cairo
-%{monodir}/gac/Mono.Cecil
-%{monodir}/gac/Mono.Cecil.Mdb
 %gac_dll Mono.CompilerServices.SymbolWriter
+%gac_dll Mono.CSharp
+%gac_dll System.Drawing
 %gac_dll Mono.GetOptions
+%gac_dll Mono.Management
 %gac_dll Mono.Posix
 %gac_dll Mono.Security
+%gac_dll Mono.Simd
+%gac_dll OpenSystem.C
 %gac_dll System
 %gac_dll System.Configuration
-%gac_dll System.Drawing
+%gac_dll System.Core
 %gac_dll System.Security
 %gac_dll System.Xml
-%gac_dll System.Core
-%gac_dll Mono.CSharp
-%gac_dll Mono.Management
-%gac_dll Mono.Simd
-%gac_dll System.ComponentModel.DataAnnotations
-%gac_dll System.IdentityModel.Selectors
-%gac_dll System.IdentityModel
-%gac_dll System.Runtime.Serialization
-%gac_dll cscompmgd
-%gac_dll CustomMarshalers
-%gac_dll OpenSystem.C
 %{monodir}/gac/System.Xml.Linq
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
@@ -457,17 +450,17 @@ install monodir %{buildroot}%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/config
 %config (noreplace) %{_sysconfdir}/mono/1.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
-%config (noreplace) %{_sysconfdir}/mono/mconfig/config.xml
 %config (noreplace) %{_sysconfdir}/mono/2.0/settings.map
 %{_libdir}/mono-source-libs/
 
 %files devel
 %defattr(-,root,root,-)
+%{_bindir}/mono-api-*
+%{monodir}/?.0/mono-api-info*
 %{_bindir}/monodis
-%{_bindir}/pedump
+%{_bindir}/al1
 %mono_bin_1 al al
 %mono_bin_2 al2 al
-%{_bindir}/al1
 %mono_bin caspol
 %mono_bin cert2spc
 %mono_bin cilc
@@ -476,6 +469,8 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin_1 genxs1 genxs
 %{_bindir}/genxs
 %mono_bin sgen
+%{monodir}/?.0/installutil.*
+%mono_bin installvst
 %mono_bin_1 ilasm ilasm
 %{_bindir}/ilasm1
 %mono_bin_2 ilasm2 ilasm
@@ -483,16 +478,21 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin makecert
 %mono_bin mkbundle
 %{_bindir}/mkbundle1
+%{_bindir}/mkbundle2
+%mono_bin mono-cil-strip
+%mono_bin monolinker
 %mono_bin_1 monop monop
 %{_bindir}/monop1
 %mono_bin_2 monop2 monop
 %mono_bin mono-shlib-cop
 %mono_bin mono-xmltool
+%{_bindir}/pedump
 %mono_bin permview
 %mono_bin prj2make
-%mono_bin_1 resgen resgen
 %{_bindir}/resgen1
+%mono_bin_1 resgen resgen
 %mono_bin_2 resgen2 resgen
+%{_mandir}/man1/resgen.1.gz
 %mono_bin secutil
 %mono_bin signcode
 %mono_bin xbuild
@@ -507,6 +507,8 @@ install monodir %{buildroot}%{_bindir}
 %{_mandir}/man1/macpack.1.gz
 %{_mandir}/man1/makecert.1.gz
 %{_mandir}/man1/mkbundle.1.gz
+%{_mandir}/man1/mono-cil-strip.1.gz
+%{_mandir}/man1/monolinker.1.gz
 %{_mandir}/man1/mono-shlib-cop.1.gz
 %{_mandir}/man1/mono-xmltool.1.gz
 %{_mandir}/man1/monodis.1.gz
@@ -598,40 +600,42 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin_1 mono-service mono-service
 %mono_bin_2 mono-service2 mono-service
 %{monodir}/gac/mono-service
+%gac_dll System.Configuration.Install
 %gac_dll System.Management
 %gac_dll System.Messaging
 %gac_dll System.ServiceProcess
-%gac_dll System.ServiceModel
-%gac_dll System.Configuration.Install
 %gac_dll Microsoft.Vsa
 %gac_dll Mono.Messaging.RabbitMQ
 %gac_dll Mono.Messaging
 %gac_dll RabbitMQ.Client
 
-%files winforms
-%defattr(-,root,root,-)
-%gac_dll System.Windows.Forms
-%gac_dll Accessibility
-%gac_dll System.Design
-%gac_dll System.Drawing.Design
+%files wcf
+%defattr(-, root, root, -)
+%gac_dll System.IdentityModel
+%gac_dll System.IdentityModel.Selectors
+%gac_dll System.Runtime.Serialization
+%gac_dll System.ServiceModel
+%gac_dll System.ServiceModel.Web
 
 %files web
 %defattr(-,root,root,-)
 %gac_dll Mono.Http
 %gac_dll Mono.Web
-%gac_dll Mono.WebBrowser
+%gac_dll System.ComponentModel.DataAnnotations
 %gac_dll System.Runtime.Remoting
-%gac_dll System.Web
 %gac_dll System.Runtime.Serialization.Formatters.Soap
-%{monodir}/compat-2.0/System.Web.Extensions*dll
-%gac_dll System.ServiceModel.Web
+%gac_dll System.Web
 %gac_dll System.Web.Abstractions
 %gac_dll System.Web.DynamicData
+%gac_dll System.Web.Extensions
+%gac_dll System.Web.Extensions.Design
+%{monodir}/compat-2.0/System.Web.Extensions*dll
+%{monodir}/3.5/System.Web.Extensions*
+%gac_dll System.Web.Mvc
 %gac_dll System.Web.Routing
 %gac_dll System.Web.Services
-%gac_dll System.Web.Extensions.Design
-%gac_dll System.Web.Extensions
 %mono_bin disco
+%mono_bin mconfig
 %mono_bin soapsuds
 %mono_bin_1 wsdl wsdl
 %{_bindir}/wsdl1
@@ -639,6 +643,7 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin_2 xsd2 xsd
 %mono_bin_1 xsd xsd
 %{_mandir}/man1/disco.1.gz
+%{_mandir}/man1/mconfig.1.gz
 %{_mandir}/man1/soapsuds.1.gz
 %{_mandir}/man1/wsdl.1.gz
 %{_mandir}/man1/xsd.1.gz
@@ -646,6 +651,7 @@ install monodir %{buildroot}%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/2.0/Browsers/Compat.browser
 %config (noreplace) %{_sysconfdir}/mono/1.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/2.0/DefaultWsdlHelpGenerator.aspx
+%config (noreplace) %{_sysconfdir}/mono/mconfig/config.xml
 %config (noreplace) %{_sysconfdir}/mono/2.0/web.config
 %mono_bin httpcfg
 %{_mandir}/man1/httpcfg.1.gz
@@ -655,6 +661,16 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/mono.web.pc
 %{_libdir}/pkgconfig/system.web.extensions_1.0.pc
 %{_libdir}/pkgconfig/system.web.extensions.design_1.0.pc
+
+%files winforms
+%defattr(-,root,root,-)
+%gac_dll Accessibility
+%gac_dll System.Design
+%gac_dll System.Drawing.Design
+%gac_dll System.Windows.Forms
+# Put here temporarily to break dependency issues
+# (cf. openSUSE packaging). Will be fixed post 1.2.5
+%gac_dll Mono.WebBrowser
 
 %files data
 %defattr(-,root,root,-)
@@ -706,6 +722,7 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/monodoc/*
 %{_libdir}/mono/monodoc/monodoc.dll
 %mono_bin mdoc
+%mono_bin mod
 %{_bindir}/mdoc-*
 %{_bindir}/mdass*
 %{_bindir}/mdval*
@@ -720,6 +737,42 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Aug 25 2009 Michel Salim <salimma@fedoraproject.org> - 2.4.2.3-2
+- Rearrange assemblies to properly fix bz 434709:
+  * mono-core can now be installed on its own, no longer pulling in
+    monodoc, mono-extras and mono-web
+  * mono-web no longer pull in mono-extras
+
+* Wed Jul 29 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2.3.1
+- Update to 2.4.2.3
+
+* Fri Jul 17 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2.2-1
+- Patch for cve-2009-0217
+
+* Thu Jul 09 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2.1-1
+- Bump to 2.4.2.1 release
+- Add system.web.mvc
+
+* Tue Jun 30 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-5
+- Bump to 2.4.2 official release
+- Move mkbundle2 to devel (BZ 497187)
+
+* Mon Jun 22 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-4
+- Bump to 2.4.2 RC 1
+
+* Wed Jun 17 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-3
+- Bump to 2.4.2 preview 2
+- Fix libgdiplus winform patch
+
+* Sun Jun 14 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-2
+- Fix metadata makefile (duplicates appconf.h during make install)
+- Move System.Web to mono-core (bz 434709)
+- Move System.Configuration.Install to mono-core (bz 434709)
+
+* Tue Jun 09 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.4.2-1
+- Bump to 2.4.2 preview
+- remove ppc glocks patch
+
 * Wed Apr 15 2009 Toshio Kuratomi <toshio@fedoraproject.org> 2.4-19
 - And turn off bootstrapping and make sure it rebuilds on all platforms.
 
@@ -951,7 +1004,7 @@ install monodir %{buildroot}%{_bindir}
 * Mon Apr 07 2008 Xavier Lamien <lxtnow@gmail.com> - 1.9-4
 - Added undeclared function bug #xxxx.
 
-* Mon Mar 17 2008 Xavier Lamien	<lxtnow@gmail.com> - 1.9-3
+* Mon Mar 17 2008 Xavier Lamien <lxtnow@gmail.com> - 1.9-3
 - Added require on mono-nunit-devel
 
 * Thu Mar 06 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.9-2

@@ -1,8 +1,8 @@
 #%define svnver 138447
 
 Name:           mono
-Version:        2.4.2.3
-Release:        2%{?dist}
+Version:        2.6
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -18,7 +18,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 2.4.2
+BuildRequires:  libgdiplus-devel >= 2.6
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -43,10 +43,9 @@ Patch1: mono-libdir-126.patch
 Patch2: mono-1.2.3-use-monodir.patch
 Patch3: mono-2.2-uselibdir.patch
 Patch4: mono-2.0-monoservice.patch
-Patch5: mono-2.0-metadata-makefile.patch
+Patch5: mono-2.6-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
-Patch7: mono-22-libdir.patch
-Patch8: mono-242-metadata-appconf.patch
+Patch7: mono-26-libdir.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -263,17 +262,12 @@ Requires: mono-core = %{version}-%{release}
 %description -n monodoc-devel
 Development file for monodoc
 
-%package moonlight
-Summary:        All the parts required for moonlight compilation
-Group:          Development/Libraries
-Requires:       mono-core = %{version}-%{release}
-
-%description moonlight
-mono-moonlight are all the parts required for moonlight compilation
-
 %define monodir %{_libdir}/mono
 %define gac_dll(dll)  %{monodir}/gac/%{1} \
   %{monodir}/?.0/%{1}.dll \
+  %{nil}
+%define gac_dll_2(dll) %{monodir}/gac/%{1} \
+  %{monodir}/?.5/%{1}.dll \
   %{nil}
 %define moon_dll(dll) %{monodir}/gac/%{1} \
   %{monodir}/2.1/%{1}.dll \
@@ -300,7 +294,6 @@ mono-moonlight are all the parts required for moonlight compilation
 %patch3 -p1 -b .uselibdir
 %patch4 -p1 -b .monoservice
 %patch5 -p1 -b .metadata-makefile
-%patch8 -p1 -b .metadata-appconf
 %patch6 -p1 -b .libgdiplus
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
@@ -327,9 +320,9 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
-%configure --with-ikvm=yes --with-jit=yes --with-xen_opt=yes \
-           --with-moonlight=yes --with-preview=yes \
-           --with-libgdiplus=installed
+%configure --with-ikvm-native=yes --with-jit=yes --with-xen_opt=yes \
+           --with-moonlight=yes --with-profile2=yes \
+           --with-libgdiplus=installed 
 make
 
 
@@ -360,8 +353,7 @@ install monodir %{buildroot}%{_bindir}
 %{__rm} %{buildroot}%{_mandir}/man1/oldmono.1
 %{__rm} %{buildroot}%{_mandir}/man1/mint.1
 %{__rm} %{buildroot}%{monodir}/1.0/browsercaps-updater.exe*
-%{__rm} %{buildroot}/%_bindir/smcs
-%{__rm} %{buildroot}/%_libdir/pkgconfig/smcs.pc
+%{__rm} -rf %{buildroot}%{monodir}/xbuild/Microsoft
 
 %find_lang mcs
 
@@ -394,6 +386,9 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin mozroots
 %mono_bin setreg
 %mono_bin sn
+%mono_bin pdb2mdb
+%mono_bin sqlmetal
+%mono_bin svcutil
 %{monodir}/2.0/System.Xml.Linq.dll
 %{_libdir}/libmono.so.*
 %{_libdir}/libmono-profiler-logging.so.*
@@ -407,6 +402,7 @@ install monodir %{buildroot}%{_bindir}
 %{_mandir}/man1/sn.1.gz
 %{_mandir}/man5/mono-config.5.gz
 %{_mandir}/man1/csharp.1.gz
+%{_mandir}/man1/pdb2mdb.1.gz
 %{_libdir}/libMonoPosixHelper.so
 %dir %{monodir}
 %dir %{monodir}/1.0
@@ -440,6 +436,8 @@ install monodir %{buildroot}%{_bindir}
 %gac_dll System.Core
 %gac_dll System.Security
 %gac_dll System.Xml
+%gac_dll Mono.Tasklets
+%gac_dll WindowsBase
 %{monodir}/gac/System.Xml.Linq
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
@@ -518,16 +516,21 @@ install monodir %{buildroot}%{_bindir}
 %{_mandir}/man1/secutil.1.gz
 %{_mandir}/man1/sgen.1.gz
 %{_mandir}/man1/signcode.1.gz
+%{_mandir}/man1/xbuild.1.gz
 %gac_dll PEAPI
 %gac_dll Microsoft.Build.Engine
 %gac_dll Microsoft.Build.Framework
 %gac_dll Microsoft.Build.Tasks
 %gac_dll Microsoft.Build.Utilities
+%gac_dll_2 Microsoft.Build.Tasks.v3.5
+%gac_dll_2 Microsoft.Build.Utilities.v3.5
 %{monodir}/2.0/MSBuild
 %{monodir}/2.0/Microsoft.Build.xsd
 %{monodir}/2.0/Microsoft.*.targets
 %{monodir}/2.0/Microsoft.Common.tasks
 %{monodir}/2.0/xbuild.rsp
+%{monodir}/3.5/Microsoft.Build.Engine.dll
+%{monodir}/3.5/Microsoft.Build.Framework.dll
 %{_bindir}/monograph
 %{_libdir}/libmono-profiler-aot.*
 %{_libdir}/libmono-profiler-cov.*
@@ -549,21 +552,6 @@ install monodir %{buildroot}%{_bindir}
 %dir %{_datadir}/mono-1.0/mono
 %dir %{_datadir}/mono-1.0/mono/cil
 %{_libdir}/mono/1.0/culevel*
-
-%files moonlight
-%defattr(-,root,root,-)
-%{_libdir}/mono/2.1/*.mdb
-%{_libdir}/mono/2.1/smcs.exe
-%{_libdir}/mono/2.1/Mono.CompilerServices.SymbolWriter.dll
-%{_libdir}/mono/2.1/System.Core.dll
-%{_libdir}/mono/2.1/System.Runtime.Serialization.dll
-%{_libdir}/mono/2.1/System.ServiceModel.Web.dll
-%{_libdir}/mono/2.1/System.ServiceModel.dll
-%{_libdir}/mono/2.1/System.Xml.Linq.dll
-%{_libdir}/mono/2.1/System.Xml.dll
-%{_libdir}/mono/2.1/System.dll
-%{_libdir}/mono/2.1/mscorlib.dll
-%moon_dll System.Net
 
 %files nunit
 %defattr(-,root,root,-)
@@ -661,6 +649,7 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/mono.web.pc
 %{_libdir}/pkgconfig/system.web.extensions_1.0.pc
 %{_libdir}/pkgconfig/system.web.extensions.design_1.0.pc
+%{_libdir}/pkgconfig/system.web.mvc.pc
 
 %files winforms
 %defattr(-,root,root,-)
@@ -722,11 +711,10 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/monodoc/*
 %{_libdir}/mono/monodoc/monodoc.dll
 %mono_bin mdoc
-%mono_bin mod
 %{_bindir}/mdoc-*
 %{_bindir}/mdass*
 %{_bindir}/mdval*
-%{_bindir}/mod
+%mono_bin mod
 %{_bindir}/monodoc*
 %{_mandir}/man1/md*
 %{_mandir}/man1/monodoc*
@@ -737,6 +725,13 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Sep 30 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6-1
+- Bump to 2.6
+- Fix metadata makefiles patch
+- Removed metadata-appconf patch (not required)
+- Removed moonlight subpackage
+- Fix configure options
+
 * Tue Aug 25 2009 Michel Salim <salimma@fedoraproject.org> - 2.4.2.3-2
 - Rearrange assemblies to properly fix bz 434709:
   * mono-core can now be installed on its own, no longer pulling in

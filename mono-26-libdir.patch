@@ -74,15 +74,6 @@
  Sources=${assemblies_dir}/Options.cs
  
  Name: Mono.Options
---- mono-2.2/data/smcs.pc.in	2008-11-18 21:10:32.000000000 +0000
-+++ mono-2.2/data/smcs.pc-new.in	2008-11-18 21:17:54.000000000 +0000
-@@ -1,4 +1,4 @@
--assemblies_dir=@prefix@/lib/mono
-+assemblies_dir=@libdir@/mono
- Libraries=${assemblies_dir}/2.1/smcs.exe
- 
- Name: Mono Internal -- Do not use.
-
 --- mono-2.2/data/monodoc.pc.in	2008-11-13 23:22:27.000000000 +0000
 +++ mono-2.2/data/monodoc.pc-new.in	2008-11-26 12:39:50.000000000 +0000
 @@ -1,9 +1,9 @@

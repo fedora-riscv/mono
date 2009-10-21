@@ -1,12 +1,12 @@
 Name:		mono
 Version:        2.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
 License:        MIT
 URL:		http://ftp.novell.com/pub/mono/sources-stable/
-Source0:        http://ftp.novell.com/pub/mono/sources-stable/%{name}-%{version}.tar.bz2
+Source0:        http://ftp.novell.com/pub/mono/sources/mono/%{name}-%{version}.tar.bz2
 Source1:	monodir.c
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -42,6 +42,7 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
 Patch6: mono-22-libgdiwinform.patch
 Patch7: mono-22-libdir.patch
+Patch8: mono-2.2-install.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -144,6 +145,16 @@ Requires:       mono-core = %{version}-%{release}
 %description web
 This package provides the ASP.NET libraries and runtime for
 development of web application, web services and remoting support.
+
+%package web-devel
+Summary:        Development files for system.web
+Group:          Development/Languages
+Requires:       mono-core = %{version}-%{release}
+Requires:       mono-web = %{version}-%{release}
+Requires:       pkgconfig
+
+%description web-devel
+This package provides the .pc file for mono-web
 
 %package data
 Summary:        Database connectivity for Mono
@@ -271,6 +282,9 @@ sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
+sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
+sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
+%patch8 -p1 -b .install-fix
 
 autoreconf -f -i -s
 
@@ -384,7 +398,6 @@ install monodir %{buildroot}%{_bindir}
 %{_mandir}/man1/csharp.1.gz
 %{_mandir}/man1/mono-cil-strip.1.gz
 %{_mandir}/man1/monoburg.1.gz
-%{_mandir}/man1/vbnc.1.gz
 %{_libdir}/libMonoPosixHelper.so
 %dir %{monodir}
 %dir %{monodir}/1.0
@@ -604,6 +617,11 @@ install monodir %{buildroot}%{_bindir}
 %mono_bin httpcfg
 %{_mandir}/man1/httpcfg.1.gz
 
+%files web-devel
+%defattr(-,root,root,-)
+%{_libdir}/pkgconfig/system.web.extensions_1.0.pc
+%{_libdir}/pkgconfig/system.web.extensions.design_1.0.pc
+
 %files data
 %defattr(-,root,root,-)
 %mono_bin sqlsharp
@@ -668,6 +686,13 @@ install monodir %{buildroot}%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Oct 22 2009 Christian Krause <chkr@fedoraproject.org> - 2.2-3
+- Update to official upstream tarball mono-2.2.tar.bz2
+- Add patch to fix install problem (include file was mentioned twice
+  in Makefile)
+- Remove vbnc manual from file list (will be in mono-basic package)
+- Add web-devel subpackage
+
 * Tue Mar 10 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-2
 - Fix mono-cairo libdir issue
 

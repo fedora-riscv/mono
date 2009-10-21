@@ -1,0 +1,11 @@
+diff -uNr mono-2.2.old/mono/metadata/Makefile.am mono-2.2/mono/metadata/Makefile.am
+--- mono-2.2.old/mono/metadata/Makefile.am	2009-10-03 17:05:51.000000000 +0200
++++ mono-2.2/mono/metadata/Makefile.am	2009-10-03 17:08:29.000000000 +0200
+@@ -170,7 +170,6 @@
+ 	object.h	\
+ 	exception.h	\
+ 	profiler.h	\
+-	appdomain.h	\
+ 	mono-config.h	\
+ 	debug-helpers.h	\
+ 	mempool.h

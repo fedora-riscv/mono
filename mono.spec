@@ -2,7 +2,7 @@
 
 Name:           mono
 Version:        2.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -338,7 +338,7 @@ install monodir %{buildroot}%{_bindir}
 
 # copy the mono.snk key into /etc/pki/mono
 mkdir -p %{buildroot}%{_sysconfdir}/pki/mono
-install -p -m0600 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
+install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 %{__rm} %{buildroot}%{_libdir}/*.la
 %{__rm} %{buildroot}%{_libdir}/*.a
@@ -735,6 +735,9 @@ install -p -m0600 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Dec  1 2009 Tom "spot" Callaway <tcallawa@redhat.com> 2.6-3
+- perms on mono.snk should be 0644
+
 * Tue Dec  1 2009 Tom "spot" Callaway <tcallawa@redhat.com> 2.6-2
 - generate and package mono.snk for packages without bundled keys to use
 - put mono.snk in /etc/pki/mono/

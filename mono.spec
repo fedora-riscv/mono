@@ -1,8 +1,8 @@
 #%define svnver 138447
 
 Name:           mono
-Version:        2.6
-Release:        4%{?dist}
+Version:        2.6.1
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -766,6 +766,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Dynamic 
 
 %changelog
+* Mon Dec 21 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.1-1
+- Minor fixes
+
 * Wed Dec 16 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6-4
 - Add in the version 4 previews (subpackage)
 - Add in new soft debugger

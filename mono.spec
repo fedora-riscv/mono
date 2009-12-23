@@ -2,7 +2,7 @@
 
 Name:           mono
 Version:        2.6
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -267,6 +267,14 @@ Requires: mono-core = %{version}-%{release}
 %description -n monodoc-devel
 Development file for monodoc
 
+%package mono-4-preview
+Summary:	Provides preview code for C# 4
+Group:		Development/Languages
+Requires:	mono-core = %{version}-%{release}
+
+%description mono-4-preview
+Preview for the new C# 4.0 code
+	
 %define monodir %{_libdir}/mono
 %define gac_dll(dll)  %{monodir}/gac/%{1} \
   %{monodir}/?.0/%{1}.dll \
@@ -288,6 +296,10 @@ Development file for monodoc
 %define mono_bin_2(bin, dll) %{_bindir}/%{1} \
   %{monodir}/2.0/%{2}.exe \
   %{monodir}/2.0/%{2}.exe.* \
+  %{nil}
+%define mono_bin_4(bin, dll) %{_bindir}/%{1} \
+  %{monodir}/4.0/%{2}.exe \
+  %{monodir}/4.0/%{2}.exe.* \
   %{nil}
 
 %prep
@@ -327,7 +339,7 @@ gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
 %configure --with-ikvm-native=yes --with-jit=yes --with-xen_opt=yes \
            --with-moonlight=yes --with-profile2=yes \
-           --with-libgdiplus=installed 
+           --with-libgdiplus=installed --with-profile4=yes 
 make
 
 
@@ -348,9 +360,10 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{__rm} %{buildroot}%{_bindir}/mono-find-requires
 
 # This was removed upstream:
-%{__rm} -fr %{buildroot}%{monodir}/gac/Mono.Security.Win32/[12]*
+%{__rm} -fr %{buildroot}%{monodir}/gac/Mono.Security.Win32/[124]*
 %{__rm} -rf %{buildroot}%{monodir}/1.0/Mono.Security.Win32.dll
 %{__rm} -rf %{buildroot}%{monodir}/2.0/Mono.Security.Win32.dll
+%{__rm} -rf %{buildroot}%{monodir}/4.0/Mono.Security.Win32
 %{__rm} %{buildroot}%{_datadir}/libgc-mono/README*
 %{__rm} %{buildroot}%{_datadir}/libgc-mono/barrett_diagram
 %{__rm} %{buildroot}%{_datadir}/libgc-mono/*.html
@@ -383,6 +396,8 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_bindir}/mono
 %{_bindir}/monodir
 %{_bindir}/mono-test-install
+%{_bindir}/mono-gdb.py
+%mono_bin lc
 %mono_bin certmgr
 %mono_bin chktrust
 %mono_bin csharp
@@ -412,6 +427,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_mandir}/man5/mono-config.5.gz
 %{_mandir}/man1/csharp.1.gz
 %{_mandir}/man1/pdb2mdb.1.gz
+%{_mandir}/man1/lc.1.gz
 %{_libdir}/libMonoPosixHelper.so
 %dir %{monodir}
 %dir %{monodir}/1.0
@@ -423,6 +439,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll I18N
 %gac_dll I18N.West
 %gac_dll ICSharpCode.SharpZipLib
+%gac_dll Mono.Debugger.Soft
 %{monodir}/compat-*/ICSharpCode.SharpZipLib.dll
 %{monodir}/gac/Mono.Cecil
 %{monodir}/gac/Mono.Cecil.Mdb
@@ -685,6 +702,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll Novell.Directory.Ldap
 %gac_dll System.DirectoryServices
 %gac_dll System.Transactions
+%{_libdir}/mono/gac/System.Data.Services/2.0*
 
 %files data-sqlite
 %defattr(-,root,root,-)
@@ -734,7 +752,24 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %defattr (-, root, root)
 %{_libdir}/pkgconfig/monodoc.pc
 
+%files mono-4-preview
+%config (noreplace) %{_sysconfdir}/mono/4.0/*.config
+%config (noreplace) %{_sysconfdir}/mono/4.0/settings.map
+%dir %{monodir}/4.0
+%dir %{_sysconfdir}/mono/4.0
+%{_bindir}/dmcs
+%{monodir}/4.0/*.exe
+%{monodir}/4.0/*.exe.*
+%{monodir}/4.0/*.dll
+%gac_dll Microsoft.CSharp
+%{_libdir}/mono/gac/System.Data.Services/4.0*
+%gac_dll System.Dynamic 
+
 %changelog
+* Wed Dec 16 2009 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6-4
+- Add in the version 4 previews (subpackage)
+- Add in new soft debugger
+
 * Tue Dec  1 2009 Tom "spot" Callaway <tcallawa@redhat.com> 2.6-3
 - perms on mono.snk should be 0644
 

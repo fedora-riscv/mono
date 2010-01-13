@@ -1,7 +1,7 @@
 #%define svnver 138447
 
 Name:           mono
-Version:        2.4.3
+Version:        2.4.3.1
 Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
@@ -752,6 +752,9 @@ install -m 755 %{SOURCE3} %{buildroot}%{_bindir}/
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Jan 13 2010 Christian Krause <chkr@fedoraproject.org> - 2.4.3.1-1
+- Update to 2.4.3.1
+
 * Wed Dec 23 2009 Christian Krause <chkr@fedoraproject.org> - 2.4.3-1
 - Update to 2.4.3
 - Drop mono-242-metadata-appconf.patch (fixed upstream)

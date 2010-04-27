@@ -1,7 +1,7 @@
 #%define svnver 138447
 
 Name:           mono
-Version:        2.6.3
+Version:        2.6.4
 Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
@@ -23,7 +23,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 2.6
+BuildRequires:  libgdiplus-devel >= 2.6.4
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -49,7 +49,10 @@ Patch3: mono-2.2-uselibdir.patch
 Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.6-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
-Patch7: mono-26-libdir.patch
+Patch7: mono-264-libdir.patch
+
+Obsoletes: mono-mono-4-preview < 2.6.4
+Provides: mono-4-preview = %{version}-%{release}
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -316,9 +319,6 @@ Preview for the new C# 4.0 code
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
-sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
-sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
-sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
 
 autoreconf -f -i -s
@@ -771,6 +771,15 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Dynamic 
 
 %changelog
+* Tue Apr 27 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.4-1
+- Bump to 2.6.4 release
+- BR now requires libgdiplus-2.6.4
+- Updated libdir patch
+- Spec cleanup
+
+* Fri Mar 19 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.3-2
+- Forgt to add the obsoletes and provides for the new name mono-4-preview
+
 * Fri Mar 19 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.3-1
 - Bump to bugfix release
 - Added RabbitMQ to extras

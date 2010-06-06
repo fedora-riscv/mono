@@ -2,7 +2,7 @@
 
 Name:           mono
 Version:        2.6.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -321,6 +321,7 @@ sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
 sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/monodoc.pc.in
+sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/mono-cairo.pc.in
 
 autoreconf -f -i -s
 
@@ -772,6 +773,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Dynamic 
 
 %changelog
+* Sun Jun 06 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.4-3
+- Fix for x86_64 mono-cairo.pc
+
 * Sun May 30 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.4-2
 - Fix libs for monodoc on x86_64
 

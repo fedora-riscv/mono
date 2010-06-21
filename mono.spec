@@ -1,8 +1,8 @@
 #%define svnver 138447
 
 Name:           mono
-Version:        2.6.1
-Release:        2%{?dist}
+Version:        2.6.4
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -49,7 +49,8 @@ Patch3: mono-2.2-uselibdir.patch
 Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.6-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
-Patch7: mono-26-libdir.patch
+Patch7: mono-264-libdir.patch
+
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -268,12 +269,13 @@ Requires: mono-core = %{version}-%{release}
 %description -n monodoc-devel
 Development file for monodoc
 
-%package mono-4-preview
+%package -n mono-4-preview
 Summary:  Provides preview code for C# 4
 Group:    Development/Languages
 Requires: mono-core = %{version}-%{release}
+Obsoletes: mono-mono-4-preview < 2.6.4
 
-%description mono-4-preview
+%description -n mono-4-preview
 Preview for the new C# 4.0 code
 
 %define monodir %{_libdir}/mono
@@ -316,10 +318,9 @@ Preview for the new C# 4.0 code
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
-sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
-sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
-sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions.design_1.0.pc.in
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
+sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/monodoc.pc.in
+sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/mono-cairo.pc.in
 
 autoreconf -f -i -s
 
@@ -624,6 +625,8 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll Mono.Messaging.RabbitMQ
 %gac_dll Mono.Messaging
 %gac_dll RabbitMQ.Client
+%{_libdir}/mono/1.0/RabbitMQ.Client.Apigen*
+%{_libdir}/mono/2.0/RabbitMQ.Client.Apigen*
 
 %files wcf
 %defattr(-, root, root, -)
@@ -753,7 +756,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %defattr (-, root, root)
 %{_libdir}/pkgconfig/monodoc.pc
 
-%files mono-4-preview
+%files -n mono-4-preview
 %defattr (-, root, root)
 %config (noreplace) %{_sysconfdir}/mono/4.0/*.config
 %config (noreplace) %{_sysconfdir}/mono/4.0/settings.map
@@ -762,12 +765,22 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_bindir}/dmcs
 %{monodir}/4.0/*.exe
 %{monodir}/4.0/*.exe.*
-%{monodir}/4.0/*.dll
+%{monodir}/4.0/Mono.Security.Win32.dll
+%{monodir}/4.0/System.Xml.Linq.dll
 %gac_dll Microsoft.CSharp
 %{_libdir}/mono/gac/System.Data.Services/4.0*
 %gac_dll System.Dynamic 
 
 %changelog
+* Mon Jun 21 2010 Christian Krause <chkr@fedoraproject.org> - 2.6.4-1
+- Fix for x86_64 mono-cairo.pc
+- Fix libs for monodoc on x86_64
+- Bump to 2.6.4 release
+- Updated libdir patch
+- Spec cleanup
+- Added RabbitMQ to extras
+- Correct the name for mono-4-preview
+
 * Mon Feb 22 2010 Christian Krause <chkr@fedoraproject.org> - 2.6.1-2
 - Fix upgrade path F12 -> F13 by obsoleting and providing mono-moonlight
 - Minor spec file cleanup

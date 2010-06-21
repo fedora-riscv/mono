@@ -61,7 +61,7 @@ metadata access libraries.
 %package core
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
-Requires:       libgdiplus
+Requires:       libgdiplus >= 2.6.4
 Obsoletes:      mono-moonlight < 2.6
 Provides:       mono-moonlight = %{version}-%{release}
 
@@ -773,6 +773,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 %changelog
 * Mon Jun 21 2010 Christian Krause <chkr@fedoraproject.org> - 2.6.4-1
+- Require libgdiplus >= 2.6.4
 - Fix for x86_64 mono-cairo.pc
 - Fix libs for monodoc on x86_64
 - Bump to 2.6.4 release

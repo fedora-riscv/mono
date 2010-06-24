@@ -2,7 +2,7 @@
 
 Name:           mono
 Version:        2.4.3.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -52,6 +52,8 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
 Patch7: mono-22-libdir.patch
+# http://anonsvn.mono-project.com/viewvc?view=revision&revision=156450
+Patch8: mono-2.4.3.1-CVE-2010-1459.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -306,6 +308,7 @@ mono-moonlight are all the parts required for moonlight compilation
 %patch6 -p1 -F 2 -b .libgdiplus
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
+%patch8 -p2 -F 3 -b .cve-2010-1459
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
@@ -752,6 +755,10 @@ install -m 755 %{SOURCE3} %{buildroot}%{_bindir}/
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Jun 24 2010 Christian Krause <chkr@fedoraproject.org> - 2.4.3.1-2
+- Add upstream patch for CVE-2010-1459:
+  http://anonsvn.mono-project.com/viewvc?view=revision&revision=156450
+
 * Wed Jan 13 2010 Christian Krause <chkr@fedoraproject.org> - 2.4.3.1-1
 - Update to 2.4.3.1
 

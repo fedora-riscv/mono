@@ -1,8 +1,8 @@
-#%define svnver 138447
+#%%define svnver 138447
 
 Name:           mono
 Version:        2.6.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -50,6 +50,9 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.6-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
 Patch7: mono-264-libdir.patch
+# svn diff -c 158081 svn://anonsvn.mono-project.com/source/trunk
+# to fix https://bugzilla.novell.com/show_bug.cgi?id=485841
+Patch8: mono-2.6.4-xbuild-fix.patch
 
 Obsoletes: mono-mono-4-preview < 2.6.4
 Provides: mono-4-preview = %{version}-%{release}
@@ -319,6 +322,7 @@ Preview for the new C# 4.0 code
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
+%patch8 -p0 -b .xbuild
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
 sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/monodoc.pc.in
 sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/mono-cairo.pc.in
@@ -773,6 +777,10 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Dynamic 
 
 %changelog
+* Thu Jul 08 2010 Christian Krause <chkr@fedoraproject.org> - 2.6.4-4
+- Add upstream patch to fix xbuild (BZ 612233, 
+  https://bugzilla.novell.com/show_bug.cgi?id=485841)
+
 * Sun Jun 06 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.4-3
 - Fix for x86_64 mono-cairo.pc
 

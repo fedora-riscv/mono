@@ -1,8 +1,8 @@
 #%%define svnver 138447
 
 Name:           mono
-Version:        2.6.4
-Release:        4%{?dist}
+Version:        2.6.7
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -23,7 +23,7 @@ BuildRequires:  bison
 BuildRequires:  glib2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  libicu-devel
-BuildRequires:  libgdiplus-devel >= 2.6.4
+BuildRequires:  libgdiplus-devel >= 2.6.7
 BuildRequires:  zlib-devel
 %ifarch ia64
 BuildRequires:  libunwind
@@ -50,9 +50,7 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.6-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
 Patch7: mono-264-libdir.patch
-# svn diff -c 158081 svn://anonsvn.mono-project.com/source/trunk
-# to fix https://bugzilla.novell.com/show_bug.cgi?id=485841
-Patch8: mono-2.6.4-xbuild-fix.patch
+Patch8: mono-267-c4.patch
 
 Obsoletes: mono-mono-4-preview < 2.6.4
 Provides: mono-4-preview = %{version}-%{release}
@@ -321,8 +319,8 @@ Preview for the new C# 4.0 code
 %patch6 -p1 -b .libgdiplus
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
+%patch8 -p1 -b .c4
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
-%patch8 -p0 -b .xbuild
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
 sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/monodoc.pc.in
 sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/mono-cairo.pc.in
@@ -346,7 +344,7 @@ gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
 %configure --with-ikvm-native=yes --with-jit=yes --with-xen_opt=yes \
            --with-moonlight=yes --with-profile2=yes \
-           --with-libgdiplus=installed --with-profile4=yes 
+           --with-libgdiplus=installed --with-profile4=yes
 make
 
 
@@ -413,6 +411,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_bindir}/gacutil2
 %mono_bin gmcs
 %mono_bin mcs
+%mono_bin xbuild
 %{_bindir}/mcs1
 %mono_bin mozroots
 %mono_bin setreg
@@ -471,6 +470,8 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Xml
 %gac_dll Mono.Tasklets
 %gac_dll WindowsBase
+%{_libdir}/mono/gac/Microsoft.Build.Tasks.v4.0/4.0*
+%{_libdir}/mono/gac/Microsoft.Build.Utilities.v4.0/4.0*
 %{monodir}/gac/System.Xml.Linq
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
@@ -563,8 +564,14 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{monodir}/2.0/Microsoft.*.targets
 %{monodir}/2.0/Microsoft.Common.tasks
 %{monodir}/2.0/xbuild.rsp
+%{monodir}/3.5/xbuild.*
 %{monodir}/3.5/Microsoft.Build.Engine.dll
 %{monodir}/3.5/Microsoft.Build.Framework.dll
+%{monodir}/3.5/MSBuild/Microsoft.Build*
+%{monodir}/3.5/Microsoft.Build.xsd
+%{monodir}/3.5/Microsoft.CSharp.targets
+%{monodir}/3.5/Microsoft.Common.ta*
+%{monodir}/3.5/Microsoft.VisualBasic.targets
 %{_bindir}/monograph
 %{_libdir}/libmono-profiler-aot.*
 %{_libdir}/libmono-profiler-cov.*
@@ -772,11 +779,22 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{monodir}/4.0/*.exe.*
 %{monodir}/4.0/Mono.Security.Win32.dll
 %{monodir}/4.0/System.Xml.Linq.dll
+%{monodir}/4.0/MSBuild/Microsoft*
+%{monodir}/4.0/Microsoft*
+%{monodir}/compat-2.0/System.Web.Mvc.dll
 %gac_dll Microsoft.CSharp
 %{_libdir}/mono/gac/System.Data.Services/4.0*
 %gac_dll System.Dynamic 
+%{monodir}/4.0/xbuild*
 
 %changelog
+* Tue Jul 13 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.7-1
+- Update to 2.6.7 release candidate 1
+- Change libgdiplus BR version to 2.6.7
+- Drop xbuild patch (fixed in source)
+- Add patch from novell to get the preview-4 to build
+- Add additional dlls etc normally found with a bump...
+
 * Thu Jul 08 2010 Christian Krause <chkr@fedoraproject.org> - 2.6.4-4
 - Add upstream patch to fix xbuild (BZ 612233, 
   https://bugzilla.novell.com/show_bug.cgi?id=485841)

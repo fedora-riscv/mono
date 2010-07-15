@@ -1,8 +1,14 @@
 #%%define svnver 138447
 
+%ifnarch s390 s390x
+%define with_mono4 1
+%else
+%define with_mono4 0
+%endif
+
 Name:           mono
 Version:        2.6.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -52,8 +58,10 @@ Patch6: mono-242-libgdiplusconfig.patch
 Patch7: mono-264-libdir.patch
 Patch8: mono-267-c4.patch
 
+%if %{with_mono4}
 Obsoletes: mono-mono-4-preview < 2.6.4
 Provides: mono-4-preview = %{version}-%{release}
+%endif
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -272,6 +280,7 @@ Requires: mono-core = %{version}-%{release}
 %description -n monodoc-devel
 Development file for monodoc
 
+%if %{with_mono4}
 %package -n mono-4-preview
 Summary:  Provides preview code for C# 4
 Group:    Development/Languages
@@ -279,6 +288,7 @@ Requires: mono-core = %{version}-%{release}
 
 %description -n mono-4-preview
 Preview for the new C# 4.0 code
+%endif
 
 %define monodir %{_libdir}/mono
 %define gac_dll(dll)  %{monodir}/gac/%{1} \
@@ -334,7 +344,7 @@ sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 rm -rf mcs/class/lib/monolite/*
 
 %build
-%ifarch ia64 s390 s390x
+%ifarch ia64
 export CFLAGS="-O2 -fno-strict-aliasing"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
@@ -344,7 +354,11 @@ gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
 %configure --with-ikvm-native=yes --with-jit=yes --with-xen_opt=yes \
            --with-moonlight=yes --with-profile2=yes \
-           --with-libgdiplus=installed --with-profile4=yes
+           --with-libgdiplus=installed \
+%if %{with_mono4}
+           --with-profile4=yes
+%endif
+
 make
 
 
@@ -470,8 +484,6 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Xml
 %gac_dll Mono.Tasklets
 %gac_dll WindowsBase
-%{_libdir}/mono/gac/Microsoft.Build.Tasks.v4.0/4.0*
-%{_libdir}/mono/gac/Microsoft.Build.Utilities.v4.0/4.0*
 %{monodir}/gac/System.Xml.Linq
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
@@ -484,6 +496,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/2.0/settings.map
 %{_libdir}/mono-source-libs/
+%{monodir}/compat-2.0/System.Web.Mvc.dll
 
 %files devel
 %defattr(-,root,root,-)
@@ -768,6 +781,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %defattr (-, root, root)
 %{_libdir}/pkgconfig/monodoc.pc
 
+%if %{with_mono4}
 %files -n mono-4-preview
 %defattr (-, root, root)
 %config (noreplace) %{_sysconfdir}/mono/4.0/*.config
@@ -781,13 +795,18 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{monodir}/4.0/System.Xml.Linq.dll
 %{monodir}/4.0/MSBuild/Microsoft*
 %{monodir}/4.0/Microsoft*
-%{monodir}/compat-2.0/System.Web.Mvc.dll
 %gac_dll Microsoft.CSharp
 %{_libdir}/mono/gac/System.Data.Services/4.0*
 %gac_dll System.Dynamic 
 %{monodir}/4.0/xbuild*
+%{_libdir}/mono/gac/Microsoft.Build.Tasks.v4.0/4.0*
+%{_libdir}/mono/gac/Microsoft.Build.Utilities.v4.0/4.0*
+%endif
 
 %changelog
+* Thu Jul 15 2010 Dan Horák <dan[at]danny.cz> - 2.6.7-2
+- conditionalize the C# 4.0 support, don't build it on s390(x)
+
 * Tue Jul 13 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.7-1
 - Update to 2.6.7 release candidate 1
 - Change libgdiplus BR version to 2.6.7

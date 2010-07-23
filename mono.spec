@@ -8,7 +8,7 @@
 
 Name:           mono
 Version:        2.6.7
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -56,7 +56,6 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.6-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
 Patch7: mono-264-libdir.patch
-Patch8: mono-267-c4.patch
 
 %if %{with_mono4}
 Obsoletes: mono-mono-4-preview < 2.6.4
@@ -329,7 +328,6 @@ Preview for the new C# 4.0 code
 %patch6 -p1 -b .libgdiplus
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
-%patch8 -p1 -b .c4
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
 sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/monodoc.pc.in
@@ -497,6 +495,10 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %config (noreplace) %{_sysconfdir}/mono/2.0/settings.map
 %{_libdir}/mono-source-libs/
 %{monodir}/compat-2.0/System.Web.Mvc.dll
+%if %{with_mono4}
+%{_libdir}/mono/gac/Microsoft.Build.Tasks.v4.0/4.0*
+%{_libdir}/mono/gac/Microsoft.Build.Utilities.v4.0/4.0*
+%endif
 
 %files devel
 %defattr(-,root,root,-)
@@ -799,11 +801,14 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_libdir}/mono/gac/System.Data.Services/4.0*
 %gac_dll System.Dynamic 
 %{monodir}/4.0/xbuild*
-%{_libdir}/mono/gac/Microsoft.Build.Tasks.v4.0/4.0*
-%{_libdir}/mono/gac/Microsoft.Build.Utilities.v4.0/4.0*
 %endif
 
 %changelog
+* Wed Jul 21 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.7-3
+- Bump to full release
+- Remove patch 8 (preview-4 patch)
+- Put Build.Utilities.v4 back into the core part as it's needed in core
+
 * Thu Jul 15 2010 Dan Horák <dan[at]danny.cz> - 2.6.7-2
 - conditionalize the C# 4.0 support, don't build it on s390(x)
 

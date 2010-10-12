@@ -1,38 +1,38 @@
---- mono-2.6/mono/metadata/Makefile.am	2009-09-25 15:58:10.000000000 +0100
-+++ mono-2.6/mono/metadata/Makefile-new.am	2009-09-30 19:23:39.000000000 +0100
+--- mono-2.8/mono/metadata/Makefile.am	2010-09-10 21:55:45.000000000 +0100
++++ mono-2.8/mono/metadata/Makefile-new.am	2010-09-15 13:47:56.378549804 +0100
 @@ -20,7 +20,7 @@
  AM_CFLAGS = -O
  else
  
 -assembliesdir = $(exec_prefix)/lib
-+assembliesdir = $(libdir)
++assembliesdir = @LIBDIR@
  confdir = $(sysconfdir)
  unix_sources = \
  	console-unix.c
-@@ -36,7 +36,7 @@
- #
- noinst_LTLIBRARIES = libmonoruntime.la libmonoruntime-static.la
+@@ -40,7 +40,7 @@
+ 
+ noinst_LTLIBRARIES = libmonoruntime.la libmonoruntime-static.la $(sgen_libraries)
  
 -INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/mono $(LIBGC_CFLAGS) $(GLIB_CFLAGS) -DMONO_BINDIR=\"$(bindir)/\" -DMONO_ASSEMBLIES=\"$(assembliesdir)\" -DMONO_CFG_DIR=\"$(confdir)\"
 +INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/mono $(LIBGC_CFLAGS) $(GLIB_CFLAGS) -DMONO_BINDIR=\"$(bindir)/\" -DMONO_ASSEMBLIES=\"$(assembliesdir)\" -DMONO_CFG_DIR=\"$(confdir)\" -DMONO_RELOC_LIBDIR=\"$(reloc_libdir)\"
  
  #
  # Make sure any prefix changes are updated in the binaries too.
---- mono-2.6/mono/metadata/Makefile.in	2009-09-30 17:34:17.000000000 +0100
-+++ mono-2.6/mono/metadata/Makefile-new.in	2009-09-30 19:27:02.000000000 +0100
-@@ -372,7 +372,7 @@
+--- mono-2.8/mono/metadata/Makefile.in	2010-09-10 21:58:23.000000000 +0100
++++ mono-2.8/mono/metadata/Makefile-new.in	2010-09-15 13:51:58.500133920 +0100
+@@ -713,7 +713,7 @@
  # The files that use MONO_ASSEMBLIES and/or MONO_CFG_DIR replace the
  # / by \ if running under WIN32.
- @CROSS_COMPILING_TRUE@@PLATFORM_WIN32_TRUE@assembliesdir = ${libdir}
--@PLATFORM_WIN32_FALSE@assembliesdir = $(exec_prefix)/lib
-+@PLATFORM_WIN32_FALSE@assembliesdir = $(libdir)
- @CROSS_COMPILING_FALSE@@PLATFORM_WIN32_TRUE@confdir = `cygpath -m "${sysconfdir}"`
- @CROSS_COMPILING_TRUE@@PLATFORM_WIN32_TRUE@confdir = ${sysconfdir}
- @PLATFORM_WIN32_FALSE@confdir = $(sysconfdir)
-@@ -388,7 +388,7 @@
- # convenience lib, so we have to do it ourselves
+ @CROSS_COMPILING_TRUE@@HOST_WIN32_TRUE@assembliesdir = ${libdir}
+-@HOST_WIN32_FALSE@assembliesdir = $(exec_prefix)/lib
++@HOST_WIN32_FALSE@assembliesdir = @LIBDIR@
+ @CROSS_COMPILING_FALSE@@HOST_WIN32_TRUE@confdir = `cygpath -m "${sysconfdir}"`
+ @CROSS_COMPILING_TRUE@@HOST_WIN32_TRUE@confdir = ${sysconfdir}
+ @HOST_WIN32_FALSE@confdir = $(sysconfdir)
+@@ -730,7 +730,7 @@
  #
- noinst_LTLIBRARIES = libmonoruntime.la libmonoruntime-static.la
+ @SUPPORT_SGEN_TRUE@sgen_libraries = libmonoruntimesgen.la libmonoruntimesgen-static.la 
+ noinst_LTLIBRARIES = libmonoruntime.la libmonoruntime-static.la $(sgen_libraries)
 -INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/mono $(LIBGC_CFLAGS) $(GLIB_CFLAGS) -DMONO_BINDIR=\"$(bindir)/\" -DMONO_ASSEMBLIES=\"$(assembliesdir)\" -DMONO_CFG_DIR=\"$(confdir)\"
 +INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/mono $(LIBGC_CFLAGS) $(GLIB_CFLAGS) -DMONO_BINDIR=\"$(bindir)/\" -DMONO_ASSEMBLIES=\"$(assembliesdir)\" -DMONO_CFG_DIR=\"$(confdir)\" -DMONO_RELOC_LIBDIR=\"$(reloc_libdir)\"
  CLEANFILES = mono-bundle.stamp

@@ -6,7 +6,7 @@
 
 Name:           mono
 Version:        2.8
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -327,13 +327,9 @@ rm -rf mcs/class/lib/monolite/*
 
 %build
 %ifarch ia64
-export CFLAGS="-O2 -fno-strict-aliasing -m32"
+export CFLAGS="-O2 -fno-strict-aliasing"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
-%endif
-
-%ifarch x86_64
-export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -m32"
 %endif
 
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
@@ -863,6 +859,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %endif
 
 %changelog
+* Thu Oct 14 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8-3
+- Remove m32 CFLAGS
+
 * Wed Oct 13 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8-2
 - Fix URL
 - Attempt to fix 64 bit build problem by adding -m32 to the CFLAGS

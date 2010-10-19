@@ -6,7 +6,7 @@
 
 Name:           mono
 Version:        2.8
-Release:        3%{?dist}
+Release:        5%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -336,10 +336,11 @@ gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
 %configure --with-ikvm-native=yes --with-jit=yes --with-xen_opt=yes \
            --with-moonlight=yes --with-profile2=yes \
-           --with-libgdiplus=installed \
+           --with-libgdiplus=installed --with-sgen=no \
 %if %{with_mono4}
            --with-profile4=yes
 %endif
+
 
 make
 
@@ -859,6 +860,12 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %endif
 
 %changelog
+* Tue Oct 19 2010 paul <paul@all-the-johnsons.co.uk> - 2.8-5
+- rebuilt
+
+* Tue Oct 19 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8-4
+- Remove sgen compilation (should fix 64 bit build problems)
+
 * Thu Oct 14 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8-3
 - Remove m32 CFLAGS
 

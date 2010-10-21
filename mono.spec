@@ -6,7 +6,7 @@
 
 Name:           mono
 Version:        2.8
-Release:        6%{?dist}
+Release:        6.1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -504,6 +504,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_bindir}/prj2make
 %mono_bin resgen
 %{_bindir}/resgen2
+%{_bindir}/sgen
 %{_bindir}/secutil
 %{_bindir}/signcode
 %{_bindir}/pedump
@@ -857,8 +858,8 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %endif
 
 %changelog
-* Wed Oct 20 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8-6
-- Removed mono-sgen and sgen from mono-devel (for now)
+* Wed Oct 20 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8-6.1
+- Removed mono-sgen from mono-devel (for now)
 
 * Tue Oct 19 2010 paul <paul@all-the-johnsons.co.uk> - 2.8-5
 - rebuilt

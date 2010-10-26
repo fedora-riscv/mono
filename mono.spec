@@ -6,7 +6,7 @@
 
 Name:           mono
 Version:        2.8
-Release:        6.1%{?dist}
+Release:        7%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -53,6 +53,7 @@ Patch3: mono-2.2-uselibdir.patch
 Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.8-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
+Patch7: mono-2.8-monodis.patch
 
 %if %{with_mono4}
 Obsoletes: mono-mono-4-preview < 2.6.4
@@ -316,7 +317,7 @@ sed -i -e 's!%{_libdir}!@LIBDIR@!' %{PATCH5}
 %patch3 -p1 -b .uselibdir
 %patch4 -p1 -b .monoservice
 %patch6 -p1 -b .libgdiplus
-
+%patch7 -p1 -b .monodis
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -471,6 +472,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_libdir}/mono-source-libs/
 %{monodir}/compat-2.0/System.Web.Mvc.dll
 %{_libdir}/libmono*-2.0.so.*
+%{_libdir}/libmono-profiler-*.so.*
 
 %files devel
 %defattr(-,root,root,-)
@@ -494,6 +496,8 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %mono_bin mkbundle
 %{_bindir}/makecert
 %{_bindir}/mono-cil-strip
+%{_bindir}/monodis
+%{_bindir}/monograph
 %mono_bin monolinker
 %{_bindir}/mono-shlib-cop
 %{_bindir}/mono-xmltool
@@ -520,6 +524,8 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_mandir}/man1/makecert.1.gz
 %{_mandir}/man1/mkbundle.1.gz
 %{_mandir}/man1/mono-cil-strip.1.gz
+%{_mandir}/man1/monodis.1.gz
+%{_datadir}/mono-2.0/mono/cil/cil-opcodes.xml
 %{_mandir}/man1/monolinker.1.gz
 %{_mandir}/man1/mono-shlib-cop.1.gz
 %{_mandir}/man1/mono-xmltool.1.gz
@@ -554,6 +560,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{monodir}/3.5/Microsoft.VisualBasic.targets
 %{_libdir}/libMonoSupportW.so
 %{_libdir}/libikvm-native.so
+%{_libdir}/libmono-profiler-*.so
 %{_libdir}/pkgconfig/dotnet.pc
 %{_libdir}/pkgconfig/mono-cairo.pc
 %{_libdir}/pkgconfig/mono.pc
@@ -566,6 +573,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_includedir}/mono-2.0/mono/jit/jit.h
 %{_includedir}/mono-2.0/mono/metadata/*.h
 %{_includedir}/mono-2.0/mono/utils/*.h
+%{_includedir}/mono-2.0/mono/cil/opcode.def
 %{_libdir}/libmono*-2.0.so
 
 %files nunit
@@ -858,6 +866,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %endif
 
 %changelog
+* Tue Oct 26 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8-7
+- Add fix for monodis to be built when moonlight=yes is used
+
 * Wed Oct 20 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8-6.1
 - Removed mono-sgen from mono-devel (for now)
 

@@ -1,4 +1,4 @@
-%ifnarch s390 s390x
+%if 1
 %define with_mono4 1
 %else
 %define with_mono4 0
@@ -6,7 +6,7 @@
 
 Name:           mono
 Version:        2.8
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -338,8 +338,11 @@ gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 %configure --with-ikvm-native=yes --with-jit=yes --with-xen_opt=yes \
            --with-moonlight=yes --with-profile2=yes \
            --with-libgdiplus=installed --with-sgen=no \
-%if %{with_mono4}
-           --with-profile4=yes
+%if ! %{with_mono4}
+           --with-profile4=no \
+%endif
+%ifnarch %{ix86} x86_64 %{arm}
+            --disable-system-aot
 %endif
 
 make
@@ -368,12 +371,12 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{__rm} %{buildroot}%{_datadir}/libgc-mono/barrett_diagram
 %{__rm} %{buildroot}%{_datadir}/libgc-mono/*.html
 %{__rm} %{buildroot}%{_datadir}/libgc-mono/gc.man
-%{__rm} %{buildroot}%{_libdir}/mono/2.0/mscorlib.dll.so
-%{__rm} %{buildroot}%{_libdir}/mono/2.0/gmcs.exe.so
+%{__rm} -f %{buildroot}%{_libdir}/mono/2.0/mscorlib.dll.so
+%{__rm} -f %{buildroot}%{_libdir}/mono/2.0/gmcs.exe.so
 %{__rm} -rf %{buildroot}%{monodir}/xbuild/Microsoft
 %if %{with_mono4}
-%{__rm} %{buildroot}%{_libdir}/mono/4.0/mscorlib.dll.so
-%{__rm} %{buildroot}%{_libdir}/mono/4.0/dmcs.exe.so
+%{__rm} -f %{buildroot}%{_libdir}/mono/4.0/mscorlib.dll.so
+%{__rm} -f %{buildroot}%{_libdir}/mono/4.0/dmcs.exe.so
 %{__rm} -rf %{buildroot}%{monodir}/4.0/Mono.Security.Win32
 %{__rm} -rf %{buildroot}%{_bindir}/mono-configuration-crypto
 %endif
@@ -866,6 +869,11 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %endif
 
 %changelog
+* Tue Nov 23 2010 Dan Horák <dan[at]danny.cz> 2.8-8
+- enable C# 4.0 for everyone
+- AOT works only on x86/x86_64 and ARM
+- the *.so files exist only on AOT platforms
+
 * Tue Oct 26 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8-7
 - Add fix for monodis to be built when moonlight=yes is used
 

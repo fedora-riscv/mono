@@ -6,7 +6,7 @@
 
 Name:           mono
 Version:        2.8
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -44,7 +44,7 @@ BuildRequires: automake libtool gettext-devel
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390 s390x ppc ppc64
+ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390x ppc ppc64
 
 Patch0: mono-2.8-ppc-thread.patch
 Patch1: mono-2.8-libdir.patch
@@ -869,6 +869,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %endif
 
 %changelog
+* Wed Nov 24 2010 Dan Horák <dan[at]danny.cz> 2.8-9
+- mono 2.8+ dropps support for s390
+
 * Tue Nov 23 2010 Dan Horák <dan[at]danny.cz> 2.8-8
 - enable C# 4.0 for everyone
 - AOT works only on x86/x86_64 and ARM

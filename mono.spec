@@ -5,8 +5,8 @@
 %endif
 
 Name:           mono
-Version:        2.8
-Release:        9%{?dist}
+Version:        2.8.1
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -52,8 +52,9 @@ Patch2: mono-1.2.3-use-monodir.patch
 Patch3: mono-2.2-uselibdir.patch
 Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.8-metadata-makefile.patch
-Patch6: mono-242-libgdiplusconfig.patch
+Patch6: mono-281-libgdiplusconfig.patch
 Patch7: mono-2.8-monodis.patch
+Patch8: mono-281-moonlightbuild.patch
 
 %if %{with_mono4}
 Obsoletes: mono-mono-4-preview < 2.6.4
@@ -73,8 +74,8 @@ metadata access libraries.
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
 Requires:       libgdiplus
-Obsoletes:      mono-moonlight < 2.6
-Provides:       mono-moonlight = %{version}-%{release}
+#Obsoletes:      mono-moonlight < 2.6
+#Provides:       mono-moonlight = %{version}-%{release}
 
 %description core
 This package contains the core of the Mono runtime including its
@@ -159,7 +160,7 @@ Requires:       mono-core = %{version}-%{release}
 %description extras
 This package provides the libary and application to run services
 and daemons with Mono. It also includes stubs for the following
-.NET 1.1 and 2.0 assemblies: Microsoft.Vsa,
+2.0 assemblies: Microsoft.Vsa,
 System.Configuration.Install, System.Management, System.Messaging.
 
 %package winforms
@@ -318,6 +319,7 @@ sed -i -e 's!%{_libdir}!@LIBDIR@!' %{PATCH5}
 %patch4 -p1 -b .monoservice
 %patch6 -p1 -b .libgdiplus
 %patch7 -p1 -b .monodis
+%patch8 -p1 -b .fixsockets
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -336,7 +338,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 
 %configure --with-ikvm-native=yes --with-jit=yes --with-xen_opt=yes \
-           --with-moonlight=yes --with-profile2=yes \
+           --with-moonlight=no --with-profile2=yes --with-monotouch=no \
            --with-libgdiplus=installed --with-sgen=no \
 %if ! %{with_mono4}
            --with-profile4=no \
@@ -869,6 +871,13 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %endif
 
 %changelog
+* Tue Dec 07 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8.1-1
+- Bump to latest bug release version
+- Fix libgdiplus config patch
+- Add moonlight build patch
+- Disable moonlight profile (currently broken)
+- Minor spec file changes
+
 * Wed Nov 24 2010 Dan Horák <dan[at]danny.cz> 2.8-9
 - mono 2.8+ dropps support for s390
 

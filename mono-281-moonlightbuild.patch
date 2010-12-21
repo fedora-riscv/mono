@@ -1,0 +1,14 @@
+--- mono-2.8.1/mcs/class/System/System.Net.Sockets/Socket_2_1.cs	2010-11-12 10:24:41.000000000 +0000
++++ mono-2.8.1/mcs/class/System/System.Net.Sockets/Socket_2_1-new.cs	2010-11-24 19:45:15.538121958 +0000
+@@ -485,7 +485,11 @@
+ 				throw new ArgumentNullException ("remoteEP");
+ 
+ 			IPEndPoint ep = remoteEP as IPEndPoint;
++#if !MOONLIGHT
+ 			if (ep != null && socket_type != SocketType.Dgram) /* Dgram uses Any to 'disconnect' */
++#else
++			  if(ep != null)
++#endif
+ 				if (ep.Address.Equals (IPAddress.Any) || ep.Address.Equals (IPAddress.IPv6Any))
+ 					throw new SocketException ((int) SocketError.AddressNotAvailable);
+ 

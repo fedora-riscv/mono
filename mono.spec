@@ -44,7 +44,7 @@ BuildRequires: automake libtool gettext-devel
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390x ppc ppc64
+ExclusiveArch: %ix86 x86_64 ia64 %{arm} sparcv9 alpha s390x ppc ppc64
 
 Patch0: mono-2.8-ppc-thread.patch
 Patch1: mono-2.8-libdir.patch

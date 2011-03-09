@@ -1,6 +1,11 @@
 Name:           mono
+<<<<<<< HEAD
 Version:        2.10.1
 Release:        1%{?dist}
+=======
+Version:        2.8.1
+Release:        2%{?dist}
+>>>>>>> 75bf18eb3bbb3c595c9e553f30159bcf50c69108
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -38,7 +43,7 @@ BuildRequires: automake libtool gettext-devel
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390x ppc ppc64
+ExclusiveArch: %ix86 x86_64 ia64 %{arm} sparcv9 alpha s390x ppc ppc64
 
 Patch0: mono-2.8-ppc-thread.patch
 Patch1: mono-2.10-libdir.patch
@@ -859,6 +864,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{monodir}/4.0/sqlmetal.exe.config
 
 %changelog
+<<<<<<< HEAD
 * Mon Mar 07 2011 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.10.1-1
 - Bump to 2.10.1
 - Update libdir and metadata patches
@@ -866,6 +872,10 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 - Renamed mono-4-preview to mono-dotnet4, removed as an option
 - Corrected mono-dotnet4 description
 - spec file clean up
+=======
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.8.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+>>>>>>> 75bf18eb3bbb3c595c9e553f30159bcf50c69108
 
 * Tue Dec 07 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8.1-1
 - Bump to latest bug release version

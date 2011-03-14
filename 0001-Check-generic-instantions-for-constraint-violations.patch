@@ -1,0 +1,112 @@
+From bde0d1f7aa16004144b21927d2ff8bfec5b1b33a Mon Sep 17 00:00:00 2001
+From: Rodrigo Kumpera <kumpera@gmail.com>
+Date: Thu, 25 Nov 2010 14:37:23 -0200
+Subject: [PATCH] Check generic instantions for constraint violations.
+
+	* class.c (mono_class_init): Check instantiations of generic
+	instances.
+
+	* icall.c (ves_icall_Type_MakeGenericType): Ditto.
+
+	* verify.c: Add mono_verifier_class_is_valid_generic_instantiation
+	to the internal API so generic instances can be checked.
+
+	Fixes #654136
+---
+ mono/metadata/class.c            |    3 +++
+ mono/metadata/icall.c            |    6 ++++++
+ mono/metadata/verify-internals.h |    1 +
+ mono/metadata/verify.c           |   15 +++++++++++++++
+ 4 files changed, 25 insertions(+), 0 deletions(-)
+
+diff --git a/mono/metadata/class.c b/mono/metadata/class.c
+index 7db29ce..62d613a 100644
+--- a/mono/metadata/class.c
++++ b/mono/metadata/class.c
+@@ -4530,6 +4530,9 @@ mono_class_init (MonoClass *class)
+ 			setup_interface_offsets (class, 0);
+ 	}
+ 
++	if (class->generic_class && !mono_verifier_class_is_valid_generic_instantiation (class))
++		mono_class_set_failure (class, MONO_EXCEPTION_TYPE_LOAD, g_strdup ("Invalid generic instantiation"));
++
+ 	goto leave;
+ 
+  leave:
+diff --git a/mono/metadata/icall.c b/mono/metadata/icall.c
+index ec86027..8a31c8e 100644
+--- a/mono/metadata/icall.c
++++ b/mono/metadata/icall.c
+@@ -67,6 +67,7 @@
+ #include <mono/metadata/security-core-clr.h>
+ #include <mono/metadata/mono-perfcounters.h>
+ #include <mono/metadata/mono-debug.h>
++#include <mono/metadata/verify-internals.h>
+ #include <mono/io-layer/io-layer.h>
+ #include <mono/utils/strtod.h>
+ #include <mono/utils/monobitset.h>
+@@ -2432,6 +2433,7 @@ ves_icall_Type_GetGenericTypeDefinition_impl (MonoReflectionType *type)
+ static MonoReflectionType*
+ ves_icall_Type_MakeGenericType (MonoReflectionType *type, MonoArray *type_array)
+ {
++	MonoClass *class;
+ 	MonoType *geninst, **types;
+ 	int i, count;
+ 
+@@ -2450,6 +2452,10 @@ ves_icall_Type_MakeGenericType (MonoReflectionType *type, MonoArray *type_array)
+ 	if (!geninst)
+ 		return NULL;
+ 
++	class = mono_class_from_mono_type (geninst);
++	if (!mono_verifier_class_is_valid_generic_instantiation (class))
++		mono_raise_exception (mono_get_exception_argument ("method", "Invalid generic arguments"));
++
+ 	return mono_type_get_object (mono_object_domain (type), geninst);
+ }
+ 
+diff --git a/mono/metadata/verify-internals.h b/mono/metadata/verify-internals.h
+index 6019b31..f73b010 100644
+--- a/mono/metadata/verify-internals.h
++++ b/mono/metadata/verify-internals.h
+@@ -21,6 +21,7 @@ gboolean mono_verifier_is_enabled_for_class (MonoClass *klass) MONO_INTERNAL;
+ 
+ gboolean mono_verifier_is_method_full_trust (MonoMethod *method) MONO_INTERNAL;
+ gboolean mono_verifier_is_class_full_trust (MonoClass *klass) MONO_INTERNAL;
++gboolean mono_verifier_class_is_valid_generic_instantiation (MonoClass *class) MONO_INTERNAL;
+ 
+ gboolean mono_verifier_verify_class (MonoClass *klass) MONO_INTERNAL;
+ 
+diff --git a/mono/metadata/verify.c b/mono/metadata/verify.c
+index d522ac5..b678ed7 100644
+--- a/mono/metadata/verify.c
++++ b/mono/metadata/verify.c
+@@ -6526,6 +6526,13 @@ mono_verifier_verify_class (MonoClass *class)
+ 		return FALSE;
+ 	return TRUE;
+ }
++
++gboolean
++mono_verifier_class_is_valid_generic_instantiation (MonoClass *class)
++{
++	return mono_class_is_valid_generic_instantiation (NULL, class);
++}
++
+ #else
+ 
+ gboolean
+@@ -6597,4 +6604,12 @@ mono_image_verify_tables (MonoImage *image, int level)
+ 	/* The verifier was disabled at compile time */
+ 	return NULL;
+ }	
++
++gboolean
++mono_verifier_class_is_valid_generic_instantiation (MonoClass *class)
++{
++	return TRUE;
++}
++
++
+ #endif
+-- 
+1.7.3.4
+

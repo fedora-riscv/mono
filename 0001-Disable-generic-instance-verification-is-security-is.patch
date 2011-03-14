@@ -1,0 +1,38 @@
+From 556423c2cbadc1b6c912d891e54c1ab111a3f749 Mon Sep 17 00:00:00 2001
+From: Rodrigo Kumpera <kumpera@gmail.com>
+Date: Mon, 29 Nov 2010 12:39:32 -0200
+Subject: [PATCH] Disable generic instance verification is security is off.
+
+	* verify.c: If security is not enabled don't perform
+	instance verification as 2.6 SRE/mcs can't couple with it.
+
+	Fix System.dll build regression.
+---
+ mono/metadata/verify.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/mono/metadata/verify.c b/mono/metadata/verify.c
+index 2b393a9..50a7224 100644
+--- a/mono/metadata/verify.c
++++ b/mono/metadata/verify.c
+@@ -6530,6 +6530,8 @@ mono_verifier_verify_class (MonoClass *class)
+ gboolean
+ mono_verifier_class_is_valid_generic_instantiation (MonoClass *class)
+ {
++	if (!mono_verifier_is_enabled_for_class (class))
++		return TRUE;
+ 	return mono_class_is_valid_generic_instantiation (NULL, class);
+ }
+ 
+@@ -6538,6 +6540,8 @@ mono_verifier_is_method_valid_generic_instantiation (MonoMethod *method)
+ {
+ 	if (!method->is_inflated)
+ 		return TRUE;
++	if (!mono_verifier_is_enabled_for_method (method))
++		return TRUE;
+ 	return mono_method_is_valid_generic_instantiation (NULL, method);
+ }
+ 
+-- 
+1.7.3.4
+

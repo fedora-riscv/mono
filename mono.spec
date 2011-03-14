@@ -8,7 +8,7 @@
 
 Name:           mono
 Version:        2.6.7
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -56,6 +56,18 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.6-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
 Patch7: mono-264-libdir.patch
+# CVE-2010-4159
+# https://github.com/mono/mono/commit/8e890a3bf80a4620e417814dc14886b1bbd17625
+Patch8: 0001-Search-for-dllimported-shared-libs-in-the-base-direc.patch
+# CVE-2010-4254 (and some required additional upstream commits)
+# https://github.com/mono/mono/commit/bde0d1f7aa16004144b21927d2ff8bfec5b1b33a
+Patch9: 0001-Check-generic-instantions-for-constraint-violations.patch
+# https://github.com/mono/mono/commit/4905ef1130feb26c3150b28b97e4a96752e0d399
+Patch10: 0001-Handle-invalid-instantiation-of-generic-methods.patch
+# https://github.com/mono/mono/commit/556423c2cbadc1b6c912d891e54c1ab111a3f749
+Patch11: 0001-Disable-generic-instance-verification-is-security-is.patch
+# https://github.com/mono/mono/commit/472119d9436d2707ce7239e8d6e2ca6e3da8d6f3
+Patch12: 0001-Fix-corlib-testsuite-crash.patch
 
 %if %{with_mono4}
 Obsoletes: mono-mono-4-preview < 2.6.4
@@ -284,6 +296,8 @@ Development file for monodoc
 Summary:  Provides preview code for C# 4
 Group:    Development/Languages
 Requires: mono-core = %{version}-%{release}
+# mono-4-preview is contains both runtime and devel files
+Requires: mono-devel
 
 %description -n mono-4-preview
 Preview for the new C# 4.0 code
@@ -293,6 +307,12 @@ Preview for the new C# 4.0 code
 %define gac_dll(dll)  %{monodir}/gac/%{1} \
   %{monodir}/?.0/%{1}.dll \
   %{nil}
+%define gac_dll_123_only(dll)  %{monodir}/gac/%{1}/[123]*\
+  %{monodir}/[123].0/%{1}.dll \
+  %{nil}
+%define gac_dll_4_only(dll)  %{monodir}/gac/%{1}/[4]*\
+  %{monodir}/4.0/%{1}.dll \
+  %{nil}
 %define gac_dll_2(dll) %{monodir}/gac/%{1} \
   %{monodir}/?.5/%{1}.dll \
   %{nil}
@@ -300,8 +320,8 @@ Preview for the new C# 4.0 code
   %{monodir}/2.1/%{1}.dll \
   %{nil}
 %define mono_bin(bin) %{_bindir}/%{1} \
-  %{monodir}/?.0/%{1}.exe \
-  %{monodir}/?.0/%{1}.exe.* \
+  %{monodir}/1.0/%{1}.exe \
+  %{monodir}/1.0/%{1}.exe.* \
   %{nil}
 %define mono_bin_1(bin, dll) %{_bindir}/%{1} \
   %{monodir}/1.0/%{2}.exe \
@@ -332,7 +352,11 @@ sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 sed -i -e 's!$(prefix)/lib/!%{_libdir}/!' docs/Makefile.{am,in}
 sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/monodoc.pc.in
 sed -i -e 's!${prefix}/lib/!%{_libdir}/!' data/mono-cairo.pc.in
-
+%patch8 -p1 -b .CVE-2010-4159
+%patch9 -p1 -b .CVE-2010-4254-1
+%patch10 -p1 -b .CVE-2010-4254-2
+%patch11 -p1 -b .CVE-2010-4254-3
+%patch12 -p1 -b .CVE-2010-4254-4
 autoreconf -f -i -s
 
 # Add undeclared Arg
@@ -378,9 +402,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 # This was removed upstream:
 %{__rm} -fr %{buildroot}%{monodir}/gac/Mono.Security.Win32/[124]*
-%{__rm} -rf %{buildroot}%{monodir}/1.0/Mono.Security.Win32.dll
-%{__rm} -rf %{buildroot}%{monodir}/2.0/Mono.Security.Win32.dll
-%{__rm} -rf %{buildroot}%{monodir}/4.0/Mono.Security.Win32
+%{__rm} -rf %{buildroot}%{monodir}/[124].0/Mono.Security.Win32.dll
 %{__rm} %{buildroot}%{_datadir}/libgc-mono/README*
 %{__rm} %{buildroot}%{_datadir}/libgc-mono/barrett_diagram
 %{__rm} %{buildroot}%{_datadir}/libgc-mono/*.html
@@ -414,24 +436,22 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_bindir}/monodir
 %{_bindir}/mono-test-install
 %{_bindir}/mono-gdb.py
-%mono_bin lc
+%mono_bin_2 lc lc
 %mono_bin certmgr
 %mono_bin chktrust
-%mono_bin csharp
+%mono_bin_2 csharp csharp
 %mono_bin gacutil
+%mono_bin_2 gacutil2 gacutil
 %{_bindir}/gacutil1
-%{_bindir}/gacutil2
-%mono_bin gmcs
+%mono_bin_2 gmcs gmcs
 %mono_bin mcs
-%mono_bin xbuild
 %{_bindir}/mcs1
 %mono_bin mozroots
 %mono_bin setreg
 %mono_bin sn
-%mono_bin pdb2mdb
-%mono_bin sqlmetal
-%mono_bin svcutil
-%{monodir}/2.0/System.Xml.Linq.dll
+%mono_bin_2 pdb2mdb pdb2mdb
+%mono_bin_2 sqlmetal sqlmetal
+%mono_bin_2 svcutil svcutil
 %{_libdir}/libmono.so.*
 %{_libdir}/libmono-profiler-logging.so.*
 %{_mandir}/man1/certmgr.1.gz
@@ -453,6 +473,8 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %dir %{monodir}/3.5
 %dir %{monodir}/gac
 %dir %{monodir}/compat-*
+%dir %{_libdir}/mono/gac/System.Xml.Linq
+%gac_dll_123_only System.Xml.Linq
 %gac_dll Commons.Xml.Relaxng
 %gac_dll I18N
 %gac_dll I18N.West
@@ -482,7 +504,6 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Xml
 %gac_dll Mono.Tasklets
 %gac_dll WindowsBase
-%{monodir}/gac/System.Xml.Linq
 %{monodir}/?.0/mscorlib.dll
 %{monodir}/?.0/mscorlib.dll.mdb
 %dir %{_sysconfdir}/mono
@@ -494,56 +515,51 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %config (noreplace) %{_sysconfdir}/mono/2.0/machine.config
 %config (noreplace) %{_sysconfdir}/mono/2.0/settings.map
 %{_libdir}/mono-source-libs/
-%{monodir}/compat-2.0/System.Web.Mvc.dll
-%if %{with_mono4}
-%{_libdir}/mono/gac/Microsoft.Build.Tasks.v4.0/4.0*
-%{_libdir}/mono/gac/Microsoft.Build.Utilities.v4.0/4.0*
-%endif
 
 %files devel
 %defattr(-,root,root,-)
 %{_sysconfdir}/pki/mono/
 %{_bindir}/mono-api-*
-%{monodir}/?.0/mono-api-info*
+%{monodir}/2.0/mono-api-info*
 %{_bindir}/monodis
 %{_bindir}/al1
-%mono_bin_1 al al
+%mono_bin al
 %mono_bin_2 al2 al
 %mono_bin caspol
 %mono_bin cert2spc
 %mono_bin cilc
 %mono_bin dtd2xsd
 %mono_bin dtd2rng
-%mono_bin_1 genxs1 genxs
-%{_bindir}/genxs
-%mono_bin sgen
-%{monodir}/?.0/installutil.*
+%mono_bin genxs
+%{_bindir}/genxs1
+%mono_bin_2 sgen sgen
+%{monodir}/1.0/installutil.*
+%{monodir}/2.0/installutil.*
 %mono_bin installvst
-%mono_bin_1 ilasm ilasm
+%mono_bin ilasm
 %{_bindir}/ilasm1
 %mono_bin_2 ilasm2 ilasm
 %mono_bin macpack
 %mono_bin makecert
 %mono_bin mkbundle
+%mono_bin_2 mkbundle2 mkbundle
 %{_bindir}/mkbundle1
-%{_bindir}/mkbundle2
 %mono_bin mono-cil-strip
-%mono_bin monolinker
-%mono_bin_1 monop monop
+%mono_bin_2 monolinker monolinker
+%mono_bin monop
 %{_bindir}/monop1
 %mono_bin_2 monop2 monop
-%mono_bin mono-shlib-cop
-%mono_bin mono-xmltool
+%mono_bin_2 mono-shlib-cop mono-shlib-cop
+%mono_bin_2 mono-xmltool mono-xmltool
 %{_bindir}/pedump
 %mono_bin permview
 %mono_bin prj2make
 %{_bindir}/resgen1
-%mono_bin_1 resgen resgen
+%mono_bin resgen
 %mono_bin_2 resgen2 resgen
 %{_mandir}/man1/resgen.1.gz
 %mono_bin secutil
 %mono_bin signcode
-%mono_bin xbuild
 %{monodir}/1.0/ictool.exe
 %{monodir}/1.0/ictool.exe.mdb
 %{_mandir}/man1/al.1.gz
@@ -567,9 +583,12 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_mandir}/man1/sgen.1.gz
 %{_mandir}/man1/signcode.1.gz
 %{_mandir}/man1/xbuild.1.gz
-%gac_dll PEAPI
-%gac_dll Microsoft.Build.Engine
-%gac_dll Microsoft.Build.Framework
+%dir %{_libdir}/mono/gac/PEAPI
+%gac_dll_123_only PEAPI
+%dir %{_libdir}/mono/gac/Microsoft.Build.Engine
+%gac_dll_123_only Microsoft.Build.Engine
+%dir %{_libdir}/mono/gac/Microsoft.Build.Framework
+%gac_dll_123_only Microsoft.Build.Framework
 %gac_dll Microsoft.Build.Tasks
 %gac_dll Microsoft.Build.Utilities
 %gac_dll_2 Microsoft.Build.Tasks.v3.5
@@ -608,10 +627,11 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %dir %{_datadir}/mono-1.0/mono
 %dir %{_datadir}/mono-1.0/mono/cil
 %{_libdir}/mono/1.0/culevel*
+%mono_bin_2 xbuild xbuild
 
 %files nunit
 %defattr(-,root,root,-)
-%mono_bin_1 nunit-console nunit-console
+%mono_bin nunit-console
 %mono_bin_2 nunit-console2 nunit-console
 %gac_dll nunit.core
 %gac_dll nunit.framework
@@ -641,7 +661,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %files extras
 %defattr(-,root,root,-)
 %{_mandir}/man1/mono-service.1.gz
-%mono_bin_1 mono-service mono-service
+%mono_bin mono-service
 %mono_bin_2 mono-service2 mono-service
 %{monodir}/gac/mono-service
 %gac_dll System.Configuration.Install
@@ -680,14 +700,15 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Web.Mvc
 %gac_dll System.Web.Routing
 %gac_dll System.Web.Services
+%{monodir}/compat-2.0/System.Web.Mvc.dll
 %mono_bin disco
-%mono_bin mconfig
+%mono_bin_2 mconfig mconfig
 %mono_bin soapsuds
-%mono_bin_1 wsdl wsdl
+%mono_bin wsdl
 %{_bindir}/wsdl1
 %mono_bin_2 wsdl2 wsdl
 %mono_bin_2 xsd2 xsd
-%mono_bin_1 xsd xsd
+%mono_bin xsd
 %{_mandir}/man1/disco.1.gz
 %{_mandir}/man1/mconfig.1.gz
 %{_mandir}/man1/soapsuds.1.gz
@@ -699,7 +720,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %config (noreplace) %{_sysconfdir}/mono/2.0/DefaultWsdlHelpGenerator.aspx
 %config (noreplace) %{_sysconfdir}/mono/mconfig/config.xml
 %config (noreplace) %{_sysconfdir}/mono/2.0/web.config
-%mono_bin httpcfg
+%mono_bin_2 httpcfg httpcfg
 %{_mandir}/man1/httpcfg.1.gz
 
 %files web-devel
@@ -721,7 +742,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 %files data
 %defattr(-,root,root,-)
-%mono_bin sqlsharp
+%mono_bin_2 sqlsharp sqlsharp
 %{_mandir}/man1/sqlsharp.1.gz
 %gac_dll System.Data
 %gac_dll System.Data.DataSetExtensions
@@ -769,7 +790,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_libdir}/mono/gac/monodoc
 %{_libdir}/monodoc/*
 %{_libdir}/mono/monodoc/monodoc.dll
-%mono_bin mdoc
+%mono_bin_2 mdoc mdoc
 %{_bindir}/mdoc-*
 %{_bindir}/mdass*
 %{_bindir}/mdval*
@@ -793,17 +814,33 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_bindir}/dmcs
 %{monodir}/4.0/*.exe
 %{monodir}/4.0/*.exe.*
-%{monodir}/4.0/Mono.Security.Win32.dll
-%{monodir}/4.0/System.Xml.Linq.dll
+%gac_dll_4_only System.Xml.Linq
 %{monodir}/4.0/MSBuild/Microsoft*
-%{monodir}/4.0/Microsoft*
+%{monodir}/4.0/Microsoft.Build.Tasks.*.dll
+%{monodir}/4.0/Microsoft.Build.xsd
+%{monodir}/4.0/Microsoft.Build.Utilities.*.dll
+%{monodir}/4.0/Microsoft.CSharp.targets
+%{monodir}/4.0/Microsoft.Common.*
+%{monodir}/4.0/Microsoft.VisualBasic.targets
 %gac_dll Microsoft.CSharp
+%{monodir}/4.0/xbuild.rsp
 %{_libdir}/mono/gac/System.Data.Services/4.0*
 %gac_dll System.Dynamic 
-%{monodir}/4.0/xbuild*
+%{_libdir}/mono/gac/Microsoft.Build.Tasks.v4.0/4.0*
+%{_libdir}/mono/gac/Microsoft.Build.Utilities.v4.0/4.0*
+%gac_dll_4_only PEAPI
+%gac_dll_4_only Microsoft.Build.Engine
+%gac_dll_4_only Microsoft.Build.Framework
 %endif
 
 %changelog
+* Tue Mar 15 2011 Christian Krause <chkr@fedoraproject.org> - 2.6.7-4
+- Move xbuild.exe and dependencies into -devel sub-package (BZ 671917)
+- Ensure that the symbolic links and the actual libraries in the GAC are
+  always in the same sub-package
+- CVE-2010-4159 (BZ 654405)
+- CVE-2010-4254 (BZ 659911)
+
 * Wed Jul 21 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.6.7-3
 - Bump to full release
 - Remove patch 8 (preview-4 patch)

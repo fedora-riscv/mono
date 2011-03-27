@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -37,7 +37,7 @@ Obsoletes: mono-4-preview < 2.10.0
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390x ppc ppc64
+ExclusiveArch: %ix86 x86_64 ia64 %{arm} sparcv9 alpha s390x ppc ppc64
 
 Patch0: mono-2.8-ppc-thread.patch
 Patch1: mono-2.10-libdir.patch
@@ -734,6 +734,10 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Sun Mar 27 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.1-3
+- Add deleted changelog entry
+- Fix ExclusiveArch entry for arm (see git commit bbed3987249c)
+
 * Sun Mar 27 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.1-2
 - Move sources into lookaside cache
 - Merge mono-4 into mono-core and appropriate sub-packages
@@ -748,6 +752,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 - Renamed mono-4-preview to mono-dotnet4, removed as an option
 - Corrected mono-dotnet4 description
 - spec file clean up
+
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.8.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
 * Tue Dec 07 2010 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.8.1-1
 - Bump to latest bug release version

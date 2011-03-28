@@ -440,13 +440,13 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Dynamic
 %gac_dll Mono.Data.Tds
 %gac_dll System.ComponentModel.Composition
+%gac_dll System.Data
 %gac_dll System.Numerics
 %gac_dll System.Runtime.Caching
 %gac_dll System.Runtime.DurableInstancing
 %gac_dll System.Xaml
 %gac_dll WebMatrix.Data
 %gac_dll Mono.CodeContracts
-%gac_dll Microsoft.Web.Infrastructure
 %{monodir}/mono-configuration-crypto/4.0/mono-config*
 %{monodir}/mono-configuration-crypto/4.0/Mono.Configuration.Crypto.dll*
 %{_mandir}/man1/ccrewrite.1.gz
@@ -635,6 +635,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Web.Routing
 %gac_dll System.Web.Services
 %gac_dll System.Web.ApplicationServices
+%gac_dll Microsoft.Web.Infrastructure
 %{_mandir}/man1/disco.1.gz
 %{_mandir}/man1/httpcfg.1.gz
 %{_mandir}/man1/mconfig.1.gz
@@ -685,7 +686,6 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %defattr(-,root,root,-)
 %mono_bin sqlsharp
 %mono_bin sqlmetal
-%gac_dll System.Data
 %gac_dll System.Data.DataSetExtensions
 %gac_dll System.Data.Linq
 %gac_dll System.EnterpriseServices

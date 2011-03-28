@@ -440,10 +440,12 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Dynamic
 %gac_dll Mono.Data.Tds
 %gac_dll System.ComponentModel.Composition
+%gac_dll System.EnterpriseServices
 %gac_dll System.Data
 %gac_dll System.Numerics
 %gac_dll System.Runtime.Caching
 %gac_dll System.Runtime.DurableInstancing
+%gac_dll System.Transactions
 %gac_dll System.Xaml
 %gac_dll WebMatrix.Data
 %gac_dll Mono.CodeContracts
@@ -688,12 +690,10 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %mono_bin sqlmetal
 %gac_dll System.Data.DataSetExtensions
 %gac_dll System.Data.Linq
-%gac_dll System.EnterpriseServices
 %gac_dll System.Data.Services
 %gac_dll System.Data.Services.Client
 %gac_dll Novell.Directory.Ldap
 %gac_dll System.DirectoryServices
-%gac_dll System.Transactions
 %gac_dll Mono.Data.Tds
 %{_mandir}/man1/sqlsharp.1.gz
 

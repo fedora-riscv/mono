@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -531,7 +531,6 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll Microsoft.Build.Utilities
 %gac_dll Microsoft.Build.Tasks.v3.5
 %gac_dll Microsoft.Build.Utilities.v3.5
-%gac_dll System.Runtime.Serialization
 %{monodir}/4.0/MSBuild/Microsoft*
 %gac_dll Microsoft.Build.Tasks.v4.0
 %gac_dll Microsoft.Build.Utilities.v4.0
@@ -692,9 +691,10 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %gac_dll System.Data.Linq
 %gac_dll System.Data.Services
 %gac_dll System.Data.Services.Client
-%gac_dll Novell.Directory.Ldap
 %gac_dll System.DirectoryServices
+%gac_dll System.Runtime.Serialization
 %gac_dll Mono.Data.Tds
+%gac_dll Novell.Directory.Ldap
 %{_mandir}/man1/sqlsharp.1.gz
 
 %files data-sqlite
@@ -734,6 +734,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Wed Mar 30 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.1-4
+- More fixes to avoid -devel dependency (BZ 671917)
+
 * Sun Mar 27 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.1-3
 - Add deleted changelog entry
 - Fix ExclusiveArch entry for arm (see git commit bbed3987249c)

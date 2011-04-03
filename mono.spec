@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -27,7 +27,6 @@ BuildRequires:  libunwind-devel
 %endif
 # Required for mono-libdir.patch
 BuildRequires: automake libtool gettext-devel
-Obsoletes: mono-4-preview < 2.10.0
 
 # Yes, mono actually depends on itself, because
 # we deleted the bootstrapping binaries. If you
@@ -58,6 +57,7 @@ metadata access libraries.
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
 Requires:       libgdiplus
+Obsoletes:      mono-4-preview < 2.10.0
 
 %description core
 This package contains the core of the Mono runtime including its
@@ -734,6 +734,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Sun Apr 03 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.1-5
+- Correctly obsolete mono-4-preview in mono-core
+
 * Wed Mar 30 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.1-4
 - More fixes to avoid -devel dependency (BZ 671917)
 

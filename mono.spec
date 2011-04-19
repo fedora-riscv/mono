@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -295,10 +295,6 @@ gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
            --with-moonlight=no --with-profile2=yes --with-monotouch=no \
            --with-libgdiplus=installed --with-sgen=no \
            --with-profile4=yes
-
-%ifnarch %{ix86} x86_64 %{arm}
-            --disable-system-aot
-%endif
 
 make 
 
@@ -734,6 +730,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Tue Apr 19 2011 Dan Horák <dan[at]danny.cz> 2.10.1-6
+- fix non-x86 builds
+
 * Sun Apr 03 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.1-5
 - Correctly obsolete mono-4-preview in mono-core
 

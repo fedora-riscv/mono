@@ -1,6 +1,6 @@
 Name:           mono
-Version:        2.10.1
-Release:        6%{?dist}
+Version:        2.10.2
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -562,6 +562,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_includedir}/mono-2.0/mono/utils/*.h
 %{_includedir}/mono-2.0/mono/cil/opcode.def
 %{_libdir}/libmono*-2.0.so
+%{_libdir}/mono/xbuild-frameworks
 
 %files nunit
 %defattr(-,root,root,-)
@@ -730,6 +731,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Tue Apr 26 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.2-1
+- Update to 2.10.2
+
 * Tue Apr 19 2011 Dan Horák <dan[at]danny.cz> 2.10.1-6
 - fix non-x86 builds
 

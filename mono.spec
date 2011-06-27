@@ -2,7 +2,7 @@
 
 Name:           mono
 Version:        2.4.3.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -39,7 +39,7 @@ Obsoletes:     monodoc, monodoc-devel
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
 
-BuildRequires: mono-core
+#BuildRequires: mono-core
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390 s390x ppc ppc64
@@ -318,7 +318,7 @@ autoreconf -f -i -s
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 
 # Remove prebuilt binaries
-rm -rf mcs/class/lib/monolite/*
+#rm -rf mcs/class/lib/monolite/*
 
 %build
 %ifarch ia64 s390 s390x
@@ -752,6 +752,9 @@ install -m 755 %{SOURCE3} %{buildroot}%{_bindir}/
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jun 27 2010 Leigh Scott <leigh123linux@googlemail.com> - 2.4.3.1-2
+- bootstrap build as mono-core doesn't exist in el6 yet
+
 * Wed Jan 13 2010 Christian Krause <chkr@fedoraproject.org> - 2.4.3.1-1
 - Update to 2.4.3.1
 

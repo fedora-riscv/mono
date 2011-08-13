@@ -8,7 +8,7 @@
 
 Name:           mono
 Version:        2.6.7
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -23,7 +23,6 @@ Source1:        monodir.c
 # sn -k mono.snk
 # You should not regenerate this unless you have a really, really, really good reason.
 Source2:        mono.snk
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  bison 
 BuildRequires:  glib2-devel
@@ -46,7 +45,7 @@ BuildRequires: automake libtool gettext-devel
 BuildRequires: mono-core
 
 # JIT only availible on these:
-ExclusiveArch: %ix86 x86_64 ia64 armv4l sparcv9 alpha s390 s390x ppc ppc64
+ExclusiveArch: %ix86 x86_64 ia64 %{arm} sparcv9 alpha s390 s390x ppc ppc64
 
 Patch0: mono-2.2-ppc-threading.patch
 Patch1: mono-libdir-126.patch
@@ -834,6 +833,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %endif
 
 %changelog
+* Fri Aug 12 2011 Peter Robinson <pbrobinson@fedoraproject.org> - 2.6.7-5
+- Fix ARM compilation options
+
 * Tue Mar 15 2011 Christian Krause <chkr@fedoraproject.org> - 2.6.7-4
 - Move xbuild.exe and dependencies into -devel sub-package (BZ 671917)
 - Ensure that the symbolic links and the actual libraries in the GAC are

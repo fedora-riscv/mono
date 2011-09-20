@@ -251,6 +251,8 @@ Requires: mono-core = %{version}-%{release}
 %description -n monodoc-devel
 Development file for monodoc
 
+%endif
+
 %define monodir %{_libdir}/mono
 %define gac_dll(dll)  %{monodir}/gac/%{1} \
   %{monodir}/?.?/%{1}.dll \
@@ -259,8 +261,6 @@ Development file for monodoc
   %{monodir}/?.0/%{1}.exe \
   %{monodir}/?.0/%{1}.exe.* \
   %{nil}
-
-%endif
 
 %prep
 %setup -q
@@ -297,6 +297,9 @@ gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 %configure --with-ikvm-native=yes --with-jit=yes --with-xen_opt=yes \
            --with-moonlight=no --with-profile2=yes --with-monotouch=no \
            --with-libgdiplus=installed --with-sgen=no \
+%ifarch ppc
+           --with-mcs-docs=no \
+%endif
            --with-profile4=yes
 
 make 

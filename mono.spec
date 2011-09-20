@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.5
-Release:        1%{?dist}
+Release:        1.1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -233,6 +233,7 @@ This package contains the ADO.NET Data provider for the IBM DB2
 Universal database.
 
 
+%ifnarch ppc
 %package -n monodoc
 Summary:        The mono documentation system
 Group:          Documentation
@@ -258,6 +259,8 @@ Development file for monodoc
   %{monodir}/?.0/%{1}.exe \
   %{monodir}/?.0/%{1}.exe.* \
   %{nil}
+
+%endif
 
 %prep
 %setup -q
@@ -710,6 +713,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %defattr(-,root,root,-)
 %gac_dll IBM.Data.DB2
 
+%ifnarch ppc
 %files -n monodoc
 %defattr(-, root, root)
 %{monodir}/gac/monodoc
@@ -728,9 +732,13 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %files -n monodoc-devel
 %defattr (-, root, root)
 %{_libdir}/pkgconfig/monodoc.pc
+%endif
 
 
 %changelog
+* Tue Sep 20 2011 Karsten Hopp <karsten@redhat.com> 2.10.5-1.1
+- disable monodoc* on ppc (#673549)
+
 * Sun Aug 28 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.5-1
 - Update to 2.10.5
 

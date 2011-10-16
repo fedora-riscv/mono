@@ -1,6 +1,6 @@
 Name:           mono
-Version:        2.10.5
-Release:        1.1%{?dist}
+Version:        2.10.6
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -739,6 +739,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Sat Oct 15 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.6-1
+- Update to 2.10.6
+
 * Tue Sep 20 2011 Karsten Hopp <karsten@redhat.com> 2.10.5-1.1
 - disable monodoc* on ppc (#673549)
 

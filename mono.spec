@@ -1,5 +1,5 @@
 Name:           mono
-Version:        2.10.5
+Version:        2.10.6
 Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
@@ -731,6 +731,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Sat Oct 15 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.6-1
+- Update to 2.10.6
+
 * Sun Aug 28 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.5-1
 - Update to 2.10.5
 

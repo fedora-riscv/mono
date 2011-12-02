@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -294,6 +294,9 @@ gcc -o monodir %{SOURCE1} -DMONODIR=\"%{_libdir}/mono\"
 %configure --with-ikvm-native=yes --with-jit=yes --with-xen_opt=yes \
            --with-moonlight=no --with-profile2=yes --with-monotouch=no \
            --with-libgdiplus=installed --with-sgen=no \
+%ifarch ppc
+           --with-mcs-docs=no \
+%endif
            --with-profile4=yes
 
 make 
@@ -713,7 +716,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %files -n monodoc
 %defattr(-, root, root)
 %{monodir}/gac/monodoc
+%ifnarch ppc
 %{_libdir}/monodoc/*
+%endif
 %{monodir}/monodoc/monodoc.dll
 %mono_bin mdoc
 %{_bindir}/mod
@@ -731,6 +736,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Fri Dec 02 2011 Karsten Hopp <karsten@redhat.com> 2.10.5-2
+- disable monodoc* on ppc (#673549)
+
 * Sun Aug 28 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.5-1
 - Update to 2.10.5
 

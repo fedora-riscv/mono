@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -226,7 +226,6 @@ This package contains the ADO.NET Data provider for the IBM DB2
 Universal database.
 
 
-%ifnarch ppc
 %package -n monodoc
 Summary:        The mono documentation system
 Group:          Documentation
@@ -243,8 +242,6 @@ Requires: mono-core = %{version}-%{release}
 
 %description -n monodoc-devel
 Development file for monodoc
-
-%endif
 
 %define monodir /usr/lib/mono
 %define gac_dll(dll)  %{monodir}/gac/%{1} \
@@ -691,12 +688,13 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %defattr(-,root,root,-)
 %gac_dll IBM.Data.DB2
 
-%ifnarch ppc
 %files -n monodoc
 %defattr(-, root, root)
 %{monodir}/gac/monodoc
 %{monodir}/monodoc/*
+%ifnarch  ppc
 %{_prefix}/lib/monodoc
+%endif
 %mono_bin mdoc
 %{_bindir}/mod
 %{_bindir}/mdoc-*
@@ -710,10 +708,13 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %files -n monodoc-devel
 %defattr (-, root, root)
 %{_libdir}/pkgconfig/monodoc.pc
-%endif
 
 
 %changelog
+* Thu Dec 15 2011 Karsten Hopp <karsten@redhat.com> 2.10.6-3
+- disable mcs-docs on ppc as a workaround for bugzilla 673549, but
+  include files that don't depend on the mcs-docs configure parameter
+
 * Sun Oct 23 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.6-2
 - Change paths for mono assemblies according to updated packaging
   guidelines (http://fedoraproject.org/wiki/Packaging:Mono)

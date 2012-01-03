@@ -1,6 +1,6 @@
 Name:           mono
-Version:        2.10.6
-Release:        3%{?dist}
+Version:        2.10.8
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -499,6 +499,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_mandir}/man1/mono-api-info.1.gz
 #{_mandir}/man1/mono-configuration-crypto.1.gz
 %gac_dll PEAPI
+%gac_dll Microsoft.Build
 %gac_dll Microsoft.Build.Engine
 %gac_dll Microsoft.Build.Framework
 %gac_dll Microsoft.Build.Tasks
@@ -711,6 +712,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Tue Jan 03 2012 Christian Krause <chkr@fedoraproject.org> - 2.10.8-1
+- Update to 2.10.8
+
 * Thu Dec 15 2011 Karsten Hopp <karsten@redhat.com> 2.10.6-3
 - disable mcs-docs on ppc as a workaround for bugzilla 673549, but
   include files that don't depend on the mcs-docs configure parameter

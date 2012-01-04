@@ -1,5 +1,5 @@
 Name:           mono
-Version:        2.10.6
+Version:        2.10.8
 Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
@@ -527,6 +527,7 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 %{_mandir}/man1/mono-api-info.1.gz
 #{_mandir}/man1/mono-configuration-crypto.1.gz
 %gac_dll PEAPI
+%gac_dll Microsoft.Build
 %gac_dll Microsoft.Build.Engine
 %gac_dll Microsoft.Build.Framework
 %gac_dll Microsoft.Build.Tasks
@@ -739,6 +740,9 @@ install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/mono/
 
 
 %changelog
+* Wed Jan 04 2012 Christian Krause <chkr@fedoraproject.org> - 2.10.8-1
+- Update to 2.10.8
+
 * Sat Oct 15 2011 Christian Krause <chkr@fedoraproject.org> - 2.10.6-1
 - Update to 2.10.6
 

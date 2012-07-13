@@ -2,7 +2,7 @@
 
 Name:           mono
 Version:        2.4.3.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -52,6 +52,7 @@ Patch4: mono-2.0-monoservice.patch
 Patch5: mono-2.0-metadata-makefile.patch
 Patch6: mono-242-libgdiplusconfig.patch
 Patch7: mono-22-libdir.patch
+Patch8: CVE-2012-3382.patch
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -306,6 +307,7 @@ mono-moonlight are all the parts required for moonlight compilation
 %patch6 -p1 -F 2 -b .libgdiplus
 sed -i -e 's!@libdir@!%{_libdir}!' %{PATCH7}
 %patch7 -p1 -b .libdir-22
+%patch8 -p1 -b .CVE-2012-3382
 sed -i -e 's!%{_libdir}!@libdir@!' %{PATCH7}
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/mono.web.pc.in
 sed -i -e 's!@prefix@/lib/!%{_libdir}/!' data/system.web.extensions_1.0.pc.in
@@ -752,6 +754,9 @@ install -m 755 %{SOURCE3} %{buildroot}%{_bindir}/
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Jul 13 2012 Leigh Scott <leigh123linux@googlemail.com> - 2.4.3.1-4
+- Patch for CVE-2012-3382 (bz 839979)
+
 * Mon Jun 27 2010 Leigh Scott <leigh123linux@googlemail.com> - 2.4.3.1-3
 - rebuild against mono-core
 

@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.8
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -715,6 +715,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 
 
 %changelog
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.10.8-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Fri Jul 20 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.10.8-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 

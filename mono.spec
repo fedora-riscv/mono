@@ -716,7 +716,7 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 
 %changelog
 * Mon Nov 25 2013 Björn Esser <bjoern.esser@gmail.com> - 2.10.8-6
-- rebuilt for giflib-5.0.5 on rawhide
+- rebuilt for giflib-5.0.5 (depends libgdiplus) on rawhide
 - fixed bogus date in %%changelog
 
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.10.8-5

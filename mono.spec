@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.8
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -715,6 +715,10 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 
 
 %changelog
+* Mon Nov 25 2013 Björn Esser <bjoern.esser@gmail.com> - 2.10.8-6
+- rebuilt for giflib-5.0.5 on rawhide
+- fixed bogus date in %%changelog
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.10.8-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
@@ -1087,7 +1091,7 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 * Tue Nov 25 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.1.pre1
 - rebuild
 
-* Mon Nov 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.pre1
+* Tue Nov 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.pre1
 - Bump to 2.2 preview 1
 - remove old patches
 - add build information for monodoc
@@ -1183,7 +1187,7 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 - added BR libunwind-devel for ia64 (bz426180)
 - fix for LIBDIR problem
 
-* Tue Dec 16 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-4
+* Sun Dec 16 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-4
 - bump new version
 - removed more redundant bits
 - url fix
@@ -1209,7 +1213,7 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 - bump
 - added new parts (mono-linker, resgen and mono-cecil)
 
-* Thu Apr 21 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 1.2.4-1
+* Sat Apr 21 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 1.2.4-1
 - update from 1.2.3
 
 * Sun Apr  1 2007 Matthias Clasen <mclasen@redhat.com> - 1.2.3-3
@@ -1242,7 +1246,7 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 - rename mono-devtools back to mono-devel
 - kill mono-lib and mono-lib-devel
 
-* Mon Aug 10 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16.1-1
+* Thu Aug 10 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16.1-1
 - Update to 1.1.16.1
 - Split out mono libs and devel headers to fix lib64 conflicts (#199790)
 

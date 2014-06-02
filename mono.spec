@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -35,7 +35,7 @@ BuildRequires: gettext-devel
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
 
-#BuildRequires: mono-core
+BuildRequires: mono-core
 
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ia64 %{arm} sparcv9 alpha s390x ppc ppc64
@@ -262,7 +262,7 @@ Development file for monodoc
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
 
 # Remove prebuilt binaries
-#rm -rf mcs/class/lib/monolite/*
+rm -rf mcs/class/lib/monolite/*
 
 %build
 %ifarch ia64 s390 s390x
@@ -714,6 +714,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jun 02 2014 Leigh Scott <leigh123linux@googlemail.com> - 2.10.8-2
+- rebuild against mono-core
+
 * Mon Jun 02 2014 Leigh Scott <leigh123linux@googlemail.com> - 2.10.8-1
 - Update to 2.10.8
 - bootstrap build for epel

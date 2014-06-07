@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.8
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -715,6 +715,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.10.8-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Mon Nov 25 2013 Björn Esser <bjoern.esser@gmail.com> - 2.10.8-6
 - rebuilt for giflib-5.0.5 (depends libgdiplus) on rawhide
 - fixed bogus date in %%changelog

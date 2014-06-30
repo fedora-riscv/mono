@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.8
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -40,6 +40,11 @@ BuildRequires: mono-core
 # JIT only availible on these:
 ExclusiveArch: %ix86 x86_64 ia64 %{arm} sparcv9 alpha s390x ppc ppc64
 
+Obsoletes: mono-4-preview < 2.10.0
+Obsoletes: mono-jscript < 2.8
+Obsoletes: mono-data-sybase < 2.8
+Obsoletes: mono-data-firebird < 2.8
+
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
 virtual machine (as well as a byte code interpreter, the
@@ -50,7 +55,8 @@ metadata access libraries.
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
 Requires:       libgdiplus
-Obsoletes:      mono-4-preview < 2.10.0
+Obsoletes:      mono-moonlight < 2.6
+Provides:       mono-moonlight = %{version}-%{release}
 
 %description core
 This package contains the core of the Mono runtime including its
@@ -715,6 +721,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 
 
 %changelog
+* Mon Jun 30 2014 Leigh Scott <leigh123linux@googlemail.com> - 2.10.8-7
+- add some obsoletes (bz 1114673)
+
 * Fri May 16 2014 Leigh Scott <leigh123linux@googlemail.com> - 2.10.8-6
 - rebuild against mono-core
 

@@ -75,7 +75,7 @@ Requires:       mono-core = %{version}-%{release}
 This is the Mono implementation of ASP.NET MVC
 
 %package mvc-devel
-Summary:        Development files for  ASP.NET MVC
+Summary:        Development files for ASP.NET MVC
 Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 

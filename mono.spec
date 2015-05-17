@@ -790,7 +790,7 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Tue Apr 28 2015  Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.0.1-4
+* Wed May 13 2015  Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.0.1-4
 - adding architecture ppc64le
 - make clear we only need monolite for bootstrap
 - enable parallel make

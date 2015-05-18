@@ -1,4 +1,4 @@
-%global bootstrap 1
+%global bootstrap 0
 %if 0%{?rhel}%{?el6}%{?el7}
 %if 0%{?el6}
 %define mono_arches %ix86 x86_64 ia64 %{arm} sparcv9 alpha s390x ppc ppc64 ppc64le
@@ -12,7 +12,7 @@
 %endif
 Name:           mono
 Version:        4.0.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -48,7 +48,7 @@ Obsoletes:      mono-entityframework
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
 
-#BuildRequires: mono-core >= 3.4
+BuildRequires: mono-core >= 4.0
 
 # JIT only available on these:
 ExclusiveArch: %mono_arches
@@ -793,6 +793,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon May 18 2015 Peter Robinson <pbrobinson@fedoraproject.org> 4.0.1-6
+- Rebuild post bootstrap
+
 * Fri May 15 2015  Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.0.1-5
 - fix nunit.pc to point to 4.5 dlls
 

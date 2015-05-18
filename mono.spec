@@ -1,7 +1,7 @@
 %global bootstrap 0
 %if 0%{?rhel}%{?el6}%{?el7}
 %if 0%{?el6}
-%define mono_arches %ix86 x86_64 ia64 %{arm} sparcv9 alpha s390x ppc ppc64 ppc64le
+%define mono_arches %ix86 x86_64 %{arm} sparcv9 alpha s390x ppc ppc64 ppc64le
 %endif
 # see https://lists.fedoraproject.org/pipermail/packaging/2011-May/007762.html
 %global _missing_build_ids_terminate_build 0
@@ -10,9 +10,10 @@
 %define _monodir %{_prefix}/lib/mono
 %define _monogacdir %{_monodir}/gac
 %endif
+
 Name:           mono
 Version:        4.0.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -32,10 +33,6 @@ BuildRequires:  libicu-devel
 BuildRequires:  libgdiplus-devel >= 2.10
 BuildRequires:  pkgconfig
 BuildRequires:  zlib-devel
-%ifarch ia64
-BuildRequires:  libunwind
-BuildRequires:  libunwind-devel
-%endif
 BuildRequires:  gettext-devel
 
 # http://www.mono-project.com/docs/about-mono/releases/4.0.0/#npgsql
@@ -307,16 +304,9 @@ rm -rf mcs/class/lib/monolite/*
 %endif
 
 %build
-%ifarch ia64
-export CFLAGS="-O2 -fno-strict-aliasing"
-%else
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
-%endif
 
 %configure --disable-rpath \
-%ifarch ppc
-           --with-mcs-docs=no \
-%endif
            --with-moonlight=no
 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -367,7 +357,6 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %postun devel -p /sbin/ldconfig
 
 %files core -f mcs.lang
-%defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB ChangeLog NEWS README.md
 %{_bindir}/mono
 %{_bindir}/mono-test-install
@@ -480,7 +469,6 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %gac_dll System.Threading.Tasks.Dataflow
 
 %files devel
-%defattr(-,root,root,-)
 %{_sysconfdir}/pki/mono/
 %{_bindir}/mono-api-info
 %{_monodir}/4.5/mono-api-info.exe
@@ -592,7 +580,6 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_includedir}/mono-2.0/mono/cil/opcode.def
 
 %files nunit
-%defattr(-,root,root,-)
 %mono_bin nunit-console
 %{_bindir}/nunit-console2
 %{_bindir}/nunit-console4
@@ -606,18 +593,15 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %gac_dll nunit.util
 
 %files nunit-devel
-%defattr(-,root,root,-)
 %{_libdir}/pkgconfig/mono-nunit.pc
 
 %files locale-extras
-%defattr(-,root,root,-)
 %gac_dll I18N.CJK
 %gac_dll I18N.MidEast
 %gac_dll I18N.Other
 %gac_dll I18N.Rare
 
 %files extras
-%defattr(-,root,root,-)
 %mono_bin mono-service
 %{_monogacdir}/mono-service
 %gac_dll System.Configuration.Install
@@ -633,7 +617,6 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_mandir}/man1/mono-service.1.gz
 
 %files reactive
-%defattr(-, root, root, -)
 %gac_dll System.Reactive.Core
 %gac_dll System.Reactive.Debugger
 %gac_dll System.Reactive.Experimental
@@ -645,16 +628,13 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %gac_dll System.Reactive.Runtime.Remoting
 
 %files reactive-winforms
-%defattr(-, root, root, -)
 %gac_dll System.Reactive.Windows.Forms
 %gac_dll System.Reactive.Windows.Threading
 
 %files reactive-devel
-%defattr(-, root, root, -)
 %_libdir/pkgconfig/reactive.pc
 
 %files wcf
-%defattr(-, root, root, -)
 %gac_dll System.IdentityModel
 %gac_dll System.IdentityModel.Selectors
 %gac_dll System.ServiceModel
@@ -664,7 +644,6 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %gac_dll System.ServiceModel.Web
 
 %files web
-%defattr(-,root,root,-)
 %mono_bin disco
 %mono_bin httpcfg
 %mono_bin mconfig
@@ -707,11 +686,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %config (noreplace) %{_sysconfdir}/mono/2.0/web.config
 
 %files web-devel
-%defattr(-,root,root,-)
 %{_libdir}/pkgconfig/aspnetwebstack.pc
 
 %files winforms
-%defattr(-,root,root,-)
 %gac_dll Accessibility
 %gac_dll Mono.WebBrowser
 %gac_dll System.Design
@@ -720,14 +697,12 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %gac_dll System.Windows.Forms.DataVisualization
 
 %files mvc
-%defattr(-, root, root,-)
 %gac_dll System.Web.DynamicData
 %gac_dll System.Web.Extensions
 %gac_dll System.Web.Extensions.Design
 %gac_dll System.Web.Mvc
 
 %files mvc-devel
-%defattr (-,root,root,-)
 %{_libdir}/pkgconfig/system.web.extensions.design_1.0.pc
 %{_libdir}/pkgconfig/system.web.extensions_1.0.pc
 %{_libdir}/pkgconfig/system.web.mvc.pc
@@ -735,12 +710,10 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/system.web.mvc3.pc
 
 %files winfx
-%defattr(-, root, root)
 %gac_dll System.Data.Services.Client
 %gac_dll WindowsBase
 
 %files data
-%defattr(-,root,root,-)
 %mono_bin sqlsharp
 %mono_bin sqlmetal
 %gac_dll System.Data
@@ -760,19 +733,15 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_mandir}/man1/sqlsharp.1.gz
 
 %files data-sqlite
-%defattr(-,root,root,-)
 %gac_dll Mono.Data.Sqlite
 
 %files data-oracle
-%defattr(-,root,root,-)
 %gac_dll System.Data.OracleClient
 
 %files -n ibm-data-db2
-%defattr(-,root,root,-)
 %gac_dll IBM.Data.DB2
 
 %files -n monodoc
-%defattr(-, root, root)
 %{_monogacdir}/monodoc
 %{_monodir}/monodoc/*
 %ifnarch  ppc
@@ -789,10 +758,13 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_mandir}/man5/mdoc*
 
 %files -n monodoc-devel
-%defattr (-, root, root)
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon May 18 2015 Peter Robinson <pbrobinson@fedoraproject.org> 4.0.1-7
+- Drop obsolete ppc and ia64 conditionals
+- Rebuild for libgdiplus 3.12
+
 * Mon May 18 2015 Peter Robinson <pbrobinson@fedoraproject.org> 4.0.1-6
 - Rebuild post bootstrap
 

@@ -1,0 +1,32 @@
+--- a/mono/metadata/sgen-gc.c	2015-05-19 10:36:11.816320483 +0200
++++ b/mono/metadata/sgen-gc.c	2015-05-19 10:36:26.488319797 +0200
+@@ -714,7 +714,7 @@
+ static __thread gpointer *store_remset_buffer;
+ static __thread long store_remset_buffer_index;
+ /* Used by the managed allocator/wbarrier */
+-static __thread char **tlab_next_addr;
++static __thread char **tlab_next_addr MONO_ATTR_USED;
+ static __thread char *stack_end;
+ static __thread long *store_remset_buffer_index_addr;
+ #endif
+--- a/mono/mini/mini.c	2015-05-19 10:13:32.364384008 +0200
++++ b/mono/mini/mini.c	2015-05-19 10:14:37.084380984 +0200
+@@ -70,11 +70,17 @@
+ #include "mini-gc.h"
+ #include "debugger-agent.h"
+ 
++#ifdef __GNUC__
++#define MONO_ATTR_USED __attribute__ ((used))
++#else
++#define MONO_ATTR_USED
++#endif
++
+ #if defined(HAVE_KW_THREAD)
+ #define MINI_FAST_TLS_SET(x,y) x = y
+ #define MINI_FAST_TLS_GET(x) x
+ #define MINI_FAST_TLS_INIT(x)
+-#define MINI_FAST_TLS_DECLARE(x) static __thread gpointer x MONO_TLS_FAST;
++#define MINI_FAST_TLS_DECLARE(x) static __thread gpointer x MONO_TLS_FAST MONO_ATTR_USED;
+ #define MINI_HAVE_FAST_TLS
+ #define MINI_THREAD_VAR_OFFSET(x,y) MONO_THREAD_VAR_OFFSET(x,y)
+ #elif (defined(__APPLE__) && defined(__i386__))

@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.8
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -17,6 +17,7 @@ Patch0: mono-2.8-ppc-thread.patch
 Patch1: mono-281-libgdiplusconfig.patch
 Patch2: mono-2.10-monodis.patch
 Patch3: mono-2.10-armhfp.patch
+Patch4: mono-2.10-tls.patch
 
 BuildRequires:  bison 
 BuildRequires:  glib2-devel
@@ -261,6 +262,7 @@ Development file for monodoc
 %ifarch armv7hl
 %patch3 -p1 -b .armhfp
 %endif
+%patch4 -F 1 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -715,6 +717,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 
 
 %changelog
+* Tue May 19 2015 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 2.10.8-9
+- fix build on F22
+
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.10.8-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 

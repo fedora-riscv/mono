@@ -13,7 +13,7 @@
 
 Name:           mono
 Version:        4.0.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -29,11 +29,12 @@ Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
+BuildRequires:  gettext-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libgdiplus-devel >= 2.10
 BuildRequires:  pkgconfig
+BuildRequires:  valgrind-devel
 BuildRequires:  zlib-devel
-BuildRequires:  gettext-devel
 
 # http://www.mono-project.com/docs/about-mono/releases/4.0.0/#npgsql
 Obsoletes:      mono-data-postgresql
@@ -761,6 +762,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue May 19 2015 Peter Robinson <pbrobinson@fedoraproject.org> 4.0.1-8
+- Build against system valgrind (fixes rhbz #1141480)
+
 * Mon May 18 2015 Peter Robinson <pbrobinson@fedoraproject.org> 4.0.1-7
 - Drop obsolete ppc and ia64 conditionals
 - Rebuild for libgdiplus 3.12

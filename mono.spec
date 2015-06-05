@@ -1,4 +1,8 @@
-%global bootstrap 0
+%ifarch ppc64le s390x
+# workaround bugs #1224945, #1228570
+%undefine _hardened_build
+%endif
+%global bootstrap 1
 %if 0%{?rhel}%{?el6}%{?el7}
 %if 0%{?el6}
 %define mono_arches %ix86 x86_64 %{arm} sparcv9 alpha s390x ppc ppc64 ppc64le
@@ -46,7 +50,11 @@ Obsoletes:      mono-entityframework
 # need to bootstrap mono, comment out this BuildRequires
 # and don't delete the binaries in %%prep.
 
+%if 0%{bootstrap}
+# for bootstrap, use bundled monolite instead of local mono
+%else
 BuildRequires: mono-core >= 4.0
+%endif
 
 # JIT only available on these:
 ExclusiveArch: %mono_arches
@@ -762,6 +770,10 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Jun 05 2015 Dan Horák <dan[at]danny.cz> - 4.0.1-9
+- disable hardening for ppc64le and s390x (#1224945, #1228570)
+- enable bootstrap for s390x
+
 * Tue May 19 2015 Peter Robinson <pbrobinson@fedoraproject.org> 4.0.1-8
 - Build against system valgrind (fixes rhbz #1141480)
 

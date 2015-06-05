@@ -2,7 +2,7 @@
 # workaround bugs #1224945, #1228570
 %undefine _hardened_build
 %endif
-%global bootstrap 1
+%global bootstrap 0
 %if 0%{?rhel}%{?el6}%{?el7}
 %if 0%{?el6}
 %define mono_arches %ix86 x86_64 %{arm} sparcv9 alpha s390x ppc ppc64 ppc64le
@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.0.1
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -770,6 +770,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Jun 05 2015 Dan Horák <dan[at]danny.cz> - 4.0.1-10
+- non-bootstrap build
+
 * Fri Jun 05 2015 Dan Horák <dan[at]danny.cz> - 4.0.1-9
 - disable hardening for ppc64le and s390x (#1224945, #1228570)
 - enable bootstrap for s390x

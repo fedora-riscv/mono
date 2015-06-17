@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.0.1
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -770,6 +770,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.0.1-12
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Fri Jun 05 2015 Dan Horák <dan[at]danny.cz> - 4.0.1-11
 - update to 4.0.1.44
 

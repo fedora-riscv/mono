@@ -30,6 +30,7 @@ Source0:        http://download.mono-project.com/sources/mono/mono-%{version}.5.
 # You should not regenerate this unless you have a really, really, really good reason.
 Source1:        mono.snk
 Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
+Patch1:         mono-4.0.2-s390x.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -296,6 +297,7 @@ Development file for monodoc
 %prep
 %setup -q -n %{name}-%{version}
 %patch0 -p1
+%patch1 -p1
 
 # modifications for Mono 4
 sed -i "s#mono/2.0#mono/4.5#g" data/mono-nunit.pc.in
@@ -770,6 +772,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jul 06 2015 Than Ngo <than@redhat.com> 4.0.2-3
+- backport from upstream to fix handling of lo64 on big endian systems
+
 * Thu Jul 02 2015  Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.0.2-2
 - Update to 4.0.2.5 (4.0.2 SR 2)
 

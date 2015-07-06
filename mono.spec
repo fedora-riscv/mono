@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.0.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages

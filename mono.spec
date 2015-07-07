@@ -2,7 +2,7 @@
 # workaround bugs #1224945, #1228570
 %undefine _hardened_build
 %endif
-%global bootstrap 1
+%global bootstrap 0
 %if 0%{?rhel}%{?el6}%{?el7}
 %if 0%{?el6}
 %define mono_arches %ix86 x86_64 %{arm} sparcv9 alpha s390x ppc ppc64 ppc64le
@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.0.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -775,6 +775,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Jul 07 2015 Than Ngo <than@redhat.com> - 4.0.2-5
+- non-bootstrap build
+
 * Tue Jul 07 2015 Than Ngo <than@redhat.com> 4.0.2-4
 - backport Bill Seurer's patch for ppc64
 - fix unvalid TZ which causes exception

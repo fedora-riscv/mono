@@ -1,8 +1,8 @@
-%ifarch ppc64le s390x
+%ifarch ppc64 ppc64le s390x
 # workaround bugs #1224945, #1228570
 %undefine _hardened_build
 %endif
-%global bootstrap 0
+%global bootstrap 1
 %if 0%{?rhel}%{?el6}%{?el7}
 %if 0%{?el6}
 %define mono_arches %ix86 x86_64 %{arm} sparcv9 alpha s390x ppc ppc64 ppc64le
@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.0.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -31,6 +31,8 @@ Source0:        http://download.mono-project.com/sources/mono/mono-%{version}.5.
 Source1:        mono.snk
 Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
 Patch1:         mono-4.0.2-s390x.patch
+Patch2:         mono-4.0.2-ppc64.patch
+Patch3:         mono-4.0.2-tz.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -298,7 +300,8 @@ Development file for monodoc
 %setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
-
+%patch2 -p1
+%patch3 -p1
 # modifications for Mono 4
 sed -i "s#mono/2.0#mono/4.5#g" data/mono-nunit.pc.in
 
@@ -772,6 +775,12 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Jul 07 2015 Than Ngo <than@redhat.com> 4.0.2-4
+- backport Bill Seurer's patch for ppc64
+- fix unvalid TZ which causes exception
+- disable hardening for ppc64
+- enable bootstrap for ppc64/ppc64le
+
 * Mon Jul 06 2015 Than Ngo <than@redhat.com> 4.0.2-3
 - backport from upstream to fix handling of lo64 on big endian systems
 

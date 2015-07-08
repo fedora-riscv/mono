@@ -30,6 +30,7 @@ Source0:        http://download.mono-project.com/sources/mono/mono-%{version}.5.
 # You should not regenerate this unless you have a really, really, really good reason.
 Source1:        mono.snk
 Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
+# https://github.com/mono/mono/commit/f6294778fe4f5a90bd7b7b592bd8fa359d299e1e
 Patch1:         mono-4.0.2-s390x.patch
 Patch2:         mono-4.0.2-ppc64.patch
 Patch3:         mono-4.0.2-tz.patch

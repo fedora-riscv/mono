@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.0.2
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -118,31 +118,6 @@ Requires:       glib2-devel
 %description devel
 This package completes the Mono developer toolchain with the mono profiler,
 assembler and other various tools.
-
-%package nunit
-Summary:        NUnit Testing Framework
-License:        zlib with acknowledgement
-Group:          Development/Languages
-Requires:       mono-core = %{version}-%{release}
-Requires:       glib2-devel
-
-%description nunit
-NUnit is a unit-testing framework for all .Net languages. Initially
-ported from JUnit, the current release, version 2.2, is the fourth
-major release of this Unit based unit testing tool for Microsoft .NET.
-It is written entirely in C# and  has been completely redesigned to
-take advantage of many .NET language features, for example
-custom attributes and other reflection related capabilities. NUnit
-brings xUnit to all .NET languages.
-
-%package        nunit-devel
-Summary:        pkgconfig for nunit
-Group:          Development/Libraries
-Requires:       mono-core = %{version}-%{release}, pkgconfig
-Requires:       mono-nunit = %{version}-%{release}
-
-%description nunit-devel
-Development files for nunit
 
 %package locale-extras
 Summary:        Extra locale information for Mono
@@ -360,6 +335,14 @@ rm -rf %{buildroot}%{_monodir}/xbuild/Microsoft
 rm -f %{buildroot}%{_monodir}/4.0/dmcs.exe.so
 rm -rf %{buildroot}%{_bindir}/mono-configuration-crypto
 rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
+
+# remove the mono-nunit files
+rm -f %{buildroot}%{_bindir}/nunit-console
+rm -f %{buildroot}%{_bindir}/nunit-console2
+rm -f %{buildroot}%{_bindir}/nunit-console4
+rm -f %{buildroot}%{_monodir}/4.5/nunit*
+rm -Rf %{buildroot}%{_monodir}/gac/nunit*
+rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 
 %find_lang mcs
 
@@ -594,22 +577,6 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_includedir}/mono-2.0/mono/utils/*.h
 %{_includedir}/mono-2.0/mono/cil/opcode.def
 
-%files nunit
-%mono_bin nunit-console
-%{_bindir}/nunit-console2
-%{_bindir}/nunit-console4
-%gac_dll nunit-console-runner
-%gac_dll nunit.core
-%gac_dll nunit.core.extensions
-%gac_dll nunit.core.interfaces
-%gac_dll nunit.framework
-%gac_dll nunit.framework.extensions
-%gac_dll nunit.mocks
-%gac_dll nunit.util
-
-%files nunit-devel
-%{_libdir}/pkgconfig/mono-nunit.pc
-
 %files locale-extras
 %gac_dll I18N.CJK
 %gac_dll I18N.MidEast
@@ -776,6 +743,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Aug 04 2015 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.0.2-6
+- do not build mono-nunit and mono-nunit-devel, there is an uptodate seperate package nunit instead (#1247825)
+
 * Tue Jul 07 2015 Than Ngo <than@redhat.com> - 4.0.2-5
 - non-bootstrap build
 

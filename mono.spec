@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.0.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -34,6 +34,7 @@ Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
 Patch1:         mono-4.0.2-s390x.patch
 Patch2:         mono-4.0.2-ppc64.patch
 Patch3:         mono-4.0.2-tz.patch
+Patch4:         mono-4.0.4-swap.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -278,6 +279,7 @@ Development file for monodoc
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 # modifications for Mono 4
 sed -i "s#mono/2.0#mono/4.5#g" data/mono-nunit.pc.in
 
@@ -743,6 +745,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Oct 29 2015 Than Ngo <than@redhat.com> - 4.0.4-2
+- backport the patch to fix exception when reading from timezone file
+
 * Fri Sep 11 2015 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.0.4-1
 - Update to 4.0.4.1 Cycle 5 – Service Release 4
 

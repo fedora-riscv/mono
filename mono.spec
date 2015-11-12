@@ -16,8 +16,8 @@
 %endif
 
 Name:           mono
-Version:        4.0.4
-Release:        2%{?dist}
+Version:        4.0.5
+Release:        1%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -745,6 +745,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Nov 12 2015 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.0.5-1
+- Update to 4.0.5.1 Cycle 5 – Service Release 5
+
 * Thu Oct 29 2015 Than Ngo <than@redhat.com> - 4.0.4-2
 - backport the patch to fix exception when reading from timezone file
 

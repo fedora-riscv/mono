@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.2.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -31,6 +31,7 @@ Source0:        http://download.mono-project.com/sources/mono/mono-%{version}.10
 Source1:        mono.snk
 Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
 Patch1:         mono-4.2.0-tlab_next_addr_offset.patch
+Patch2:         mono-4.0.0-libgdiplusconfig.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -268,6 +269,7 @@ Development file for monodoc
 %setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -734,6 +736,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Sat Jan 02 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-3
+- apply patch to fix issues with libgdiplus.so.0 (#1251756)
+
 * Sat Jan 02 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-2
 - apply patch to fix build on ARM (#1293727)
 

@@ -1,5 +1,5 @@
---- data/config.in.orig	2016-01-02 18:56:31.246981603 +0100
-+++ data/config.in	2016-01-02 18:56:46.510980850 +0100
+--- a/data/config.in	2016-01-02 18:56:31.246981603 +0100
++++ b/data/config.in	2016-01-02 18:56:46.510980850 +0100
 @@ -29,8 +29,8 @@
  		<dllentry dll="__Internal" name="MoveMemory" target="mono_win32_compat_MoveMemory"/>
  		<dllentry dll="__Internal" name="ZeroMemory" target="mono_win32_compat_ZeroMemory"/>

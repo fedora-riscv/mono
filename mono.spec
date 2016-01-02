@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -30,6 +30,7 @@ Source0:        http://download.mono-project.com/sources/mono/mono-%{version}.10
 # You should not regenerate this unless you have a really, really, really good reason.
 Source1:        mono.snk
 Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
+Patch1:         mono-4.2.0-tlab_next_addr_offset.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -266,6 +267,7 @@ Development file for monodoc
 %prep
 %setup -q -n %{name}-%{version}
 %patch0 -p1
+%patch1 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -732,6 +734,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Sat Jan 02 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-2
+- apply patch to fix build on ARM (#1293727)
+
 * Tue Nov 17 2015 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.2.1-1
 - Update to 4.2.1.102 Cycle 6
 

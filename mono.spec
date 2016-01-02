@@ -1,6 +1,6 @@
 Name:           mono
-Version:        2.10.8
-Release:        9%{?dist}
+Version:        2.11.4
+Release:        1%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -717,6 +717,9 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 
 
 %changelog
+* Sat Jan 02 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 2.11.4-1
+- build Mono 2.11.4
+
 * Tue May 19 2015 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 2.10.8-9
 - fix build on F22
 

@@ -1,19 +1,35 @@
---- a/mono/metadata/sgen-gc.c	2015-05-19 10:36:11.816320483 +0200
-+++ b/mono/metadata/sgen-gc.c	2015-05-19 10:36:26.488319797 +0200
-@@ -714,7 +714,7 @@
- static __thread gpointer *store_remset_buffer;
- static __thread long store_remset_buffer_index;
+From 16ee0252305fbd4f40ea39c3c4421dc7f103f8a0 Mon Sep 17 00:00:00 2001
+From: Vladimir Kargov <vkargov@users.noreply.github.com>
+Date: Thu, 12 Feb 2015 17:45:34 +0300
+Subject: [PATCH] [runtime] Mark TLS variables as explicitly used to avoid
+ their unwarranted deletion by the compiler overlooking their usage in inline
+ assembly sections.
+
+---
+ mono/metadata/sgen-alloc.c | 2 +-
+ mono/utils/mono-compiler.h | 8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/mono/metadata/sgen-alloc.c b/mono/metadata/sgen-alloc.c
+index 12beef8..aa475bc 100644
+--- a/mono/metadata/sgen-alloc.c
++++ b/mono/metadata/sgen-alloc.c
+@@ -93,7 +93,7 @@ static __thread char *tlab_next;
+ static __thread char *tlab_temp_end;
+ static __thread char *tlab_real_end;
  /* Used by the managed allocator/wbarrier */
 -static __thread char **tlab_next_addr;
 +static __thread char **tlab_next_addr MONO_ATTR_USED;
- static __thread char *stack_end;
- static __thread long *store_remset_buffer_index_addr;
  #endif
---- a/mono/mini/mini.c	2015-05-19 10:13:32.364384008 +0200
-+++ b/mono/mini/mini.c	2015-05-19 10:14:37.084380984 +0200
-@@ -70,11 +70,17 @@
- #include "mini-gc.h"
- #include "debugger-agent.h"
+ 
+ #ifdef HAVE_KW_THREAD
+diff --git a/mono/utils/mono-compiler.h b/mono/utils/mono-compiler.h
+index 6cb60f2..a910e91 100644
+--- a/mono/utils/mono-compiler.h
++++ b/mono/utils/mono-compiler.h
+@@ -7,13 +7,19 @@
+  */
+ #include <config.h>
  
 +#ifdef __GNUC__
 +#define MONO_ATTR_USED __attribute__ ((used))
@@ -21,12 +37,14 @@
 +#define MONO_ATTR_USED
 +#endif
 +
- #if defined(HAVE_KW_THREAD)
- #define MINI_FAST_TLS_SET(x,y) x = y
- #define MINI_FAST_TLS_GET(x) x
- #define MINI_FAST_TLS_INIT(x)
--#define MINI_FAST_TLS_DECLARE(x) static __thread gpointer x MONO_TLS_FAST;
-+#define MINI_FAST_TLS_DECLARE(x) static __thread gpointer x MONO_TLS_FAST MONO_ATTR_USED;
- #define MINI_HAVE_FAST_TLS
- #define MINI_THREAD_VAR_OFFSET(x,y) MONO_THREAD_VAR_OFFSET(x,y)
- #elif (defined(__APPLE__) && defined(__i386__))
+ #ifdef HAVE_KW_THREAD
+ 
+ #define MONO_HAVE_FAST_TLS
+ #define MONO_FAST_TLS_SET(x,y) x = y
+ #define MONO_FAST_TLS_GET(x) x
+ #define MONO_FAST_TLS_INIT(x)
+-#define MONO_FAST_TLS_DECLARE(x) static __thread gpointer x MONO_TLS_FAST;
++#define MONO_FAST_TLS_DECLARE(x) static __thread gpointer x MONO_TLS_FAST MONO_ATTR_USED;
+ 
+ #if HAVE_TLS_MODEL_ATTR
+ 

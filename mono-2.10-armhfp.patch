@@ -1,8 +1,6 @@
-Index: mono-2.10.6/configure
-===================================================================
---- mono-2.10.6.orig/configure
-+++ mono-2.10.6/configure
-@@ -23729,11 +23729,12 @@ main ()
+--- a/configure	2016-01-02 19:59:33.750795196 +0100
++++ b/configure	2016-01-02 20:00:06.754793569 +0100
+@@ -24928,11 +24928,12 @@
    return 0;
  }
  _ACEOF
@@ -18,5 +16,5 @@ Index: mono-2.10.6/configure
 +#fi
 +fpu=VFP
  rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ 	fi
  
- 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $fpu" >&5

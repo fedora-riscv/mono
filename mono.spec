@@ -5,19 +5,19 @@
 %global bootstrap 0
 %if 0%{?rhel}%{?el6}%{?el7}
 %if 0%{?el6}
-%define mono_arches %ix86 x86_64 %{arm} sparcv9 alpha s390x ppc ppc64 ppc64le
+%global mono_arches %ix86 x86_64 %{arm} sparcv9 alpha s390x ppc ppc64 ppc64le
 %endif
 # see https://lists.fedoraproject.org/pipermail/packaging/2011-May/007762.html
 %global _missing_build_ids_terminate_build 0
 %global debug_package %{nil}
 # see https://fedorahosted.org/fpc/ticket/395
-%define _monodir %{_prefix}/lib/mono
-%define _monogacdir %{_monodir}/gac
+%global _monodir %{_prefix}/lib/mono
+%global _monogacdir %{_monodir}/gac
 %endif
 
 Name:           mono
 Version:        4.2.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -56,9 +56,9 @@ BuildRequires: mono-core >= 4.0
 # JIT only available on these:
 ExclusiveArch: %mono_arches
 
-%define _use_internal_dependency_generator 0
-%define __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
-%define __find_requires env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-requires && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-requires; } | sort | uniq | grep ^...'
+%global _use_internal_dependency_generator 0
+%global __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
+%global __find_requires env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-requires && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-requires; } | sort | uniq | grep ^...'
 
 %description
 The Mono runtime implements a JIT engine for the ECMA CLI
@@ -257,10 +257,10 @@ Requires:       mono-core = %{version}-%{release}
 %description -n monodoc-devel
 Development file for monodoc
 
-%define gac_dll(dll)  %{_monogacdir}/%{1} \
+%global gac_dll(dll)  %{_monogacdir}/%{1} \
   %{_monodir}/4.5/%{1}.dll \
   %{nil}
-%define mono_bin(bin) %{_bindir}/%{1} \
+%global mono_bin(bin) %{_bindir}/%{1} \
   %{_monodir}/4.5/%{1}.exe \
   %{_monodir}/4.5/%{1}.exe.* \
   %{nil}
@@ -333,6 +333,9 @@ rm -f %{buildroot}%{_bindir}/nunit-console4
 rm -f %{buildroot}%{_monodir}/4.5/nunit*
 rm -Rf %{buildroot}%{_monodir}/gac/nunit*
 rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
+
+# remove dmcs because it requires the .net 4.0 sdk but we only deliver 4.5 with Fedora (#1294967)
+rm -f %{buildroot}%{_bindir}/dmcs
 
 %find_lang mcs
 
@@ -423,7 +426,6 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 %config (noreplace) %{_sysconfdir}/mono/4.5/settings.map
 %config (noreplace) %{_sysconfdir}/mono/4.5/web.config
 %dir %{_sysconfdir}/mono/4.0
-%{_bindir}/dmcs
 %mono_bin ccrewrite
 %{_monodir}/4.5/mscorlib.dll
 %{_monodir}/4.5/mscorlib.dll.mdb
@@ -736,6 +738,10 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jan 04 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-4
+- replace define with global, according to http://fedoraproject.org/wiki/Packaging:Guidelines#.25global_preferred_over_.25define
+- remove dmcs because it requires the .net 4.0 sdk but we only deliver 4.5 with Fedora (#1294967)
+
 * Sat Jan 02 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-3
 - apply patch to fix issues with libgdiplus.so.0 (#1251756)
 

@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.0.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -36,6 +36,7 @@ Patch2:         mono-4.0.2-ppc64.patch
 Patch3:         mono-4.0.2-tz.patch
 Patch4:         mono-4.0.4-swap.patch
 Patch5:         mono-4.0.5-CVE-2009-0689.patch
+Patch6:         mono-4.0.0-libgdiplusconfig.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -282,6 +283,7 @@ Development file for monodoc
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 # modifications for Mono 4
 sed -i "s#mono/2.0#mono/4.5#g" data/mono-nunit.pc.in
 
@@ -747,6 +749,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jan 04 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.0.5-3
+- apply patch to fix issues with libgdiplus.so.0 (#1251756)
+
 * Tue Dec 22 2015 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.0.5-2
 - apply patch for security issue CVE-2009-0689 (#1293638)
 - Converting specially crafted string to float causes crash and possible code execution

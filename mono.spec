@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.2.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -337,6 +337,11 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 # remove dmcs because it requires the .net 4.0 sdk but we only deliver 4.5 with Fedora (#1294967)
 rm -f %{buildroot}%{_bindir}/dmcs
 
+# Move upstream GDB scripts for security reasons of new GDB.
+mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
+%{__mv} -f %{buildroot}%{_bindir}/mono-gdb.py \
+           %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}/
+
 %find_lang mcs
 
 %post -p /sbin/ldconfig
@@ -351,7 +356,7 @@ rm -f %{buildroot}%{_bindir}/dmcs
 %doc COPYING.LIB ChangeLog NEWS README.md
 %{_bindir}/mono
 %{_bindir}/mono-test-install
-%{_bindir}/mono-gdb.py
+%{_datadir}/gdb/auto-load
 %{_bindir}/mono-boehm
 %{_bindir}/mono-service2
 %{_bindir}/mono-sgen
@@ -738,6 +743,9 @@ rm -f %{buildroot}%{_bindir}/dmcs
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jan 04 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-5
+- Move mono-gdb.py under /usr/share/gdb/auto-load/ (#815501)
+
 * Mon Jan 04 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-4
 - replace define with global, according to http://fedoraproject.org/wiki/Packaging:Guidelines#.25global_preferred_over_.25define
 - remove dmcs because it requires the .net 4.0 sdk but we only deliver 4.5 with Fedora (#1294967)

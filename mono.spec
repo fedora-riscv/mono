@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.2.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -356,7 +356,7 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %doc COPYING.LIB ChangeLog NEWS README.md
 %{_bindir}/mono
 %{_bindir}/mono-test-install
-%{_datadir}/gdb/auto-load
+%{_datadir}/gdb/auto-load/*
 %{_bindir}/mono-boehm
 %{_bindir}/mono-service2
 %{_bindir}/mono-sgen
@@ -743,6 +743,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jan 04 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-6
+- another fix for gdb/auto-load mono-gdb.py. directory is owned by GDB
+
 * Mon Jan 04 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-5
 - Move mono-gdb.py under /usr/share/gdb/auto-load/ (#815501)
 

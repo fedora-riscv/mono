@@ -1,6 +1,6 @@
 Name:           mono
 Version:        2.10.8
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        A .NET runtime environment
 
 Group:          Development/Languages
@@ -17,6 +17,7 @@ Patch0: mono-2.8-ppc-thread.patch
 Patch1: mono-281-libgdiplusconfig.patch
 Patch2: mono-2.10-monodis.patch
 Patch3: mono-2.10-armhfp.patch
+Patch4: mono-2.10-CVE-2009-0689.patch
 
 BuildRequires:  bison 
 BuildRequires:  glib2-devel
@@ -267,6 +268,7 @@ Development file for monodoc
 %ifarch armv7hl
 %patch3 -p1 -b .armhfp
 %endif
+%patch4 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -721,6 +723,10 @@ rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
 
 
 %changelog
+* Mon Jan 04 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 2.10.8-9
+- apply patch for security issue CVE-2009-0689 (#1293640)
+- Converting specially crafted string to float causes crash and possible code execution
+
 * Tue Jul 08 2014 Leigh Scott <leigh123linux@googlemail.com> - 2.10.8-8
 - move obsoletes to core package
 

@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.2.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -32,6 +32,7 @@ Source1:        mono.snk
 Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
 Patch1:         mono-4.2.0-tlab_next_addr_offset.patch
 Patch2:         mono-4.0.0-libgdiplusconfig.patch
+Patch3:         mono-4.2.1-ppc.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -270,6 +271,7 @@ Development file for monodoc
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1 -b .ppc
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -743,6 +745,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jan 18 2016 Than Ngo <than@redhat.com> - 4.2.1-7
+- fix build failure on ppc
+
 * Mon Jan 04 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.1-6
 - another fix for gdb/auto-load mono-gdb.py. directory is owned by GDB
 

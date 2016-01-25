@@ -1,17 +1,26 @@
-diff -up mono-4.2.2/mono/metadata/icall.c.than mono-4.2.2/mono/metadata/icall.c
---- mono-4.2.2/mono/metadata/icall.c.than	2016-01-22 07:19:14.752781004 -0500
-+++ mono-4.2.2/mono/metadata/icall.c	2016-01-22 07:20:47.642781004 -0500
-@@ -825,10 +825,10 @@ ves_icall_System_Runtime_CompilerService
- #define SWAP(n) {\
- 	guint ## n *data = (guint ## n *) mono_array_addr (array, char, 0); \
- 	guint ## n *src = (guint ## n *) field_data; \
+diff -up mono-4.2.1/mono/metadata/icall.c.than mono-4.2.1/mono/metadata/icall.c
+--- mono-4.2.1/mono/metadata/icall.c.than	2015-11-12 10:00:29.000000000 +0100
++++ mono-4.2.1/mono/metadata/icall.c	2016-01-25 16:36:24.479028169 +0100
+@@ -822,14 +822,14 @@ ves_icall_System_Runtime_CompilerService
+ 	}
+ 
+ #if G_BYTE_ORDER != G_LITTLE_ENDIAN
+-#define SWAP(n) {\
+-	guint ## n *data = (guint ## n *) mono_array_addr (array, char, 0); \
+-	guint ## n *src = (guint ## n *) field_data; \
 -	guint ## n *end = (guint ## n *)((char*)src + size); \
-+	int i; \
- \
+-\
 -	for (; src < end; data++, src++) { \
 -		*data = read ## n (src); \
-+        for (i = 0; i < (size / sizeof(guint ## n)); i++) { \
-+               data[i] = read ## n (&src[i]);  \
- 	} \
+-	} \
++#define SWAP(n) {                                                              \
++       guint ## n *data = (guint ## n *) mono_array_addr (array, char, 0);     \
++       guint ## n *src = (guint ## n *) field_data;                            \
++       int i, nEnt = (size / sizeof(guint ## n));                              \
++                                                                               \
++       for (i = 0; i < nEnt; i++) {                                            \
++               data[i] = read ## n (&src[i]);                                  \
++       }                                                                       \
  }
  
+ 	/* printf ("Initialize array with elements of %s type\n", klass->element_class->name); */

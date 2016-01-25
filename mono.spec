@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.2.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -747,6 +747,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Jan 25 2016 Than Ngo <than@redhat.com> - 4.2.1-9
+- backport fix from upstream, fix build problem with gcc 4.4.7 on s390x
+
 * Fri Jan 22 2016 Than Ngo <than@redhat.com> - 4.2.1-8
 - fix build failure on s390, thanks to <Neale Ferguson>
 

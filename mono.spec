@@ -34,6 +34,7 @@ Patch1:         mono-4.2.0-tlab_next_addr_offset.patch
 Patch2:         mono-4.0.0-libgdiplusconfig.patch
 Patch3:         mono-4.2.1-ppc.patch
 Patch4:         mono-4.2.1-s390.patch
+Patch5:         mono-4.2.2-asmx.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -274,6 +275,7 @@ Development file for monodoc
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -747,8 +749,8 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.2.2-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+* Tue Feb 09 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.2-2
+- add a patch so that the documentation for asmx is displayed again; fixing upstream bug #37137
 
 * Fri Jan 29 2016 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.2.2-1
 - Update to 4.2.2.30 Cycle 6 – Service Release 1

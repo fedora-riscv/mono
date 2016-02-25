@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.3.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -752,6 +752,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Feb 25 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.3.2-2
+- fix missing mscorlib
+
 * Wed Feb 24 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.3.2-1
 - update to 4.3.2.467 Cycle 7 Alpha
 

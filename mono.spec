@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.3.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -34,6 +34,7 @@ Patch1:         mono-4.0.0-libgdiplusconfig.patch
 Patch2:         mono-4.2.1-ppc.patch
 Patch3:         mono-4.2.1-s390.patch
 Patch4:         mono-4.2.2-asmx.patch
+Patch5:         mono-4.3.2-find-provides.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -274,6 +275,7 @@ Development file for monodoc
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -396,6 +398,8 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_mandir}/man1/mprof-report.1.gz
 %{_libdir}/libMonoPosixHelper.so*
 %dir %{_monodir}
+%dir %{_monodir}/4.5
+%dir %{_monodir}/4.5/Facades
 %dir %{_monodir}/gac
 %gac_dll Commons.Xml.Relaxng
 %gac_dll ICSharpCode.SharpZipLib
@@ -440,6 +444,7 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %config (noreplace) %{_sysconfdir}/mono/4.5/web.config
 %dir %{_sysconfdir}/mono/4.0
 %mono_bin ccrewrite
+%{_monodir}/4.5-api
 %{_monodir}/4.5/mscorlib.dll
 %{_monodir}/4.5/mscorlib.dll.mdb
 %gac_dll Microsoft.CSharp
@@ -752,6 +757,10 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Feb 26 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.3.2-3
+- fix RPM provides of assemblies that are not in the gac.
+- fix for building from csproj files: need a symbolic link for 4.5-api instead of reference assemblies
+
 * Thu Feb 25 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.3.2-2
 - fix missing mscorlib
 

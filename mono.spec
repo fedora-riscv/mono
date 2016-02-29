@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.3.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -33,8 +33,8 @@ Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
 Patch1:         mono-4.0.0-libgdiplusconfig.patch
 Patch2:         mono-4.2.1-ppc.patch
 Patch3:         mono-4.2.1-s390.patch
-Patch4:         mono-4.2.2-asmx.patch
-Patch5:         mono-4.3.2-find-provides.patch
+Patch4:         mono-4.3.2-find-provides.patch
+Patch5:         mono-4.3.2-s390-get_pinvoke_import.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -758,6 +758,10 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Feb 29 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.3.2-5
+- remove patch for asmx service documentation: that has been fixed upstream
+- add a patch for s390x (#1311841)
+
 * Sat Feb 27 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.3.2-4
 - add symbolic link for 4.0-api to avoid having to replace TargetFramework 4.0 in csproj files
 

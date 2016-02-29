@@ -1,0 +1,26 @@
+From 9a8067719ced08ebd866013637db865f74774d2d Mon Sep 17 00:00:00 2001
+From: Zoltan Varga <vargaz@gmail.com>
+Date: Fri, 5 Feb 2016 15:22:11 -0500
+Subject: [PATCH] Fix the build.
+
+---
+ mono/mini/aot-compiler.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/mono/mini/aot-compiler.c b/mono/mini/aot-compiler.c
+index de12cc9..a39ea0a 100644
+--- a/mono/mini/aot-compiler.c
++++ b/mono/mini/aot-compiler.c
+@@ -4759,6 +4759,12 @@ get_pinvoke_import (MonoAotCompile *acfg, MonoMethod *method)
+ 	
+ 	return import;
+ }
++#else
++static const char *
++get_pinvoke_import (MonoAotCompile *acfg, MonoMethod *method)
++{
++	return NULL;
++}
+ #endif
+ 
+ static gint

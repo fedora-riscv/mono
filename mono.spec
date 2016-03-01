@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.3.2
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -279,6 +279,9 @@ Development file for monodoc
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
+
+# Remove hardcoded lib directory for libMonoPosixHelper.so from the config
+sed -i 's|$mono_libdir/||g' data/config.in
 
 # Remove prebuilt binaries
 find . -name "*.dll" -not -path "./mcs/class/lib/monolite/*" -print -delete
@@ -758,6 +761,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Mar 01 2016  Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.3.2-6
+- Remove hardcoded lib directory for libMonoPosixHelper.so from the config (fixes #1313021)
+
 * Mon Feb 29 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.3.2-5
 - remove patch for asmx service documentation: that has been fixed upstream
 - add a patch for s390x (#1311841)

@@ -1,5 +1,5 @@
-%ifarch ppc64 ppc64le s390x
-# workaround bugs #1224945, #1228570
+%ifarch ppc64 ppc64le
+# workaround #1224945
 %undefine _hardened_build
 %endif
 %global bootstrap 0
@@ -17,7 +17,7 @@
 
 Name:           mono
 Version:        4.3.2
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -761,6 +761,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Mar 03 2016  Dan Horák <dan[at]danny.cz> - 4.3.2-7
+- enable hardened build on s390x (#1228570)
+
 * Tue Mar 01 2016  Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.3.2-6
 - Remove hardcoded lib directory for libMonoPosixHelper.so from the config (fixes #1313021)
 

@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.4.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -327,7 +327,6 @@ rm -f %{buildroot}%{_monodir}/2.0/cilc.exe*
 rm -f %{buildroot}%{_monodir}/*/mscorlib.dll.so
 rm -f %{buildroot}%{_monodir}/*/mcs.exe.so
 rm -f %{buildroot}%{_monodir}/*/gmcs.exe.so
-rm -rf %{buildroot}%{_monodir}/xbuild/Microsoft
 rm -f %{buildroot}%{_monodir}/4.0/dmcs.exe.so
 rm -rf %{buildroot}%{_bindir}/mono-configuration-crypto
 rm -rf %{buildroot}%{_mandir}/man?/mono-configuration-crypto*
@@ -758,6 +757,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Jun 07 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.4.0-4
+- do not drop Microsoft targets files, they are needed for WebApplications (#1342852)
+
 * Wed May 18 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.4.0-3
 - update to 4.4.0.142 CYCLE 7 Beta Release Candidate
 - tidy up the spec file for Epel builds

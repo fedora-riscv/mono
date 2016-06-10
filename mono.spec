@@ -16,8 +16,8 @@
 %endif
 
 Name:           mono
-Version:        4.2.3
-Release:        2%{?dist}
+Version:        4.2.4
+Release:        1%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -748,6 +748,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Jun 10 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-1
+- Update to 4.2.4.4 Cycle 6 - Service Release 4
+
 * Tue Jun 07 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.3-2
 - do not drop Microsoft targets files, they are needed for WebApplications (#1342852)
 

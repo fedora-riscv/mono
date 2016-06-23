@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.4.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -33,6 +33,7 @@ Patch1:         mono-4.0.0-libgdiplusconfig.patch
 Patch2:         mono-4.2.1-ppc.patch
 Patch3:         mono-4.2.1-s390.patch
 Patch4:         mono-4.3.2-find-provides.patch
+Patch5:         mono-4.2-fix-winforms-trayicon.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -273,6 +274,7 @@ Development file for monodoc
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -757,6 +759,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Jun 23 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.4.1-2
+- Fix winforms problem with TrayIcon (#1284609)
+
 * Wed Jun 22 2016 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.4.1-1
 - update to 4.4.1.0 Cycle 7 Service Release 0
 

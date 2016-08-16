@@ -43,7 +43,12 @@ BuildRequires:  libgdiplus-devel >= 2.10
 BuildRequires:  pkgconfig
 BuildRequires:  valgrind-devel
 BuildRequires:  zlib-devel
+
+%if 0%{bootstrap}
+# for bootstrap, we build Mono.Cecil from the mono tarball 
+%else
 BuildRequires:  mono-cecil
+%endif
 
 # Yes, mono actually depends on itself, because
 # we deleted the bootstrapping binaries. If you
@@ -292,6 +297,9 @@ find . -name "*.exe" -not -path "./mcs/class/lib/monolite/*" -print -delete
 rm -rf mcs/class/lib/monolite/*
 %endif
 
+%if 0%{bootstrap}
+# for bootstrap, build Mono.Cecil from the mono tarball
+%else
 # Remove Cecil, use mono-cecil package instead
 rm -rf data/cecil.pc*
 sed -i "s#data/cecil.pc##g" configure.ac
@@ -312,6 +320,7 @@ sed -i "s#-r:Mono.Cecil.dll#-r:%{_monodir}/Mono.Cecil/Mono.Cecil.dll#g" mcs/tool
 sed -i "s#/r:Mono.Cecil.dll#-r:%{_monodir}/Mono.Cecil/Mono.Cecil.dll#g" mcs/tools/pdb2mdb/Makefile
 sed -i "s#/r:Mono.Cecil.dll#-r:%{_monodir}/Mono.Cecil/Mono.Cecil.dll#g" mcs/tools/mdoc/Makefile
 sed -i "s#/r:Mono.Cecil.dll#-r:%{_monodir}/Mono.Cecil/Mono.Cecil.dll#g" mcs/tools/mono-symbolicate/Makefile
+%endif
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
@@ -781,6 +790,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Aug 16 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.4.2-3
+- for bootstrap, there is no mono-cecil package, so we have to build Mono.Cecil from the mono tarball
+
 * Fri Aug 05 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.4.2-2
 - remove Mono.Cecil from mono-core, since there is a separate package for it (#1360620)
 

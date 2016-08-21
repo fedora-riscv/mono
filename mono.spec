@@ -44,12 +44,6 @@ BuildRequires:  pkgconfig
 BuildRequires:  valgrind-devel
 BuildRequires:  zlib-devel
 
-%if 0%{bootstrap}
-# for bootstrap, we build Mono.Cecil from the mono tarball 
-%else
-BuildRequires:  mono-cecil
-%endif
-
 # Yes, mono actually depends on itself, because
 # we deleted the bootstrapping binaries. If you
 # need to bootstrap mono, comment out this BuildRequires
@@ -57,8 +51,10 @@ BuildRequires:  mono-cecil
 
 %if 0%{bootstrap}
 # for bootstrap, use bundled monolite instead of local mono
+# for bootstrap, we build Mono.Cecil from the mono tarball
 %else
-BuildRequires: mono-core >= 4.0
+BuildRequires:  mono-core >= 4.0
+BuildRequires:  mono-cecil
 %endif
 
 # JIT only available on these:

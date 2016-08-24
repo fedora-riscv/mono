@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -29,11 +29,10 @@ Source0:        http://download.mono-project.com/sources/mono/mono-%{version}.15
 # You should not regenerate this unless you have a really, really, really good reason.
 Source1:        mono.snk
 Patch0:         mono-4.0.0-ignore-reference-assemblies.patch
-Patch1:         mono-4.0.0-libgdiplusconfig.patch
-Patch2:         mono-4.2.1-ppc.patch
-Patch3:         mono-4.3.2-find-provides.patch
-Patch4:         mono-4.2-fix-winforms-trayicon.patch
-Patch5:         mono-4.6.0-patch_arm_fast_tls.patch
+Patch1:         mono-4.2.1-ppc.patch
+Patch2:         mono-4.3.2-find-provides.patch
+Patch3:         mono-4.2-fix-winforms-trayicon.patch
+Patch4:         mono-4.6.0-patch_arm_fast_tls.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -274,7 +273,6 @@ Development file for monodoc
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -771,6 +769,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Aug 24 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.0-2
+- drop patch for libgdiplus reference, it has been fixed upstream
+
 * Tue Aug 23 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.0-1
 - update to 4.6.0.150 Cycle 8 Beta Preview 1
 - use Mono.Cecil from the tarball to build Mono, but do not make it public for other packages

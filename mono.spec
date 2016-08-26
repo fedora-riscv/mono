@@ -1141,7 +1141,7 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 * Tue Nov 25 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.1.pre1
 - rebuild
 
-* Mon Nov 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.pre1
+* Tue Nov 18 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 2.2-1.pre1
 - Bump to 2.2 preview 1
 - remove old patches
 - add build information for monodoc
@@ -1237,7 +1237,7 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 - added BR libunwind-devel for ia64 (bz426180)
 - fix for LIBDIR problem
 
-* Tue Dec 16 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-4
+* Sun Dec 16 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> 1.2.6-4
 - bump new version
 - removed more redundant bits
 - url fix
@@ -1263,7 +1263,7 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 - bump
 - added new parts (mono-linker, resgen and mono-cecil)
 
-* Thu Apr 21 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 1.2.4-1
+* Sat Apr 21 2007 Paul F. Johnson <paul@all-the-johnsons.co.uk> - 1.2.4-1
 - update from 1.2.3
 
 * Sun Apr  1 2007 Matthias Clasen <mclasen@redhat.com> - 1.2.3-3
@@ -1296,7 +1296,7 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 - rename mono-devtools back to mono-devel
 - kill mono-lib and mono-lib-devel
 
-* Mon Aug 10 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16.1-1
+* Thu Aug 10 2006 Alexander Larsson <alexl@redhat.com> - 1.1.16.1-1
 - Update to 1.1.16.1
 - Split out mono libs and devel headers to fix lib64 conflicts (#199790)
 

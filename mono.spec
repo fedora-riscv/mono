@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.2.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -348,6 +348,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{__mv} -f %{buildroot}%{_bindir}/mono-gdb.py \
            %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}/
 
+# do not make cecil publicly available. other packages should use the mono-cecil package instead
+rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
+
 %find_lang mcs
 
 %post -p /sbin/ldconfig
@@ -571,7 +574,6 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{_libdir}/pkgconfig/mono.pc
 %{_libdir}/pkgconfig/mono-2.pc
 %{_libdir}/pkgconfig/monosgen-2.pc
-%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/dotnet35.pc
 %{_libdir}/pkgconfig/mono-lineeditor.pc
 %{_libdir}/pkgconfig/mono-options.pc
@@ -750,6 +752,9 @@ mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 
 
 %changelog
+* Fri Aug 26 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-3
+- do not deliver cecil.pc because Mono.Cecil should not be made public to other packages, they should use package mono-cecil
+
 * Thu Jun 23 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-2
 - Fix winforms problem with TrayIcon (#1284609)
 

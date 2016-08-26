@@ -2,7 +2,7 @@
 # workaround #1224945
 %undefine _hardened_build
 %endif
-%global bootstrap 0
+%global bootstrap 1
 %if 0%{?el6}
 # see https://fedorahosted.org/fpc/ticket/395, it was added to el7
 %global mono_arches %{ix86} x86_64 sparc sparcv9 ia64 %{arm} alpha s390x ppc ppc64 ppc64le
@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.2.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -57,7 +57,7 @@ BuildRequires: mono-core >= 4.0
 %endif
 
 # JIT only available on these:
-ExclusiveArch: %mono_arches
+ExclusiveArch: %mono_arches ppc64le
 
 %global _use_internal_dependency_generator 0
 %global __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
@@ -752,6 +752,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 
 %changelog
+* Fri Aug 26 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-4
+- enable bootstrap. add ppc64le to ExclusiveArch
+
 * Fri Aug 26 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-3
 - do not deliver cecil.pc because Mono.Cecil should not be made public to other packages, they should use package mono-cecil
 

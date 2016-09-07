@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.2.4
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -752,6 +752,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 
 %changelog
+* Wed Sep 07 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-5
+- new build in side tag epel7-mono4
+
 * Fri Aug 26 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-4
 - enable bootstrap. add ppc64le to ExclusiveArch
 

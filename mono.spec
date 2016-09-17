@@ -2,7 +2,7 @@
 # workaround #1224945
 %undefine _hardened_build
 %endif
-%global bootstrap 1
+%global bootstrap 0 
 %if 0%{?el6}
 # see https://fedorahosted.org/fpc/ticket/395, it was added to el7
 %global mono_arches %{ix86} x86_64 sparc sparcv9 ia64 %{arm} alpha s390x ppc ppc64 ppc64le
@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.2.4
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -44,6 +44,7 @@ BuildRequires:  libgdiplus-devel >= 2.10
 BuildRequires:  pkgconfig
 BuildRequires:  valgrind-devel
 BuildRequires:  zlib-devel
+Obsoletes:      mono-data-postgresql <= 4.0
 
 # Yes, mono actually depends on itself, because
 # we deleted the bootstrapping binaries. If you
@@ -752,6 +753,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 
 %changelog
+* Sat Sep 17 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-6
+- disable bootstrap and obsolete mono-data-postgresql
+
 * Wed Sep 07 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-5
 - new build in side tag epel7-mono4
 

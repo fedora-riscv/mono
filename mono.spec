@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.2.4
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -44,7 +44,6 @@ BuildRequires:  libgdiplus-devel >= 2.10
 BuildRequires:  pkgconfig
 BuildRequires:  valgrind-devel
 BuildRequires:  zlib-devel
-Obsoletes:      mono-data-postgresql <= 4.0
 
 # Yes, mono actually depends on itself, because
 # we deleted the bootstrapping binaries. If you
@@ -74,6 +73,7 @@ metadata access libraries.
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Group:          Development/Languages
 Requires:       libgdiplus
+Obsoletes:      mono-data-postgresql <= 4.0
 
 %description core
 This package contains the core of the Mono runtime including its
@@ -753,6 +753,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 
 %changelog
+* Mon Sep 19 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-7
+- fix to obsolete mono-data-postgresql
+
 * Sat Sep 17 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-6
 - disable bootstrap and obsolete mono-data-postgresql
 

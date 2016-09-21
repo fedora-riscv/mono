@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.6.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -33,6 +33,7 @@ Patch1:         mono-4.2.1-ppc.patch
 Patch2:         mono-4.3.2-find-provides.patch
 Patch3:         mono-4.2-fix-winforms-trayicon.patch
 Patch4:         mono-4.6.0-patch_arm_fast_tls.patch
+Patch5:         mono-4.6.0-fix_gacutil.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -273,6 +274,7 @@ Development file for monodoc
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -769,6 +771,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Sep 21 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.0-7
+- include patch for gacutil as suggested by directhex
+
 * Wed Sep 14 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.0-6
 - update to 4.6.0.245 Cycle 8 Stable
 

@@ -342,6 +342,10 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 # remove dmcs because it requires the .net 4.0 sdk but we only deliver 4.5 with Fedora (#1294967)
 rm -f %{buildroot}%{_bindir}/dmcs
 
+# drop prj2make because the binary is not built anymore
+rm -f %{buildroot}%{_bindir}/prj2make
+rm -f %{buildroot}%{_mandir}/man1/prj2make*
+
 # Move upstream GDB scripts for security reasons of new GDB.
 mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_bindir}
 %{__mv} -f %{buildroot}%{_bindir}/mono-gdb.py \
@@ -523,7 +527,6 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_bindir}/monop2
 %mono_bin permview
 %{_bindir}/peverify
-%{_bindir}/prj2make
 %mono_bin resgen
 %{_bindir}/resgen2
 %mono_bin sgen
@@ -553,7 +556,6 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_mandir}/man1/mono-xmltool.1.gz
 %{_mandir}/man1/monop.1.gz
 %{_mandir}/man1/permview.1.gz
-%{_mandir}/man1/prj2make.1.gz
 %{_mandir}/man1/secutil.1.gz
 %{_mandir}/man1/sgen.1.gz
 %{_mandir}/man1/signcode.1.gz
@@ -769,6 +771,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Oct 10 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.1-2
+- drop prj2make (#1381300)
+
 * Wed Sep 28 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.1-1
 - update to 4.6.1.3 Cycle 8 Service Release 0
 

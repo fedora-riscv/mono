@@ -33,6 +33,7 @@ Patch1:         mono-4.2.1-ppc.patch
 Patch2:         mono-4.3.2-find-provides.patch
 Patch3:         mono-4.2-fix-winforms-trayicon.patch
 Patch4:         mono-4.6.0-patch_arm_fast_tls.patch
+Patch5:         mono-4.6.1-aarch64.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -55,7 +56,7 @@ BuildRequires:  mono-core >= 4.0
 %endif
 
 # JIT only available on these:
-ExclusiveArch: %mono_arches
+ExclusiveArch: %mono_arches aarch64
 
 %global _use_internal_dependency_generator 0
 %global __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
@@ -273,6 +274,7 @@ Development file for monodoc
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -369,7 +371,10 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_bindir}/mono
 %{_bindir}/mono-test-install
 %{_datadir}/gdb/auto-load/*
+%ifnarch aarch64
+# there is no support for aarch64 in the boehm back end
 %{_bindir}/mono-boehm
+%endif
 %{_bindir}/mono-service2
 %{_bindir}/mono-sgen
 %{_bindir}/mono-sgen-gdb.py
@@ -536,7 +541,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %mono_bin crlupdate
 %mono_bin mdbrebase
 %{_prefix}/lib/mono-source-libs/
+%ifnarch aarch64
 %{_bindir}/pedump
+%endif
 %{_mandir}/man1/resgen.1.gz
 %{_mandir}/man1/al.1.gz
 %{_mandir}/man1/cert2spc.1.gz
@@ -773,6 +780,7 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %changelog
 * Mon Oct 10 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.1-2
 - drop prj2make (#1381300)
+- add a patch for building on aarch64 (#1371829)
 
 * Wed Sep 28 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.1-1
 - update to 4.6.1.3 Cycle 8 Service Release 0

@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.6.1
-Release:        4%{?dist}
+Release:        6%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -778,6 +778,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Oct 13 2016 Peter Robinson <pbrobinson@fedoraproject.org> - 4.6.1-6
+- Non bootstrap build
+
 * Wed Oct 12 2016 Peter Robinson <pbrobinson@fedoraproject.org> 4.6.1-4
 - Enable bootstrap for aarch64
 

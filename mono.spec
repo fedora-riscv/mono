@@ -2,7 +2,7 @@
 # workaround #1224945
 %undefine _hardened_build
 %endif
-%global bootstrap 0
+%global bootstrap 1
 %if 0%{?el6}
 # see https://fedorahosted.org/fpc/ticket/395, it was added to el7
 %global mono_arches %{ix86} x86_64 sparc sparcv9 ia64 %{arm} alpha s390x ppc ppc64 ppc64le
@@ -780,6 +780,12 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %changelog
 * Tue Nov 15 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.2-1
 - update to 4.6.2.7 Cycle 8 Service Release 1
+
+* Thu Oct 13 2016 Peter Robinson <pbrobinson@fedoraproject.org> - 4.6.1-6
+- Non bootstrap build
+
+* Wed Oct 12 2016 Peter Robinson <pbrobinson@fedoraproject.org> 4.6.1-4
+- Enable bootstrap for aarch64
 
 * Wed Oct 12 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.1-3
 - update to 4.6.1.5 Cycle 8 Service Release 0 (updated)

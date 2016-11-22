@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.2.4
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -753,6 +753,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 
 %changelog
+* Tue Nov 22 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-8
+- enable bootstrap for Epel6
+
 * Mon Sep 19 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-7
 - fix to obsolete mono-data-postgresql
 

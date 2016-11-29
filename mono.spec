@@ -2,7 +2,7 @@
 # workaround #1224945
 %undefine _hardened_build
 %endif
-%global bootstrap 1
+%global bootstrap 0
 %if 0%{?el6}
 # see https://fedorahosted.org/fpc/ticket/395, it was added to el7
 %global mono_arches %{ix86} x86_64 sparc sparcv9 ia64 %{arm} alpha s390x ppc ppc64 ppc64le
@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.6.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -778,6 +778,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Nov 29 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.2-2
+- Non bootstrap build. Somehow the bootstrap flag was set during a merge gone wrong.
+
 * Tue Nov 15 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.2-1
 - update to 4.6.2.7 Cycle 8 Service Release 1
 

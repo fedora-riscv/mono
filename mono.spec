@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.6.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -292,6 +292,10 @@ rm -rf mcs/class/lib/monolite/*
 %endif
 
 %build
+%ifarch s390x
+# workaround a gcc bug - https://bugzilla.redhat.com/show_bug.cgi?id=1397948
+RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed -e 's/-march=z[[:alnum:]]\+/-march=z9-109/g')
+%endif
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 %configure --disable-rpath \
@@ -778,6 +782,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Sat Jan 14 2017  Dan Horák <dan[at]danny.cz> - 4.6.2-4
+- add a workaround for a gcc bug on s390x
+
 * Wed Jan 04 2017 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.6.2-3
 - update to 4.6.2.16 Cycle 8 Service Release 2
 

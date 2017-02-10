@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.6.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -782,6 +782,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 4.6.2-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Sat Jan 14 2017  Dan Horák <dan[at]danny.cz> - 4.6.2-4
 - add a workaround for a gcc bug on s390x
 

@@ -36,6 +36,7 @@ Patch4:         mono-4.6.0-patch_arm_fast_tls.patch
 Patch5:         mono-4.6.1-aarch64.patch
 
 BuildRequires:  bison
+BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  gettext-devel
 BuildRequires:  libicu-devel

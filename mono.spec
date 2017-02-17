@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.8.0
-Release:        2%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -478,8 +478,8 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %gac_dll System.Transactions
 %gac_dll System.Xaml
 %gac_dll WebMatrix.Data
-%ifnarch aarch64 armv7hl ppc64le
-# there is no btls for ARM and ppc64le
+%ifnarch aarch64 armv7hl ppc64 ppc64le 
+# there is no btls for ARM and PPC
 %gac_dll Mono.Btls.Interface
 %endif
 %gac_dll Mono.CodeContracts
@@ -550,9 +550,7 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %mono_bin crlupdate
 %mono_bin mdbrebase
 %{_prefix}/lib/mono-source-libs/
-%ifnarch aarch64
 %{_bindir}/pedump
-%endif
 %{_mandir}/man1/resgen.1.gz
 %{_mandir}/man1/al.1.gz
 %{_mandir}/man1/cert2spc.1.gz
@@ -787,8 +785,14 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Feb 17 2017 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.8.0-4
+- don't exclude pedump on aarch64
+ 
+* Fri Feb 17 2017 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.8.0-3
+- Disable Mono.Btls.Interface for ppc64
+
 * Fri Feb 17 2017 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.8.0-2
-* Disable Mono.Btls.Interface for ARM and ppc64le
+- Disable Mono.Btls.Interface for ARM and ppc64le
 
 * Thu Feb 16 2017 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.8.0-1
 - update to 4.8.0.489 Cycle 9 RC Refresh

@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.8.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -295,7 +295,7 @@ rm -rf mcs/class/lib/monolite/*
 %build
 %ifarch s390x
 # workaround a gcc bug - https://bugzilla.redhat.com/show_bug.cgi?id=1397948
-RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed -e 's/-march=z[[:alnum:]]\+/-march=z9-109/g')
+RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed -e 's/-march=z[[:alnum:]]\+/-march=z9-109/g' -e 's/-mtune=z[[:alnum:]]\+/-mtune=z10/g')
 %endif
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
@@ -478,8 +478,8 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %gac_dll System.Transactions
 %gac_dll System.Xaml
 %gac_dll WebMatrix.Data
-%ifnarch aarch64 armv7hl ppc64 ppc64le 
-# there is no btls for ARM and PPC
+%ifarch %{ix86} x86_64
+# there is no btls for non-x86
 %gac_dll Mono.Btls.Interface
 %endif
 %gac_dll Mono.CodeContracts
@@ -785,9 +785,12 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Feb 20 2017 Dan Horák <dan[at]danny.cz> - 4.8.0-5
+- updates for s390x
+
 * Fri Feb 17 2017 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.8.0-4
 - don't exclude pedump on aarch64
- 
+
 * Fri Feb 17 2017 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.8.0-3
 - Disable Mono.Btls.Interface for ppc64
 

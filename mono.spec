@@ -2,7 +2,7 @@
 # workaround #1224945
 %undefine _hardened_build
 %endif
-%global bootstrap 0
+%global bootstrap 1
 %if 0%{?el6}
 # see https://fedorahosted.org/fpc/ticket/395, it was added to el7
 %global mono_arches %{ix86} x86_64 sparc sparcv9 ia64 %{arm} alpha s390x ppc ppc64 ppc64le
@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.6.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -56,7 +56,7 @@ BuildRequires:  mono-core >= 4.0
 %endif
 
 # JIT only available on these:
-ExclusiveArch: %mono_arches ppc64le
+ExclusiveArch: %mono_arches ppc64le aarch64
 
 %global _use_internal_dependency_generator 0
 %global __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
@@ -784,6 +784,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 
 %changelog
+* Mon Jun 26 2017 Timotheus Pokorra <tp@tbits.net> - 4.2.6-2
+- enable bootstrap. add aarch64 to ExclusiveArch
+
 * Thu Jun 22 2017 Timotheus Pokorra <tp@tbits.net> - 4.2.6-1
 - Update to 4.6.2.16 Cycle 8 - Service Release 2
 

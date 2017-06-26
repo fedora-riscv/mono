@@ -784,13 +784,13 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 
 %changelog
-* Mon Jun 26 2017 Timotheus Pokorra <tp@tbits.net> - 4.2.6-3
+* Mon Jun 26 2017 Timotheus Pokorra <tp@tbits.net> - 4.6.2-3
 - disable bootstrap
 
-* Mon Jun 26 2017 Timotheus Pokorra <tp@tbits.net> - 4.2.6-2
+* Mon Jun 26 2017 Timotheus Pokorra <tp@tbits.net> - 4.6.2-2
 - enable bootstrap. add aarch64 to ExclusiveArch
 
-* Thu Jun 22 2017 Timotheus Pokorra <tp@tbits.net> - 4.2.6-1
+* Thu Jun 22 2017 Timotheus Pokorra <tp@tbits.net> - 4.6.2-1
 - Update to 4.6.2.16 Cycle 8 - Service Release 2
 
 * Mon Sep 19 2016 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.2.4-7

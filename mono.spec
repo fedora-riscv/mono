@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.8.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -785,6 +785,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 4.8.0-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Wed Mar 15 2017 Claudio Rodrigo Pereyra Diaz <elsupergomez@fedoraproject.org> - 4.8.0-7
 - update to 4.8.0.520 Cycle 9 Service Release 0
 

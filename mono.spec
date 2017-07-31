@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.6.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -34,6 +34,10 @@ Patch2:         mono-4.3.2-find-provides.patch
 Patch3:         mono-4.2-fix-winforms-trayicon.patch
 Patch4:         mono-4.6.0-patch_arm_fast_tls.patch
 Patch5:         mono-4.6.1-aarch64.patch
+
+# see https://bugzilla.xamarin.com/show_bug.cgi?id=46929
+# and the history of https://github.com/mono/mono/commits/master/mcs/class/Mono.Data.Sqlite/Mono.Data.Sqlite_2.0/SQLiteConvert.cs
+Patch6:         mono-4.6.0-sqlite_date.patch
 
 BuildRequires:  bison
 BuildRequires:  gcc-c++
@@ -276,6 +280,7 @@ Development file for monodoc
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -784,6 +789,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 
 %changelog
+* Sat Jul 29 2017 Timotheus Pokorra <tp@tbits.net> - 4.6.2-4
+- add a patch for an sqlite bug related to dates
+
 * Mon Jun 26 2017 Timotheus Pokorra <tp@tbits.net> - 4.6.2-3
 - disable bootstrap
 

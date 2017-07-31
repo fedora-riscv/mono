@@ -1,0 +1,11 @@
+--- a/mcs/class/Mono.Data.Sqlite/Mono.Data.Sqlite_2.0/SQLiteConvert.cs	2017-07-29 07:27:51.885369241 +0200
++++ b/mcs/class/Mono.Data.Sqlite/Mono.Data.Sqlite_2.0/SQLiteConvert.cs	2017-07-29 07:28:38.065062437 +0200
+@@ -221,7 +221,7 @@
+         case SQLiteDateFormats.UnixEpoch:
+           return ((long)(dateValue.Subtract(UnixEpoch).Ticks / TimeSpan.TicksPerSecond)).ToString();
+         default:
+-          return dateValue.ToString(_datetimeFormats[5], CultureInfo.InvariantCulture);
++          return dateValue.ToString(_datetimeFormats[19], CultureInfo.InvariantCulture);
+       }
+     }
+ 

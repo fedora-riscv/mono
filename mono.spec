@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.8.0
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -372,7 +372,8 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %postun devel -p /sbin/ldconfig
 
 %files core -f mcs.lang
-%doc COPYING.LIB NEWS README.md
+%license COPYING.LIB
+%doc NEWS README.md
 %{_bindir}/mono
 %{_bindir}/mono-test-install
 %{_datadir}/gdb/auto-load/*
@@ -386,6 +387,8 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_bindir}/mono-package-runtime
 %{_bindir}/monograph
 %{_bindir}/sgen-grep-binprot
+%dir %{_libdir}/mono
+%dir %{_libdir}/mono/lldb
 %{_libdir}/mono/lldb/mono.py*
 %mono_bin csharp
 %mono_bin cert-sync
@@ -785,6 +788,10 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Aug 21 2017 Ville SkyttÃ¤ <ville.skytta@iki.fi> - 4.8.0-10
+- Own dirs in %%{_libdir}/mono
+- Mark COPYING.LIB as %%license
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 4.8.0-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 

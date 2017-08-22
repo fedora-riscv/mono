@@ -788,7 +788,7 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
-* Mon Aug 21 2017 Ville SkyttÃ¤ <ville.skytta@iki.fi> - 4.8.0-10
+* Mon Aug 21 2017 Ville Skyttä <ville.skytta@iki.fi> - 4.8.0-10
 - Own dirs in %%{_libdir}/mono
 - Mark COPYING.LIB as %%license
 

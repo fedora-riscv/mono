@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.8.0
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -486,6 +486,8 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %gac_dll Mono.Btls.Interface
 %endif
 %gac_dll Mono.CodeContracts
+%dir %{_monodir}/mono-configuration-crypto
+%dir %{_monodir}/mono-configuration-crypto/4.5
 %{_monodir}/mono-configuration-crypto/4.5/mono-config*
 %{_monodir}/mono-configuration-crypto/4.5/Mono.Configuration.Crypto.dll*
 %{_mandir}/man1/ccrewrite.1.gz
@@ -788,6 +790,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Sun Aug 27 2017 Ville Skyttä <ville.skytta@iki.fi> - 4.8.0-11
+- Own dirs in %%{_monodir}/mono-configuration-crypto
+
 * Mon Aug 21 2017 Ville Skyttä <ville.skytta@iki.fi> - 4.8.0-10
 - Own dirs in %%{_libdir}/mono
 - Mark COPYING.LIB as %%license

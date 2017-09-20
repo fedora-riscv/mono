@@ -37,6 +37,7 @@ Patch5:         mono-4.6.1-aarch64.patch
 # fix bz#1484151, bz#1484149 due to new glibc which
 # drops the struct ucontext
 Patch6:         mono-4.8.0.520-glibc-ucontext.patch
+Patch7:         mono-4.8.0-aarch64-glibc-2.26.patch
 
 BuildRequires:  bison
 BuildRequires:  cmake
@@ -280,6 +281,7 @@ Development file for monodoc
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -795,7 +797,7 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 %changelog
 * Wed Sep 20 2017 Than Ngo <than@redhat.com> - 4.8.0-12
-- fixed the build failure on s390x/ppc64/ppc64le against new glibc
+- fixed the build failure on s390x/ppc64/ppc64le/aarch64 against new glibc
   which drops the tag struct ucontext 
 
 * Sun Aug 27 2017 Ville Skyttä <ville.skytta@iki.fi> - 4.8.0-11

@@ -1,0 +1,12 @@
+diff -up mono-4.8.0/mono/utils/mono-sigcontext.h.than mono-4.8.0/mono/utils/mono-sigcontext.h
+--- mono-4.8.0/mono/utils/mono-sigcontext.h.than	2017-09-20 09:47:02.344226028 -0400
++++ mono-4.8.0/mono/utils/mono-sigcontext.h	2017-09-20 09:53:16.120785421 -0400
+@@ -276,7 +276,7 @@ typedef struct ucontext {
+ #endif
+ 
+ #if defined(__linux__)
+-	typedef struct ucontext os_ucontext;
++	typedef ucontext_t os_ucontext;
+ 
+ #ifdef __mono_ppc64__
+ 	#define UCONTEXT_REG_Rn(ctx, n)   (((os_ucontext*)(ctx))->uc_mcontext.gp_regs [(n)])

@@ -10,3 +10,15 @@ diff -up mono-4.8.0/mono/utils/mono-sigcontext.h.than mono-4.8.0/mono/utils/mono
  
  #ifdef __mono_ppc64__
  	#define UCONTEXT_REG_Rn(ctx, n)   (((os_ucontext*)(ctx))->uc_mcontext.gp_regs [(n)])
+diff -up mono-4.8.0/mono/utils/mono-context.h.than mono-4.8.0/mono/utils/mono-context.h
+--- mono-4.8.0/mono/utils/mono-context.h.than	2017-09-20 17:34:46.343187526 +0200
++++ mono-4.8.0/mono/utils/mono-context.h	2017-09-20 17:35:18.324985280 +0200
+@@ -854,7 +854,7 @@ typedef struct {
+ 
+ #define MONO_ARCH_HAS_MONO_CONTEXT 1
+ 
+-typedef struct ucontext MonoContext;
++typedef ucontext_t MonoContext;
+ 
+ #define MONO_CONTEXT_SET_IP(ctx,ip) 					\
+ 	do {								\

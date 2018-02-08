@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.8.0
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -796,6 +796,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Thu Feb 08 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.8.0-13
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Wed Sep 20 2017 Than Ngo <than@redhat.com> - 4.8.0-12
 - fixed the build failure on s390x/ppc64/ppc64le/aarch64 against new glibc
   which drops the tag struct ucontext 

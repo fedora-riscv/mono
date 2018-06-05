@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.8.0
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -37,7 +37,12 @@ Patch5:         mono-4.6.1-aarch64.patch
 # fix bz#1484151, bz#1484149 due to new glibc which
 # drops the struct ucontext
 Patch6:         mono-4.8.0.520-glibc-ucontext.patch
-Patch7:         mono-4.8.0-aarch64-glibc-2.26.patch
+# fix bz#1580447, due to new file format terminfo2 introduced with ncurses6.1
+Patch7:         mono-4.8.0-terminfo.patch
+# glibc change: The inclusion of <sys/sysmacros.h> by <sys/types.h> is deprecated.  This
+# means that in a future release, the macros “major”, “minor”, and “makedev”
+# will only be available from <sys/sysmacros.h>.
+Patch8:         mono-4.8.0-sysmacros.patch
 
 BuildRequires:  bison
 BuildRequires:  cmake
@@ -282,6 +287,7 @@ Development file for monodoc
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -796,6 +802,11 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Tue Jun 05 2018 Timotheus Pokorra <tp@tbits.net> - 4.8.0-14
+- backport a patch for new file format terminfo2 introduced with ncurses6.1
+- dropping patch for glibc on aarch64 because it now breaks the build on Fedora 28
+- adding patch for glibc change regarding sysmacros, for Fedora 29
+
 * Thu Feb 08 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.8.0-13
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 

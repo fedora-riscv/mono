@@ -308,6 +308,8 @@ rm -rf mcs/class/lib/monolite/*
 %ifarch s390x
 # workaround a gcc bug - https://bugzilla.redhat.com/show_bug.cgi?id=1397948
 RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed -e 's/-march=z[[:alnum:]]\+/-march=z9-109/g' -e 's/-mtune=z[[:alnum:]]\+/-mtune=z10/g')
+# so either mono C code relies on undefined behaviour or gcc is even more broken than earlier
+RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed -e 's/-O2 /-O0 /g')
 %endif
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 

@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.8.0
-Release:        14%{?dist}
+Release:        15%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 Group:          Development/Languages
@@ -804,6 +804,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.8.0-15
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Tue Jun 05 2018 Timotheus Pokorra <tp@tbits.net> - 4.8.0-14
 - backport a patch for new file format terminfo2 introduced with ncurses6.1
 - dropping patch for glibc on aarch64 because it now breaks the build on Fedora 28

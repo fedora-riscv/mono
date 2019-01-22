@@ -377,13 +377,9 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 
 %find_lang mcs
 
-%post -p /sbin/ldconfig
+%ldconfig_scriptlets
 
-%postun -p /sbin/ldconfig
-
-%post devel -p /sbin/ldconfig
-
-%postun devel -p /sbin/ldconfig
+%ldconfig_scriptlets devel
 
 %files core -f mcs.lang
 %license COPYING.LIB

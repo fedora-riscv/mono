@@ -19,7 +19,6 @@ Version:        4.8.0
 Release:        15%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
-Group:          Development/Languages
 License:        MIT
 URL:            http://www.mono-project.com
 Source0:        http://download.mono-project.com/sources/mono/mono-%{version}.520.tar.bz2
@@ -80,7 +79,6 @@ metadata access libraries.
 
 %package core
 Summary:        The Mono CIL runtime, suitable for running .NET code
-Group:          Development/Languages
 Requires:       libgdiplus
 
 %description core
@@ -91,7 +89,6 @@ I18N, Cairo and Mono.*).
 
 %package winfx
 Summary:        Mono implementation of core WinFX APIs
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description winfx
@@ -99,7 +96,6 @@ Open source implementation of core WinFX APIs
 
 %package mvc
 Summary:        Mono implementation of ASP.NET MVC
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description mvc
@@ -107,7 +103,6 @@ This is the Mono implementation of ASP.NET MVC
 
 %package mvc-devel
 Summary:        Development files for  ASP.NET MVC
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description mvc-devel
@@ -115,7 +110,6 @@ This is the Mono implementation of ASP.NET MVC
 
 %package devel
 Summary:        Development tools for Mono
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       pkgconfig
 Requires:       glib2-devel
@@ -126,7 +120,6 @@ assembler and other various tools.
 
 %package locale-extras
 Summary:        Extra locale information for Mono
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description locale-extras
@@ -135,7 +128,6 @@ non-latin alphabets.
 
 %package extras
 Summary:        Provides the infrastructure for running and building daemons and services with Mono as well as various stub assemblies
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description extras
@@ -147,7 +139,6 @@ System.Configuration.Install, System.Management, System.Messaging.
 %package reactive
 License:        MIT License (or similar) ; Apache License 2.0
 Summary:        Reactive Extensions for Mono core libraries
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description reactive
@@ -157,7 +148,6 @@ desktop-specific features.
 %package reactive-winforms
 License:        MIT License (or similar) ; Apache License 2.0
 Summary:        Reactive Extensions for Mono desktop-specific libraries
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       mono-reactive = %{version}-%{release}
 
@@ -167,7 +157,6 @@ windows threading).
 
 %package reactive-devel
 Summary:        Development files for system.web
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       mono-reactive = %{version}-%{release} pkgconfig
 
@@ -176,7 +165,6 @@ This package provides the .pc file for mono-rx
 
 %package winforms
 Summary:        Windows Forms implementation for Mono
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description winforms
@@ -186,7 +174,6 @@ applications.
 
 %package wcf
 Summary:        Mono implementation of Windows Communication Foundation
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description wcf
@@ -195,7 +182,6 @@ Foundation.
 
 %package web
 Summary:        ASP.NET, Remoting, and Web Services for Mono
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description web
@@ -204,7 +190,6 @@ development of web application, web services and remoting support.
 
 %package web-devel
 Summary:        Development files for system.web
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       mono-web = %{version}-%{release} pkgconfig
 
@@ -213,7 +198,6 @@ This package provides the .pc file for mono-web
 
 %package data
 Summary:        Database connectivity for Mono
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description data
@@ -226,7 +210,6 @@ data providers.
 
 %package data-sqlite
 Summary:        sqlite database connectivity for Mono
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 Requires:       sqlite
 
@@ -236,7 +219,6 @@ database.
 
 %package data-oracle
 Summary:        Oracle database connectivity for Mono
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description data-oracle
@@ -245,7 +227,6 @@ database.
 
 %package -n ibm-data-db2
 Summary:        IBM DB2 database connectivity for Mono
-Group:          Development/Languages
 Requires:       mono-core = %{version}-%{release}
 
 %description -n ibm-data-db2
@@ -254,7 +235,6 @@ Universal database.
 
 %package -n monodoc
 Summary:        The mono documentation system
-Group:          Documentation
 Requires:       mono-core = %{version}-%{release}
 
 %description -n monodoc
@@ -262,7 +242,6 @@ monodoc is the documentation package for the mono .NET environment
 
 %package -n monodoc-devel
 Summary:        .pc file for monodoc
-Group:          Documentation
 Requires:       monodoc = %{version}-%{release} pkgconfig
 Requires:       mono-core = %{version}-%{release}
 

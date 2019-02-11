@@ -16,7 +16,7 @@
 
 Name:           mono
 Version:        4.8.0
-Release:        16%{?dist}
+Release:        17%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -42,6 +42,10 @@ Patch7:         mono-4.8.0-terminfo.patch
 # means that in a future release, the macros “major”, “minor”, and “makedev”
 # will only be available from <sys/sysmacros.h>.
 Patch8:         mono-4.8.0-sysmacros.patch
+Patch9:         mono-4.8.0-python-shebang.patch
+
+# Due to bug 1588734
+ExcludeArch: ppc64le
 
 BuildRequires:  bison
 BuildRequires:  cmake
@@ -267,6 +271,7 @@ Development file for monodoc
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 # Add undeclared Arg
 sed -i "61a #define ARG_MAX     _POSIX_ARG_MAX" mono/io-layer/wapi_glob.h
@@ -779,6 +784,10 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/cecil.pc
 %{_libdir}/pkgconfig/monodoc.pc
 
 %changelog
+* Mon Feb 11 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 4.8.0-17
+- fixes to resolve FTBFS: python shebang
+- disable build for ppc64le due to bug 1588734
+
 * Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 4.8.0-16
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 

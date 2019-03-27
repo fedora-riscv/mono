@@ -46,6 +46,7 @@ Patch8:         mono-5.18.0-use-v471.patch
 Patch9:         mono-5.18.0-reference-assemblies-fix.patch
 Patch10:        mono-5.18.0-sharpziplib-parent-path-traversal.patch
 Patch11:        mono-4.8.0-python-shebang.patch
+Patch12:        mono-5.18.1-s390x-build.patch
 
 BuildRequires:  bison
 BuildRequires:  python
@@ -321,7 +322,7 @@ not install anything from outside the mono source (XSP, mono-basic, etc.).
 %setup -q -n %{name}-%{version}.%{xamarinrelease}
 
 %patch0 -p1
-%ifarch ppc ppc64 ppc64le
+%ifarch ppc ppc64 ppc64le s390x
 %patch1 -p1
 %endif
 %patch2 -p1
@@ -334,6 +335,7 @@ not install anything from outside the mono source (XSP, mono-basic, etc.).
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 # Remove hardcoded lib directory for libMonoPosixHelper.so from the config
 sed -i 's|$mono_libdir/||g' data/config.in
@@ -353,9 +355,7 @@ cd external/binary-reference-assemblies && mv v4.7.1 v4.7.1.tobuild && ln -s /us
 
 %build
 %ifarch s390x
-# workaround a gcc bug - https://bugzilla.redhat.com/show_bug.cgi?id=1397948
-RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed -e 's/-march=z[[:alnum:]]\+/-march=z9-109/g' -e 's/-mtune=z[[:alnum:]]\+/-mtune=z10/g')
-# so either mono C code relies on undefined behaviour or gcc is even more broken than earlier
+# either mono C code relies on undefined behaviour or gcc is even more broken than earlier
 RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed -e 's/-O2 /-O1 /g')
 %endif
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"

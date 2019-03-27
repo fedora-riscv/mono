@@ -1,5 +1,5 @@
-%ifarch ppc64 ppc64le
-# workaround #1224945
+%ifarch s390x
+# workaround https://github.com/mono/mono/issues/9009#issuecomment-477073609
 %undefine _hardened_build
 %endif
 %global bootstrap 1

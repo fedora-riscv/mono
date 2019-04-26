@@ -5,7 +5,7 @@
  		protected override string ToolName {
  			get {
 -				return MSBuildUtils.RunningOnWindows ? "csc.bat" : "csc.exe";
-+				return MSBuildUtils.RunningOnWindows ? "msc.bat" : "msc.exe";
++				return MSBuildUtils.RunningOnWindows ? "mcs.bat" : "mcs.exe";
  			}
  		}
  

@@ -20,10 +20,10 @@
 %undefine _missing_build_ids_terminate_build
 %endif
 
-%global xamarinrelease 0
+%global xamarinrelease 3
 Name:           mono
 Version:        5.18.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -41,7 +41,7 @@ Patch3:         mono-4.2-fix-winforms-trayicon.patch
 Patch4:         mono-4.6.1-aarch64.patch
 Patch5:         mono-5.18.1-s390x-ucontext.patch
 Patch6:         mono-5.18.0-roslyn-binaries.patch
-Patch7:         mono-5.18.0-use-msc.patch
+Patch7:         mono-5.18.0-use-mcs.patch
 Patch8:         mono-5.18.0-use-v471.patch
 Patch9:         mono-5.18.0-reference-assemblies-fix.patch
 Patch10:        mono-5.18.0-sharpziplib-parent-path-traversal.patch
@@ -879,6 +879,10 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Thu Apr 18 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-3
+- upgrade to Mono 5.18.1.3
+- fix typo for mcs in Microsoft.Build.Tasks patch
+
 * Wed Mar 27 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-2
 - disable bootstrapping
 

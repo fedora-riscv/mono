@@ -45,11 +45,11 @@ Patch7:         mono-5.18.0-use-mcs.patch
 Patch8:         mono-5.18.0-use-v471.patch
 Patch9:         mono-5.18.0-reference-assemblies-fix.patch
 Patch10:        mono-5.18.0-sharpziplib-parent-path-traversal.patch
-Patch11:        mono-4.8.0-python-shebang.patch
+Patch11:        mono-5.18.1-python3.patch
 Patch12:        mono-5.18.1-s390x-build.patch
 
 BuildRequires:  bison
-BuildRequires:  python
+BuildRequires:  python3
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  gettext-devel

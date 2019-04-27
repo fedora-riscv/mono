@@ -49,7 +49,7 @@ Patch11:        mono-5.18.1-python3.patch
 Patch12:        mono-5.18.1-s390x-build.patch
 
 BuildRequires:  bison
-BuildRequires:  python3
+BuildRequires:  python%{python3_pkgversion}
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  gettext-devel

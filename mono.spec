@@ -23,7 +23,7 @@
 %global xamarinrelease 3
 Name:           mono
 Version:        5.18.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -444,6 +444,9 @@ rm -rf %{buildroot}/usr/lib/mono/msbuild
 
 # we have btls debug files
 rm -rf %{buildroot}/usr/lib/debug/usr/lib64/libmono-btls-shared.so-*.debug
+
+# create a symbolic link so that Fedora packages targetting Framework 4.5 will still build
+cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
 
 %find_lang mcs
 
@@ -879,6 +882,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Sat Apr 27 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-4
+- add symbolic link from /usr/lib/mono/4.5-api to 4.7.1-api to fix build issues for other packages depending on Mono
+
 * Thu Apr 18 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-3
 - upgrade to Mono 5.18.1.3
 - fix typo for mcs in Microsoft.Build.Tasks patch

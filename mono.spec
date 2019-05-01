@@ -23,7 +23,7 @@
 %global xamarinrelease 3
 Name:           mono
 Version:        5.18.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -75,7 +75,7 @@ BuildRequires:  mono-core >= 5.0
 ExclusiveArch: %mono_arches
 
 %global _use_internal_dependency_generator 0
-%global __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
+%global __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | grep -v 4.7.1-api | grep -v 4.5-api| /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | grep -v 4.7.1-api | grep -v 4.5-api | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
 %global __find_requires env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-requires && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-requires; } | sort | uniq | grep ^...'
 
 %description
@@ -883,6 +883,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Wed May 01 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-5
+- mono-devel should not provide for namespaces in the reference assemblies. fixes bug 1704560
+
 * Sat Apr 27 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-4
 - add symbolic link from /usr/lib/mono/4.5-api to 4.7.1-api to fix build issues for other packages depending on Mono
 

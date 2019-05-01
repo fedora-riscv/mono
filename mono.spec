@@ -23,7 +23,7 @@
 %global xamarinrelease 3
 Name:           mono
 Version:        5.18.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -47,6 +47,7 @@ Patch9:         mono-5.18.0-reference-assemblies-fix.patch
 Patch10:        mono-5.18.0-sharpziplib-parent-path-traversal.patch
 Patch11:        mono-5.18.1-python3.patch
 Patch12:        mono-5.18.1-s390x-build.patch
+Patch13:        mono-5.18.0-largearraybuilder.patch
 
 BuildRequires:  bison
 BuildRequires:  python%{python3_pkgversion}
@@ -336,6 +337,7 @@ not install anything from outside the mono source (XSP, mono-basic, etc.).
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 # Remove hardcoded lib directory for libMonoPosixHelper.so from the config
 sed -i 's|$mono_libdir/||g' data/config.in
@@ -883,6 +885,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Wed May 01 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-6
+- backport a fix for LargeArrayBuilder, fixes bug 1704847
+
 * Wed May 01 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-5
 - mono-devel should not provide for namespaces in the reference assemblies. fixes bug 1704560
 

@@ -70,6 +70,7 @@ BuildRequires:  perl-Getopt-Long
 # for bootstrap, use bundled monolite and reference assemblies instead of local mono
 %else
 BuildRequires:  mono-core >= 5.0
+BuildRequires:  mono-devel >= 5.0
 %endif
 
 # JIT only available on these:

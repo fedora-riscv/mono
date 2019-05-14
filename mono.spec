@@ -23,7 +23,7 @@
 %global xamarinrelease 3
 Name:           mono
 Version:        5.18.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -450,6 +450,8 @@ rm -rf %{buildroot}/usr/lib/debug/usr/lib64/libmono-btls-shared.so-*.debug
 
 # create a symbolic link so that Fedora packages targetting Framework 4.5 will still build
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
+# as requested in bug 1704861; we have had that link in F29 with Mono 4.8 as well.
+cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.0-api && cd -
 
 %find_lang mcs
 
@@ -886,6 +888,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Tue May 14 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-7
+- adding link 4.0-api, fixes bug 1704861
+
 * Wed May 01 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-6
 - backport a fix for LargeArrayBuilder, fixes bug 1704847
 

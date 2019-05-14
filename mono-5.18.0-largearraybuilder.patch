@@ -1,0 +1,41 @@
+From 0bf46dbe2cf0a215ca6e64793b7c434433f50722 Mon Sep 17 00:00:00 2001
+From: Marek Safar <marek.safar@gmail.com>
+Date: Wed, 31 Oct 2018 10:25:58 +0100
+Subject: [PATCH] Fixes __MonoCS__ handling of value types
+
+---
+ .../src/System/Collections/Generic/LargeArrayBuilder.cs     | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/external/corefx/src/Common/src/System/Collections/Generic/LargeArrayBuilder.cs b/external/corefx/src/Common/src/System/Collections/Generic/LargeArrayBuilder.cs
+index c0f441909dcf..8ec603ace72e 100644
+--- a/external/corefx/src/Common/src/System/Collections/Generic/LargeArrayBuilder.cs
++++ b/external/corefx/src/Common/src/System/Collections/Generic/LargeArrayBuilder.cs
+@@ -263,7 +263,7 @@ public CopyPosition CopyTo(CopyPosition position, T[] array, int arrayIndex, int
+             T[] buffer = GetBuffer(row);
+             int copied =
+ #if __MonoCS__
+-            CopyToCore(buffer, column, array, arrayIndex, count);
++            CopyToCore(buffer, column, array, ref arrayIndex, ref count);
+ #else
+             CopyToCore(buffer, column);
+ #endif
+@@ -278,7 +278,7 @@ public CopyPosition CopyTo(CopyPosition position, T[] array, int arrayIndex, int
+                 buffer = GetBuffer(++row);
+                 copied =
+ #if __MonoCS__
+-                CopyToCore(buffer, 0, array, arrayIndex, count);
++                CopyToCore(buffer, 0, array, ref arrayIndex, ref count);
+ #else
+                 CopyToCore(buffer, 0);
+ #endif
+@@ -289,7 +289,7 @@ public CopyPosition CopyTo(CopyPosition position, T[] array, int arrayIndex, int
+ #if __MonoCS__
+         }
+ 
+-        static int CopyToCore(T[] sourceBuffer, int sourceIndex, T[] array, int arrayIndex, int count)
++        static int CopyToCore(T[] sourceBuffer, int sourceIndex, T[] array, ref int arrayIndex, ref int count)
+ #else
+             int CopyToCore(T[] sourceBuffer, int sourceIndex)
+ #endif
+

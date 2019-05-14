@@ -23,7 +23,7 @@
 %global xamarinrelease 3
 Name:           mono
 Version:        5.18.1
-Release:        4%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -47,6 +47,7 @@ Patch9:         mono-5.18.0-reference-assemblies-fix.patch
 Patch10:        mono-5.18.0-sharpziplib-parent-path-traversal.patch
 Patch11:        mono-5.18.1-python3.patch
 Patch12:        mono-5.18.1-s390x-build.patch
+Patch13:        mono-5.18.0-largearraybuilder.patch
 
 BuildRequires:  bison
 BuildRequires:  python%{python3_pkgversion}
@@ -69,13 +70,14 @@ BuildRequires:  perl-Getopt-Long
 # for bootstrap, use bundled monolite and reference assemblies instead of local mono
 %else
 BuildRequires:  mono-core >= 5.0
+BuildRequires:  mono-devel >= 5.0
 %endif
 
 # JIT only available on these:
 ExclusiveArch: %mono_arches
 
 %global _use_internal_dependency_generator 0
-%global __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
+%global __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | grep -v 4.7.1-api | grep -v 4.5-api| /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | grep -v 4.7.1-api | grep -v 4.5-api | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
 %global __find_requires env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | /usr/lib/rpm/redhat/find-requires && printf "%s\\n" "${filelist[@]}" | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-requires; } | sort | uniq | grep ^...'
 
 %description
@@ -336,6 +338,7 @@ not install anything from outside the mono source (XSP, mono-basic, etc.).
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 # Remove hardcoded lib directory for libMonoPosixHelper.so from the config
 sed -i 's|$mono_libdir/||g' data/config.in
@@ -447,6 +450,8 @@ rm -rf %{buildroot}/usr/lib/debug/usr/lib64/libmono-btls-shared.so-*.debug
 
 # create a symbolic link so that Fedora packages targetting Framework 4.5 will still build
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
+# as requested in bug 1704861; we have had that link in F29 with Mono 4.8 as well.
+cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.0-api && cd -
 
 %find_lang mcs
 
@@ -883,6 +888,15 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Tue May 14 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-7
+- adding link 4.0-api, fixes bug 1704861
+
+* Wed May 01 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-6
+- backport a fix for LargeArrayBuilder, fixes bug 1704847
+
+* Wed May 01 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-5
+- mono-devel should not provide for namespaces in the reference assemblies. fixes bug 1704560
+
 * Sat Apr 27 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-4
 - add symbolic link from /usr/lib/mono/4.5-api to 4.7.1-api to fix build issues for other packages depending on Mono
 

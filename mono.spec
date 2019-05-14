@@ -691,6 +691,7 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %gac_dll System.Xml.Serialization
 %{_monodir}/4.7.1-api/
 %{_monodir}/4.5-api
+%{_monodir}/4.0-api
 %{_monodir}/4.5/Microsoft.Common.tasks
 %{_monodir}/4.5/MSBuild/Microsoft.Build*
 %{_monodir}/4.5/Microsoft.Build.xsd

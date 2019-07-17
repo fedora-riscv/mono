@@ -20,10 +20,10 @@
 %undefine _missing_build_ids_terminate_build
 %endif
 
-%global xamarinrelease 3
+%global xamarinrelease 28
 Name:           mono
 Version:        5.18.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -889,6 +889,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Wed Jul 17 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-8
+- upgrade to Mono 5.18.1.28
+
 * Tue May 14 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-7
 - adding link 4.0-api, fixes bug 1704861
 

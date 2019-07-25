@@ -23,7 +23,7 @@
 %global xamarinrelease 28
 Name:           mono
 Version:        5.18.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -889,6 +889,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 5.18.1-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Wed Jul 17 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.18.1-8
 - upgrade to Mono 5.18.1.28
 

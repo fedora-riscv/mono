@@ -23,7 +23,7 @@
 %global xamarinrelease 28
 Name:           mono
 Version:        5.18.1
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -34,6 +34,11 @@ Source0:        http://download.mono-project.com/sources/mono/mono-%{version}.%{
 # sn -k mono.snk
 # You should not regenerate this unless you have a really, really, really good reason.
 Source1:        mono.snk
+# These scripts were taken from rpm-build in Fedora 30
+# They're significantly different from what is included in the mono sources.
+Source2:        mono-find-provides
+Source3:        mono-find-requires
+Source4:        mono.attr
 Patch0:         mono-5.10.0-ignore-reference-assemblies.patch
 Patch1:         mono-4.2.1-ppc.patch
 Patch2:         mono-5.10.0-find-provides.patch
@@ -453,6 +458,11 @@ cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
 # as requested in bug 1704861; we have had that link in F29 with Mono 4.8 as well.
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.0-api && cd -
 
+# rpm helper scripts
+mkdir -p %{buildroot}%{_prefix}/lib/rpm/fileattrs/
+install -p -m755 %{SOURCE2} %{SOURCE3} %{buildroot}%{_prefix}/lib/rpm/
+install -p -m644 %{SOURCE4} %{buildroot}%{_prefix}/lib/rpm/fileattrs/
+
 %find_lang mcs
 
 %post
@@ -717,6 +727,8 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %{_includedir}/mono-2.0/mono/metadata/*.h
 %{_includedir}/mono-2.0/mono/utils/*.h
 %{_includedir}/mono-2.0/mono/cil/opcode.def
+%{_prefix}/lib/rpm/mono-find-*
+%{_prefix}/lib/rpm/fileattrs/mono.attr
 
 %files locale-extras
 %gac_dll I18N.CJK
@@ -889,6 +901,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Tue Jul 30 2019 Tom Callaway <spot@fedoraproject.org> - 5.18.1-10
+- add rpm helper scripts (formerly in rpm-build)
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 5.18.1-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 

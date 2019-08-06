@@ -2,7 +2,7 @@
 # workaround https://github.com/mono/mono/issues/9009#issuecomment-477073609
 %undefine _hardened_build
 %endif
-%global bootstrap 0
+%global bootstrap 1
 %if 0%{?el6}
 # see https://fedorahosted.org/fpc/ticket/395, it was added to el7
 %global mono_arches %{ix86} x86_64 sparc sparcv9 ia64 %{arm} alpha s390x ppc ppc64 ppc64le
@@ -20,10 +20,10 @@
 %undefine _missing_build_ids_terminate_build
 %endif
 
-%global xamarinrelease 28
+%global xamarinrelease 34
 Name:           mono
-Version:        5.18.1
-Release:        10%{?dist}
+Version:        5.20.1
+Release:        0%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -44,15 +44,12 @@ Patch1:         mono-4.2.1-ppc.patch
 Patch2:         mono-5.10.0-find-provides.patch
 Patch3:         mono-4.2-fix-winforms-trayicon.patch
 Patch4:         mono-4.6.1-aarch64.patch
-Patch5:         mono-5.18.1-s390x-ucontext.patch
-Patch6:         mono-5.18.0-roslyn-binaries.patch
-Patch7:         mono-5.18.0-use-mcs.patch
-Patch8:         mono-5.18.0-use-v471.patch
-Patch9:         mono-5.18.0-reference-assemblies-fix.patch
-Patch10:        mono-5.18.0-sharpziplib-parent-path-traversal.patch
-Patch11:        mono-5.18.1-python3.patch
-Patch12:        mono-5.18.1-s390x-build.patch
-Patch13:        mono-5.18.0-largearraybuilder.patch
+Patch5:         mono-5.18.0-roslyn-binaries.patch
+Patch6:         mono-5.18.0-use-mcs.patch
+Patch7:         mono-5.18.0-use-v471.patch
+Patch8:         mono-5.18.0-reference-assemblies-fix.patch
+Patch9:         mono-5.18.0-sharpziplib-parent-path-traversal.patch
+Patch10:        mono-5.18.1-python3.patch
 
 BuildRequires:  bison
 BuildRequires:  python%{python3_pkgversion}
@@ -341,9 +338,6 @@ not install anything from outside the mono source (XSP, mono-basic, etc.).
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
 
 # Remove hardcoded lib directory for libMonoPosixHelper.so from the config
 sed -i 's|$mono_libdir/||g' data/config.in
@@ -453,6 +447,9 @@ rm -rf %{buildroot}/usr/lib/mono/msbuild
 # we have btls debug files
 rm -rf %{buildroot}/usr/lib/debug/usr/lib64/libmono-btls-shared.so-*.debug
 
+# drop other debug files as well
+rm -rf %{buildroot}/usr/lib/debug/usr/lib64/libmono-native.so*.debug
+
 # create a symbolic link so that Fedora packages targetting Framework 4.5 will still build
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
 # as requested in bug 1704861; we have had that link in F29 with Mono 4.8 as well.
@@ -522,7 +519,7 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %{_mandir}/man1/lc.1.gz
 %{_mandir}/man1/mprof-report.1.gz
 %{_libdir}/libMonoPosixHelper.so*
-%{_libdir}/libmono-system-native.so*
+%{_libdir}/libmono-native.so*
 %dir %{_monodir}
 %dir %{_monodir}/4.5
 %dir %{_monodir}/4.5/Facades
@@ -901,6 +898,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Tue Aug 06 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.20.1-0
+- upgrade to Mono 5.20.1.34, with a bootstrap build
+
 * Tue Jul 30 2019 Tom Callaway <spot@fedoraproject.org> - 5.18.1-10
 - add rpm helper scripts (formerly in rpm-build)
 

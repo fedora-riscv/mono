@@ -23,7 +23,7 @@
 %global xamarinrelease 34
 Name:           mono
 Version:        5.20.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -462,7 +462,7 @@ install -p -m644 %{SOURCE4} %{buildroot}%{_prefix}/lib/rpm/fileattrs/
 
 %find_lang mcs
 
-%post
+%post core
 %{?ldconfig}
 cert-sync /etc/pki/tls/certs/ca-bundle.crt
 
@@ -898,6 +898,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Sun Oct 13 2019 Peter Oliver <rpm@mavit.org.uk> - 5.20.1-1
+- Post script must belong to a subpackage, since there is no main package.
+
 * Wed Aug 07 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.20.1-1
 - build again without bootstrap
 

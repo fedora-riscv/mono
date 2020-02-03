@@ -23,7 +23,7 @@
 %global xamarinrelease 161
 Name:           mono
 Version:        6.6.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -459,6 +459,9 @@ rm -rf %{buildroot}/usr/lib/debug/usr/lib64/libmono-btls-shared.so-*.debug
 # drop other debug files as well
 rm -rf %{buildroot}/usr/lib/debug/usr/lib64/libmono-native.so*.debug
 rm -rf %{buildroot}/usr/lib/debug/usr/bin/mono-hang-watchdog-*.debug
+
+# remove mdoc bash script, since mdoc.exe is not built with mcs anymore
+rm -f %{buildroot}/usr/bin/mdoc
 
 # create a symbolic link so that Fedora packages targetting Framework 4.5 will still build
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
@@ -896,7 +899,6 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %{_prefix}/lib/monodoc
 %endif
 %{_bindir}/mod
-%{_bindir}/mdoc
 %{_bindir}/mdoc-*
 %{_bindir}/mdass*
 %{_bindir}/mdval*
@@ -911,10 +913,13 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Mon Feb 03 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-3
+- drop bash script for mdoc, because mdoc does not build with mcs anymore
+
 * Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 6.6.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
-* Mon Jan 21 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-1
+* Mon Jan 20 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-1
 - build again without bootstrap
 
 * Sat Jan 18 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-0

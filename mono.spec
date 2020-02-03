@@ -23,7 +23,7 @@
 %global xamarinrelease 161
 Name:           mono
 Version:        6.6.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -462,6 +462,9 @@ rm -rf %{buildroot}/usr/lib/debug/usr/bin/mono-hang-watchdog-*.debug
 
 # remove mdoc bash script, since mdoc.exe is not built with mcs anymore
 rm -f %{buildroot}/usr/bin/mdoc
+rm -f %{buildroot}/usr/bin/mdass*
+rm -f %{buildroot}/usr/bin/mdval*
+rm -f %{buildroot}/usr/bin/monodoc*
 
 # create a symbolic link so that Fedora packages targetting Framework 4.5 will still build
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
@@ -900,9 +903,6 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %endif
 %{_bindir}/mod
 %{_bindir}/mdoc-*
-%{_bindir}/mdass*
-%{_bindir}/mdval*
-%{_bindir}/monodoc*
 %{_mandir}/man1/md*
 %{_mandir}/man1/monodoc*
 %{_mandir}/man5/mdoc*
@@ -913,6 +913,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Mon Feb 03 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-4
+- drop more bash scripts for mdoc, because mdoc does not build with mcs anymore
+
 * Mon Feb 03 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-3
 - drop bash script for mdoc, because mdoc does not build with mcs anymore
 

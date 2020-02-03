@@ -23,7 +23,7 @@
 %global xamarinrelease 161
 Name:           mono
 Version:        6.6.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -49,6 +49,13 @@ Patch6:         mono-5.18.0-use-mcs.patch
 Patch7:         mono-5.18.0-reference-assemblies-fix.patch
 Patch8:         mono-5.18.0-sharpziplib-parent-path-traversal.patch
 Patch9:         mono-6.6.0-python3.patch
+# Fix NRE bug in api-doc-tools: https://github.com/mono/api-doc-tools/pull/464
+Patch10:        0001-DocumentationEnumerator.cs-Declare-iface-and-ifaceMe.patch
+# Replace new Csharp features with old to allow mdoc to build
+# https://github.com/mono/api-doc-tools/pull/463
+Patch11:        0001-Replace-new-Csharp-features-with-old-ones.patch
+# Reenable mdoc build. To be upstreamed after Patch 10 and 11
+Patch12:        0001-Reenable-mdoc.exe-build.patch
 
 BuildRequires:  bison
 BuildRequires:  python%{python3_pkgversion}
@@ -336,6 +343,11 @@ not install anything from outside the mono source (XSP, mono-basic, etc.).
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+pushd external/api-doc-tools
+%patch10 -p1
+%patch11 -p1
+popd
+%patch12 -p1
 
 # don't build mono-helix-client which requires the helix-binaries to build
 sed -i 's|mono-helix-client||g' mcs/tools/Makefile
@@ -459,12 +471,6 @@ rm -rf %{buildroot}/usr/lib/debug/usr/lib64/libmono-btls-shared.so-*.debug
 # drop other debug files as well
 rm -rf %{buildroot}/usr/lib/debug/usr/lib64/libmono-native.so*.debug
 rm -rf %{buildroot}/usr/lib/debug/usr/bin/mono-hang-watchdog-*.debug
-
-# remove mdoc bash script, since mdoc.exe is not built with mcs anymore
-rm -f %{buildroot}/usr/bin/mdoc
-rm -f %{buildroot}/usr/bin/mdass*
-rm -f %{buildroot}/usr/bin/mdval*
-rm -f %{buildroot}/usr/bin/monodoc*
 
 # create a symbolic link so that Fedora packages targetting Framework 4.5 will still build
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
@@ -901,8 +907,13 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %ifnarch  ppc
 %{_prefix}/lib/monodoc
 %endif
+%mono_bin mdoc
 %{_bindir}/mod
+%{_bindir}/mdoc
 %{_bindir}/mdoc-*
+%{_bindir}/mdass*
+%{_bindir}/mdval*
+%{_bindir}/monodoc*
 %{_mandir}/man1/md*
 %{_mandir}/man1/monodoc*
 %{_mandir}/man5/mdoc*
@@ -913,6 +924,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Mon Feb 03 2020 Robert-André Mauchin <zebob.m@gmail.com> - 6.6.0-5
+- Reenable mdoc build (#1797360)
+
 * Mon Feb 03 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-4
 - drop more bash scripts for mdoc, because mdoc does not build with mcs anymore
 

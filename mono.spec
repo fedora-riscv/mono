@@ -478,9 +478,10 @@ cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.0-api && cd -
 
 # rpm helper scripts
-mkdir -p %{buildroot}%{_prefix}/lib/rpm/fileattrs/
-install -p -m755 %{SOURCE2} %{SOURCE3} %{buildroot}%{_prefix}/lib/rpm/
-install -p -m644 %{SOURCE4} %{buildroot}%{_prefix}/lib/rpm/fileattrs/
+# not needed on Epel 8
+#mkdir -p %{buildroot}%{_prefix}/lib/rpm/fileattrs/
+#install -p -m755 %{SOURCE2} %{SOURCE3} %{buildroot}%{_prefix}/lib/rpm/
+#install -p -m644 %{SOURCE4} %{buildroot}%{_prefix}/lib/rpm/fileattrs/
 
 %find_lang mcs
 

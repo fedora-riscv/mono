@@ -2,7 +2,7 @@
 # workaround https://github.com/mono/mono/issues/9009#issuecomment-477073609
 %undefine _hardened_build
 %endif
-%global bootstrap 1
+%global bootstrap 0
 %if 0%{?el6}
 # see https://fedorahosted.org/fpc/ticket/395, it was added to el7
 %global mono_arches %{ix86} x86_64 sparc sparcv9 ia64 %{arm} alpha s390x ppc ppc64 ppc64le
@@ -23,7 +23,7 @@
 %global xamarinrelease 161
 Name:           mono
 Version:        6.6.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -924,6 +924,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Sat Apr 25 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-7
+- Non-Bootstrap build for Epel 8
+
 * Sat Feb 29 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-6
 - Bootstrap build for Epel 8
 

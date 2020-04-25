@@ -2,7 +2,7 @@
 # workaround https://github.com/mono/mono/issues/9009#issuecomment-477073609
 %undefine _hardened_build
 %endif
-%global bootstrap 0
+%global bootstrap 1
 %if 0%{?el6}
 # see https://fedorahosted.org/fpc/ticket/395, it was added to el7
 %global mono_arches %{ix86} x86_64 sparc sparcv9 ia64 %{arm} alpha s390x ppc ppc64 ppc64le
@@ -656,8 +656,8 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %mono_bin mkbundle
 %mono_bin makecert
 %mono_bin mono-cil-strip
-%{_bindir}/mono-find-provides
-%{_bindir}/mono-find-requires
+#%{_bindir}/mono-find-provides
+#%{_bindir}/mono-find-requires
 %{_bindir}/monodis
 %mono_bin monolinker
 %mono_bin mono-shlib-cop
@@ -925,7 +925,7 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 
 %changelog
 * Sat Apr 25 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-7
-- Non-Bootstrap build for Epel 8
+- another bootstrap build for Epel 8, but this time without the mono-find-provides and mono-find-requires scripts since they are still provided by rpm-build in Epel8
 
 * Sat Feb 29 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-6
 - Bootstrap build for Epel 8

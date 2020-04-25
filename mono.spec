@@ -657,8 +657,8 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %mono_bin mkbundle
 %mono_bin makecert
 %mono_bin mono-cil-strip
-#%{_bindir}/mono-find-provides
-#%{_bindir}/mono-find-requires
+%{_bindir}/mono-find-provides
+%{_bindir}/mono-find-requires
 %{_bindir}/monodis
 %mono_bin monolinker
 %mono_bin mono-shlib-cop
@@ -747,8 +747,8 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %{_includedir}/mono-2.0/mono/metadata/*.h
 %{_includedir}/mono-2.0/mono/utils/*.h
 %{_includedir}/mono-2.0/mono/cil/opcode.def
-%{_prefix}/lib/rpm/mono-find-*
-%{_prefix}/lib/rpm/fileattrs/mono.attr
+#%{_prefix}/lib/rpm/mono-find-*
+#%{_prefix}/lib/rpm/fileattrs/mono.attr
 %{_bindir}/aprofutil
 %mono_bin aprofutil
 %{_mandir}/man1/aprofutil.1.gz

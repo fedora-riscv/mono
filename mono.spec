@@ -1,4 +1,4 @@
-%global _with_bootstrap 1
+%global _with_bootstrap 0
 %bcond_with bootstrap
 
 %ifarch s390x
@@ -25,7 +25,7 @@
 %global xamarinrelease 123
 Name:           mono
 Version:        6.8.0
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -932,7 +932,10 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
-* Wed Jun 17 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-0
+* Fri Jun 19 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-1
+- build without bootstrap
+
+* Fri Jun 19 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-0
 - upgrade to Mono 6.8.0.123, with a bootstrap build
 
 * Mon Feb 03 2020 Robert-André Mauchin <zebob.m@gmail.com> - 6.6.0-5

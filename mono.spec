@@ -1,4 +1,5 @@
-%bcond_without bootstrap
+%global _with_bootstrap 0
+%bcond_with bootstrap
 
 %ifarch s390x
 # workaround https://github.com/mono/mono/issues/9009#issuecomment-477073609
@@ -72,7 +73,7 @@ BuildRequires:  perl-Getopt-Long
 
 # Yes, mono actually depends on itself, because
 # we deleted the bootstrapping binaries. If you
-# need to bootstrap mono, set bcond_with bootstrap at the top
+# need to bootstrap mono, set _with_bootstrap at the top
 # which results in not deleting the binaries in %%prep.
 
 %if %{without bootstrap}

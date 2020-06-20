@@ -20,10 +20,10 @@
 %undefine _missing_build_ids_terminate_build
 %endif
 
-%global xamarinrelease 161
+%global xamarinrelease 166
 Name:           mono
 Version:        6.6.0
-Release:        5%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -477,10 +477,13 @@ cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
 # as requested in bug 1704861; we have had that link in F29 with Mono 4.8 as well.
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.0-api && cd -
 
+# for Epel7, we don't deliver these files, they are still provided by rpm-build-4.11.3-43.el7.x86_64
+%if 0%{?el7}%{?el8} == 0
 # rpm helper scripts
 mkdir -p %{buildroot}%{_prefix}/lib/rpm/fileattrs/
 install -p -m755 %{SOURCE2} %{SOURCE3} %{buildroot}%{_prefix}/lib/rpm/
 install -p -m644 %{SOURCE4} %{buildroot}%{_prefix}/lib/rpm/fileattrs/
+%endif
 
 %find_lang mcs
 
@@ -746,8 +749,13 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %{_includedir}/mono-2.0/mono/metadata/*.h
 %{_includedir}/mono-2.0/mono/utils/*.h
 %{_includedir}/mono-2.0/mono/cil/opcode.def
+
+# for Epel7, we don't deliver these two files, they are still provided by rpm-build-4.11.3-43.el7.x86_64
+%if 0%{?el7}%{?el8} == 0
 %{_prefix}/lib/rpm/mono-find-*
 %{_prefix}/lib/rpm/fileattrs/mono.attr
+%endif
+
 %{_bindir}/aprofutil
 %mono_bin aprofutil
 %{_mandir}/man1/aprofutil.1.gz
@@ -924,6 +932,12 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Wed Jun 17 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-7
+- fix for epel7, don't deliver mono-find-provides or mono-find-requires since they are still part of rpm-build
+
+* Wed Jun 17 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-6
+- new upstream Mono 6.6.0.166
+
 * Mon Feb 03 2020 Robert-André Mauchin <zebob.m@gmail.com> - 6.6.0-5
 - Reenable mdoc build (#1797360)
 

@@ -24,7 +24,7 @@
 %global xamarinrelease 123
 Name:           mono
 Version:        6.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -445,9 +445,11 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 # remove dmcs because it requires the .net 4.0 sdk but we only deliver 4.5 with Fedora (#1294967)
 rm -f %{buildroot}%{_bindir}/dmcs
 
-# remove csc
+# remove wrapper scripts for roslyn-binaries
 rm -f %{buildroot}%{_bindir}/csc
 rm -f %{buildroot}%{_bindir}/csc-dim
+rm -f %{buildroot}%{_bindir}/csi
+rm -f %{buildroot}%{_bindir}/vbc
 
 # drop prj2make because the binary is not built anymore
 rm -f %{buildroot}%{_bindir}/prj2make
@@ -517,11 +519,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %mono_bin ikdasm
 %mono_bin lc
 %{_bindir}/gacutil2
-%{_bindir}/csi
 %{_bindir}/mcs
 %{_monodir}/4.5/mcs.*
 %{_monodir}/4.5/mono-api-diff.*
-%{_bindir}/vbc
 %mono_bin mozroots
 %mono_bin pdb2mdb
 %mono_bin setreg
@@ -931,6 +931,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Sat Jun 27 2020 Jeff Smith <whydoubt@gmail.com> - 6.8.0-2
+- Remove wrapper scripts for unbuilt csi.exe and vbc.exe
+
 * Fri Jun 19 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-1
 - build without bootstrap
 

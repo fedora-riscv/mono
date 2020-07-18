@@ -24,7 +24,7 @@
 %global xamarinrelease 123
 Name:           mono
 Version:        6.8.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -931,10 +931,10 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
-* Sat Jul 18 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-2
+* Sat Jul 18 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-3
 - Non-Bootstrap build of Mono 6.8 for Epel 8
 
-* Fri Jul 17 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-0
+* Fri Jul 17 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-2
 - Bootstrap build for Mono 6.8 for Epel 8
 
 * Thu Jul 16 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-9

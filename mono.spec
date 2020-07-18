@@ -1,4 +1,3 @@
-%global _with_bootstrap 1
 %bcond_with bootstrap
 
 %ifarch s390x
@@ -932,6 +931,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Sat Jul 18 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-2
+- Non-Bootstrap build of Mono 6.8 for Epel 8
+
 * Fri Jul 17 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-0
 - Bootstrap build for Mono 6.8 for Epel 8
 

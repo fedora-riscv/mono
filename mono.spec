@@ -2,7 +2,7 @@
 # workaround https://github.com/mono/mono/issues/9009#issuecomment-477073609
 %undefine _hardened_build
 %endif
-%global bootstrap 0
+%global bootstrap 1
 %if 0%{?el6}
 # see https://fedorahosted.org/fpc/ticket/395, it was added to el7
 %global mono_arches %{ix86} x86_64 sparc sparcv9 ia64 %{arm} alpha s390x ppc ppc64 ppc64le
@@ -20,10 +20,10 @@
 %undefine _missing_build_ids_terminate_build
 %endif
 
-%global xamarinrelease 166
+%global xamarinrelease 123
 Name:           mono
-Version:        6.6.0
-Release:        7%{?dist}
+Version:        6.8.0
+Release:        0%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -77,8 +77,8 @@ BuildRequires:  perl-Getopt-Long
 %if 0%{bootstrap}
 # for bootstrap, use bundled monolite and reference assemblies instead of local mono
 %else
-BuildRequires:  mono-core >= 6.6
-BuildRequires:  mono-devel >= 6.6
+BuildRequires:  mono-core >= 6.8
+BuildRequires:  mono-devel >= 6.8
 %endif
 
 # JIT only available on these:
@@ -446,9 +446,11 @@ rm -f %{buildroot}%{_libdir}/pkgconfig/mono-nunit.pc
 # remove dmcs because it requires the .net 4.0 sdk but we only deliver 4.5 with Fedora (#1294967)
 rm -f %{buildroot}%{_bindir}/dmcs
 
-# remove csc
+# remove wrapper scripts for roslyn-binaries
 rm -f %{buildroot}%{_bindir}/csc
 rm -f %{buildroot}%{_bindir}/csc-dim
+rm -f %{buildroot}%{_bindir}/csi
+rm -f %{buildroot}%{_bindir}/vbc
 
 # drop prj2make because the binary is not built anymore
 rm -f %{buildroot}%{_bindir}/prj2make
@@ -477,11 +479,13 @@ cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.5-api && cd -
 # as requested in bug 1704861; we have had that link in F29 with Mono 4.8 as well.
 cd %{buildroot}/usr/lib/mono && ln -s 4.7.1-api 4.0-api && cd -
 
+# for Epel7, we don't deliver these files, they are still provided by rpm-build-4.11.3-43.el7.x86_64
+%if 0%{?el7}%{?el8} == 0
 # rpm helper scripts
-# not needed on Epel 8
-#mkdir -p %{buildroot}%{_prefix}/lib/rpm/fileattrs/
-#install -p -m755 %{SOURCE2} %{SOURCE3} %{buildroot}%{_prefix}/lib/rpm/
-#install -p -m644 %{SOURCE4} %{buildroot}%{_prefix}/lib/rpm/fileattrs/
+mkdir -p %{buildroot}%{_prefix}/lib/rpm/fileattrs/
+install -p -m755 %{SOURCE2} %{SOURCE3} %{buildroot}%{_prefix}/lib/rpm/
+install -p -m644 %{SOURCE4} %{buildroot}%{_prefix}/lib/rpm/fileattrs/
+%endif
 
 %find_lang mcs
 
@@ -516,11 +520,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %mono_bin ikdasm
 %mono_bin lc
 %{_bindir}/gacutil2
-%{_bindir}/csi
 %{_bindir}/mcs
 %{_monodir}/4.5/mcs.*
 %{_monodir}/4.5/mono-api-diff.*
-%{_bindir}/vbc
 %mono_bin mozroots
 %mono_bin pdb2mdb
 %mono_bin setreg
@@ -660,7 +662,7 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %{_bindir}/mono-find-provides
 %{_bindir}/mono-find-requires
 %{_bindir}/monodis
-%mono_bin monolinker
+%{_bindir}/monolinker
 %mono_bin mono-shlib-cop
 %mono_bin mono-xmltool
 %mono_bin monop
@@ -747,8 +749,13 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %{_includedir}/mono-2.0/mono/metadata/*.h
 %{_includedir}/mono-2.0/mono/utils/*.h
 %{_includedir}/mono-2.0/mono/cil/opcode.def
-#%{_prefix}/lib/rpm/mono-find-*
-#%{_prefix}/lib/rpm/fileattrs/mono.attr
+
+# for Epel7, we don't deliver these files, they are still provided by rpm-build-4.11.3-43.el7.x86_64
+%if 0%{?el7}%{?el8} == 0
+%{_prefix}/lib/rpm/mono-find-*
+%{_prefix}/lib/rpm/fileattrs/mono.attr
+%endif
+
 %{_bindir}/aprofutil
 %mono_bin aprofutil
 %{_mandir}/man1/aprofutil.1.gz
@@ -925,6 +932,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Sat Jul 18 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-0
+- Bootstrap build for Mono 6.8 for Epel 7
+
 * Thu Jul 16 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.6.0-7
 - Non-Bootstrap build for Epel 7
 

@@ -24,7 +24,7 @@
 %global xamarinrelease 123
 Name:           mono
 Version:        6.8.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -374,6 +374,11 @@ cd external/binary-reference-assemblies && mv v4.7.1 v4.7.1.tobuild && ln -s /us
 %endif
 
 %build
+# This package fails to build with LTO on ppc64le.  Root cause analysis has not been
+# done.  For now disable LTO
+%ifarch ppc64le
+%define _lto_cflags %{nil}
+%endif
 %ifarch s390x
 # either mono C code relies on undefined behaviour or gcc is even more broken than earlier
 RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed -e 's/-O2 /-O1 /g')
@@ -931,6 +936,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Tue Aug 11 2020 Jeff Law <law@redhat.com> - 6.8.0-5
+- Disable LTO on ppc64le
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 6.8.0-4
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild

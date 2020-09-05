@@ -24,7 +24,7 @@
 %global xamarinrelease 123
 Name:           mono
 Version:        6.8.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -418,7 +418,7 @@ cp external/binary-reference-assemblies/v4.7.1/*.dll %{buildroot}%{_monodir}/4.7
 rm -f %{buildroot}%{_libdir}/*.la
 # remove Windows-only stuff
 rm -rf %{buildroot}%{_monodir}/*/Mono.Security.Win32*
-rm -f %{buildroot}%{_libdir}/libMonoSupportW.*
+#rm -f %{buildroot}%{_libdir}/libMonoSupportW.*
 # remove .a files for libraries that are really only for us
 rm %{buildroot}%{_libdir}/*.a
 # remove libgc cruft
@@ -547,6 +547,7 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %{_mandir}/man1/lc.1.gz
 %{_mandir}/man1/mprof-report.1.gz
 %{_libdir}/libMonoPosixHelper.so*
+%{_libdir}/libMonoSupportW.so*
 %{_libdir}/libmono-native.so*
 %dir %{_monodir}
 %dir %{_monodir}/4.5
@@ -936,6 +937,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Fri Aug 21 2020 François Cami <fcami@redhat.com> - 6.8.0-6
+- Ship libMonoSupportW.so
+
 * Tue Aug 11 2020 Jeff Law <law@redhat.com> - 6.8.0-5
 - Disable LTO on ppc64le
 

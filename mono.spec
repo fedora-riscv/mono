@@ -23,7 +23,7 @@
 %global xamarinrelease 34
 Name:           mono
 Version:        5.20.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -393,7 +393,7 @@ cp external/binary-reference-assemblies/v4.7.1/*.dll %{buildroot}%{_monodir}/4.7
 rm -f %{buildroot}%{_libdir}/*.la
 # remove Windows-only stuff
 rm -rf %{buildroot}%{_monodir}/*/Mono.Security.Win32*
-rm -f %{buildroot}%{_libdir}/libMonoSupportW.*
+#rm -f %{buildroot}%{_libdir}/libMonoSupportW.*
 # remove .a files for libraries that are really only for us
 rm %{buildroot}%{_libdir}/*.a
 # remove libgc cruft
@@ -519,6 +519,7 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %{_mandir}/man1/lc.1.gz
 %{_mandir}/man1/mprof-report.1.gz
 %{_libdir}/libMonoPosixHelper.so*
+%{_libdir}/libMonoSupportW.so*
 %{_libdir}/libmono-native.so*
 %dir %{_monodir}
 %dir %{_monodir}/4.5
@@ -898,7 +899,10 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
-* Sun Oct 13 2019 Peter Oliver <rpm@mavit.org.uk> - 5.20.1-1
+* Fri Aug 21 2020 François Cami <fcami@redhat.com> - 5.20.1-3
+- Ship libMonoSupportW.so
+
+* Sun Oct 13 2019 Peter Oliver <rpm@mavit.org.uk> - 5.20.1-2
 - Post script must belong to a subpackage, since there is no main package.
 
 * Wed Aug 07 2019 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 5.20.1-1

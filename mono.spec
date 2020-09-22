@@ -96,7 +96,7 @@ metadata access libraries.
 %package core
 Summary:        The Mono CIL runtime, suitable for running .NET code
 Requires:       libgdiplus
-#dependency requiered for install
+#dependency required for install
 Provides:       mono(System.Collections.Immutable) = 1.2.0.0
 Provides:       mono(System.Diagnostics.StackTrace) = 4.0.2.0
 Provides:       mono(System.IO) = 4.0.10.0

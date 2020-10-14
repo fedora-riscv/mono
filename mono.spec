@@ -24,7 +24,7 @@
 %global xamarinrelease 123
 Name:           mono
 Version:        6.8.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -57,6 +57,8 @@ Patch10:        0001-DocumentationEnumerator.cs-Declare-iface-and-ifaceMe.patch
 Patch11:        0001-Replace-new-Csharp-features-with-old-ones.patch
 # Reenable mdoc build. To be upstreamed after Patch 10 and 11
 Patch12:        0001-Reenable-mdoc.exe-build.patch
+# fix issue with conflicts between i686 and x86_64 package (#1853724)
+Patch13:	mono-6.6.0-fix-multi-arch-issue.patch
 
 BuildRequires:  bison
 BuildRequires:  python%{python3_pkgversion}
@@ -347,6 +349,7 @@ pushd external/api-doc-tools
 %patch11 -p1
 popd
 %patch12 -p1
+%patch13 -p1
 
 # don't build mono-helix-client which requires the helix-binaries to build
 sed -i 's|mono-helix-client||g' mcs/tools/Makefile
@@ -490,6 +493,10 @@ mkdir -p %{buildroot}%{_prefix}/lib/rpm/fileattrs/
 install -p -m755 %{SOURCE2} %{SOURCE3} %{buildroot}%{_prefix}/lib/rpm/
 install -p -m644 %{SOURCE4} %{buildroot}%{_prefix}/lib/rpm/fileattrs/
 %endif
+
+# remove these files, we are using the files installed in /usr/lib/rpm/
+rm %{buildroot}%{_bindir}/mono-find-requires
+rm %{buildroot}%{_bindir}/mono-find-provides
 
 %find_lang mcs
 
@@ -664,8 +671,6 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %mono_bin mkbundle
 %mono_bin makecert
 %mono_bin mono-cil-strip
-%{_bindir}/mono-find-provides
-%{_bindir}/mono-find-requires
 %{_bindir}/monodis
 %{_bindir}/monolinker
 %mono_bin mono-shlib-cop
@@ -937,6 +942,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Wed Oct 14 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-7
+- fix issue with conflicts between i686 and x86_64 package (#1853724)
+
 * Fri Aug 21 2020 François Cami <fcami@redhat.com> - 6.8.0-6
 - Ship libMonoSupportW.so
 

@@ -77,8 +77,8 @@ BuildRequires:  perl-Getopt-Long
 # which results in not deleting the binaries in %%prep.
 
 %if %{without bootstrap}
-BuildRequires:  mono-core >= 6.10
-BuildRequires:  mono-devel >= 6.10
+BuildRequires:  mono-core >= 6.12
+BuildRequires:  mono-devel >= 6.12
 %endif
 
 # JIT only available on these:

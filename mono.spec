@@ -21,10 +21,10 @@
 %undefine _missing_build_ids_terminate_build
 %endif
 
-%global xamarinrelease 90
+%global xamarinrelease 107
 Name:           mono
 Version:        6.12.0
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -940,6 +940,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Tue Dec 22 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.12.0-1
+- Upgrade to Mono 6.12.0.107
+
 * Tue Oct 27 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.12.0-0
 - Upgrade to Mono 6.12.0.90
 

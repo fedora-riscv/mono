@@ -24,7 +24,7 @@
 %global xamarinrelease 107
 Name:           mono
 Version:        6.12.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -58,6 +58,8 @@ Patch11:        0001-Replace-new-Csharp-features-with-old-ones.patch
 Patch12:        0001-Reenable-mdoc.exe-build.patch
 # fix issue with conflicts between i686 and x86_64 package (#1853724)
 Patch13:	mono-6.6.0-fix-multi-arch-issue.patch
+# fix issue with process start (#1839410)
+Patch14:	mono-6.12.0-fix-process-start.patch
 
 BuildRequires: make
 BuildRequires:  bison
@@ -349,6 +351,7 @@ pushd external/api-doc-tools
 popd
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
 
 # don't build mono-helix-client which requires the helix-binaries to build
 sed -i 's|mono-helix-client||g' mcs/tools/Makefile
@@ -941,6 +944,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Mon Feb 22 2021 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.12.0-3
+- backport patch: fix early return in Process.Start (#1839410)
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 6.12.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 

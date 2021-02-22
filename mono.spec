@@ -23,7 +23,7 @@
 %global xamarinrelease 123
 Name:           mono
 Version:        6.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -56,6 +56,9 @@ Patch10:        0001-DocumentationEnumerator.cs-Declare-iface-and-ifaceMe.patch
 Patch11:        0001-Replace-new-Csharp-features-with-old-ones.patch
 # Reenable mdoc build. To be upstreamed after Patch 10 and 11
 Patch12:        0001-Reenable-mdoc.exe-build.patch
+# fix issue with process start (#1839410)
+Patch14:	mono-6.12.0-fix-process-start.patch
+
 
 BuildRequires:  bison
 BuildRequires:  python%{python3_pkgversion}
@@ -348,6 +351,7 @@ pushd external/api-doc-tools
 %patch11 -p1
 popd
 %patch12 -p1
+%patch14 -p1
 
 # don't build mono-helix-client which requires the helix-binaries to build
 sed -i 's|mono-helix-client||g' mcs/tools/Makefile
@@ -932,6 +936,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Mon Feb 22 2021 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-2
+- backport patch: fix early return in Process.Start (#1839410)
+
 * Sat Jul 18 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-1
 - Non-Bootstrap build for Mono 6.8 for Epel 7
 

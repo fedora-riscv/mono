@@ -24,7 +24,7 @@
 %global xamarinrelease 123
 Name:           mono
 Version:        6.8.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -59,6 +59,8 @@ Patch11:        0001-Replace-new-Csharp-features-with-old-ones.patch
 Patch12:        0001-Reenable-mdoc.exe-build.patch
 # fix issue with conflicts between i686 and x86_64 package (#1853724)
 Patch13:	mono-6.6.0-fix-multi-arch-issue.patch
+# fix issue with process start (#1839410)
+Patch14:	mono-6.12.0-fix-process-start.patch
 
 BuildRequires:  bison
 BuildRequires:  python%{python3_pkgversion}
@@ -350,6 +352,7 @@ pushd external/api-doc-tools
 popd
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
 
 # don't build mono-helix-client which requires the helix-binaries to build
 sed -i 's|mono-helix-client||g' mcs/tools/Makefile
@@ -942,6 +945,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Mon Feb 22 2021 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-8
+- backport patch: fix early return in Process.Start (#1839410)
+
 * Wed Oct 14 2020 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.8.0-7
 - fix issue with conflicts between i686 and x86_64 package (#1853724)
 

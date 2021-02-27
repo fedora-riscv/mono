@@ -21,10 +21,10 @@
 %undefine _missing_build_ids_terminate_build
 %endif
 
-%global xamarinrelease 107
+%global xamarinrelease 122
 Name:           mono
 Version:        6.12.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -944,6 +944,9 @@ cert-sync /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Sat Feb 27 2021 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.12.0-4
+- Upgrade to Mono 6.12.0.122
+
 * Mon Feb 22 2021 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.12.0-3
 - backport patch: fix early return in Process.Start (#1839410)
 

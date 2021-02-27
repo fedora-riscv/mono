@@ -58,8 +58,6 @@ Patch11:        0001-Replace-new-Csharp-features-with-old-ones.patch
 Patch12:        0001-Reenable-mdoc.exe-build.patch
 # fix issue with conflicts between i686 and x86_64 package (#1853724)
 Patch13:	mono-6.6.0-fix-multi-arch-issue.patch
-# fix issue with process start (#1839410)
-Patch14:	mono-6.12.0-fix-process-start.patch
 
 BuildRequires: make
 BuildRequires:  bison
@@ -351,7 +349,6 @@ pushd external/api-doc-tools
 popd
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
 
 # don't build mono-helix-client which requires the helix-binaries to build
 sed -i 's|mono-helix-client||g' mcs/tools/Makefile

@@ -501,7 +501,7 @@ rm %{buildroot}%{_bindir}/mono-find-provides
 
 %post core
 %{?ldconfig}
-cert-sync /etc/pki/tls/certs/ca-bundle.crt
+cert-sync --quiet /etc/pki/tls/certs/ca-bundle.crt
 
 %ldconfig_postun
 

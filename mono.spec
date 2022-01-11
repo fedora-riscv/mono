@@ -1,3 +1,4 @@
+%global _with_bootstrap 1
 %bcond_with bootstrap
 
 %ifarch s390x

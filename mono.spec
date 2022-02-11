@@ -24,7 +24,7 @@
 %global xamarinrelease 122
 Name:           mono
 Version:        6.12.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -182,7 +182,7 @@ assemblies: Microsoft.Vsa,
 System.Configuration.Install, System.Management, System.Messaging.
 
 %package reactive
-License:        MIT License (or similar) ; Apache License 2.0
+License:        MIT and ASL 2.0
 Summary:        Reactive Extensions for Mono core libraries
 Requires:       mono-core = %{version}-%{release}
 
@@ -191,7 +191,7 @@ Reactive Extensions for Mono, this packages don't depend on
 desktop-specific features.
 
 %package reactive-winforms
-License:        MIT License (or similar) ; Apache License 2.0
+License:        MIT and ASL 2.0
 Summary:        Reactive Extensions for Mono desktop-specific libraries
 Requires:       mono-core = %{version}-%{release}
 Requires:       mono-reactive = %{version}-%{release}
@@ -941,6 +941,9 @@ cert-sync --quiet /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Fri Feb 11 2022 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.12.0-7
+- Fixing license for mono-reactive packages, fixing bug 2025856
+
 * Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 6.12.0-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 

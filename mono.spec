@@ -21,10 +21,10 @@
 %undefine _missing_build_ids_terminate_build
 %endif
 
-%global xamarinrelease 122
+%global xamarinrelease 182
 Name:           mono
 Version:        6.12.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -941,6 +941,9 @@ cert-sync --quiet /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Thu Jun 16 2022 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.12.0-8
+- Upgrade to Mono 6.12.0.182
+
 * Fri Feb 11 2022 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.12.0-7
 - Fixing license for mono-reactive packages, fixing bug 2025856
 

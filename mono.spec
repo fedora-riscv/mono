@@ -24,7 +24,7 @@
 %global xamarinrelease 182
 Name:           mono
 Version:        6.12.0
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Cross-platform, Open Source, .NET development framework
 
 License:        MIT
@@ -941,6 +941,9 @@ cert-sync --quiet /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 6.12.0-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Thu Jun 16 2022 Timotheus Pokorra <timotheus.pokorra@solidcharity.com> - 6.12.0-8
 - Upgrade to Mono 6.12.0.182
 

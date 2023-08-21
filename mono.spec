@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 %ifarch s390x
 # workaround https://github.com/mono/mono/issues/9009#issuecomment-477073609
@@ -83,7 +83,7 @@ BuildRequires:  mono-devel >= 6.12
 %endif
 
 # JIT only available on these:
-ExclusiveArch: %mono_arches
+ExclusiveArch: %mono_arches riscv64
 
 %global _use_internal_dependency_generator 0
 %global __find_provides env sh -c 'filelist=($(cat)) && { printf "%s\\n" "${filelist[@]}" | grep -v 4.7.1-api | grep -v 4.5-api| /usr/lib/rpm/redhat/find-provides && printf "%s\\n" "${filelist[@]}" | grep -v 4.7.1-api | grep -v 4.5-api | prefix=%{buildroot}%{_prefix} %{buildroot}%{_bindir}/mono-find-provides; } | sort | uniq'
@@ -941,6 +941,9 @@ cert-sync --quiet /etc/pki/tls/certs/ca-bundle.crt
 %files complete
 
 %changelog
+* Mon Aug 21 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 6.12.0-11~bootstrap
+- Try to bootstrap for riscv64.
+
 * Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 6.12.0-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
 
